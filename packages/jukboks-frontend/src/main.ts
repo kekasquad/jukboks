@@ -1,12 +1,13 @@
-import './global.css';
+import 'svelte'; // Just to make tsc happy
+import "./global.css";
 
-import App from './App.svelte';
+import App from "./App.svelte";
 
 const app = new App({
-	target: document.body,
-	props: {
-		name: 'world'
-	}
+  target: document.body,
+  props: {
+    name: "world",
+  },
 });
 
 export default app;
