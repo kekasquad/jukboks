@@ -1,6 +1,6 @@
 {
   "name": "@kekasquad/jukboks-frontend",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "devDependencies": {
     "@tsconfig/svelte": "^1.0.10",
     "cross-env": "^7.0.3",
