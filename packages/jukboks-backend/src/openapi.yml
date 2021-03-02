@@ -15,4 +15,20 @@ paths:
       responses:
         '200': 
           description: "Returns OK"
+  /users:
+    post:
+      summary: Users creation
+      operationId: createUser
+      responses:
+        '200': 
+          description: "Creates user"
+        '400':
+          description: "Failed in user creation: bad request"
+    get:
+      summary: Users showing
+      operationId: showUser
+      responses:
+        '200': 
+          description: "Users got"
+
             

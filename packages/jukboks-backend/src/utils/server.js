@@ -1,9 +1,17 @@
 const path = require('path');
 const express = require('express');
 const OpenApiValidator = require('express-openapi-validator');
+const mongoose = require('mongoose');
+const { UserController } = require("./controllers/UserController")
 
 async function createServer() {
+  mongoose.connect('mongodb://localhost/test', { useNewUrlParser: true, useUnifiedTopology: true });
+
   const app = express();
+  const db = mongoose.connection;
+
+  db.on('error', console.error.bind(console, 'connection error:'));
+  const userCtrl = new UserController()
 
   // Parse json to req.body
   app.use(express.json());
@@ -37,6 +45,9 @@ async function createServer() {
   app.get('/ping', (req, res) => {
     res.send('OK');
   });
+
+  app.post('/users', userCtrl.create);
+  app.get('/users', userCtrl.show);
 
   return app;
 }
