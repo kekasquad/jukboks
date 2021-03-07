@@ -30,24 +30,24 @@ async function createServer() {
     }),
   );
 
-  // Error handler
-  app.use((err, req, res, next) => {
-    if ('status' in err) {
-      res.status(err.status || 500);
-    } else {
-      res.status(500);
-    }
-    res.json({
-      message: err.message,
-    });
-  });
 
   app.get('/ping', (req, res) => {
     res.send('OK');
   });
 
-  app.post('/users', userCtrl.create);
-  app.get('/users', userCtrl.show);
+  app.get('/users', userCtrl.get.bind(userCtrl));
+  app.post('/user', userCtrl.create.bind(userCtrl));
+  app.get('/user/:username', userCtrl.getByUsername.bind(userCtrl));
+
+  // Error handler
+  app.use((err, req, res, next) => {
+    //console.error(err);
+    res.status(err.status || 500);
+    return res.json({
+      ok: false,
+      message: err.message,
+    });
+  });
 
   return app;
 }

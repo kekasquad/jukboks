@@ -1,22 +1,39 @@
 const express = require('express');
 const { User } = require("../models/User")
+const { HttpError } = require("../error");
 
 class UserController {
-
-    create(req, res, next) {
-        const user = new User(req.body);
-        user.save(function (err, user) {
-            if (err) return cres.send(err);
-            res.send("saved " + user.name);
-        })
-        // res.send("KK")
+    constructor() {
+        this.publicFields = {
+            _id: false,
+            username: true,
+            name: true,
+            streams: true
+        }
     }
 
-    show(req, res, next) {
-        User.find(function (err, users) {
-            if (err) return res.send(err);
-            res.send(users);
-        })
+    async create(req, res) {
+        const user = new User(req.body);
+        await user.save();
+        res.json({ created: true });
+    }
+
+    async get(req, res) {
+        const persons = await User.find({}, this.publicFields);
+        if (!persons) {
+            return res.status(404).end();
+        }
+        res.json(persons);
+    }
+
+    async getByUsername(req, res, next) {
+        const username = req.params.username;
+        const person = await User.findOne({ username }, this.publicFields);
+        if (!person) {
+            // TODO: catch from async functions
+            return next(new HttpError(404, "User not found"));
+        }
+        res.json(person);
     }
 }
 
