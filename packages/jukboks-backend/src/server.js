@@ -1,12 +1,13 @@
 const Fastify = require('fastify');
 const mongoose = require('mongoose');
-const { MONGO_URI } = require('../config');
+const { MONGO_URI, isDevelopment } = require('../config');
 
 async function createServer() {
   const fastify = Fastify({
     logger: {
-      prettyPrint: process.env.NODE_ENV !== 'production',
+      prettyPrint: isDevelopment,
       base: null, // remove logging hostname and pid
+      level: isDevelopment ? 'debug' : 'info',
     },
   });
   fastify.register(require('fastify-swagger'), {
@@ -17,9 +18,12 @@ async function createServer() {
     },
   });
 
-  fastify.register(require('./plugins/mongoose'), {
-    uri: MONGO_URI,
-  });
+  // fastify.register(require('./plugins/mongoose'), {
+  //   uri: MONGO_URI,
+  // });
+
+  // Register WS before handlers
+  fastify.register(require('./plugins/ws'));
 
   fastify.get(
     '/ping',
@@ -41,6 +45,13 @@ async function createServer() {
       return { ok: true };
     },
   );
+
+  fastify.get('/ws', { websocket: true }, (connection, request) => {
+    connection.socket.on('message', async (message) => {
+      fastify.log.debug({ id: request.id, msg: message });
+      connection.socket.send(`Hi! You wrote: ${message}`);
+    });
+  });
 
   fastify.register(require('./routes/user'));
 
