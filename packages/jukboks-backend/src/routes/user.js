@@ -13,10 +13,17 @@ async function routes(fastify, options) {
     '/auth',
     {
       schema: {
+        body: {
+          type: 'object',
+          properties: {
+            username: { type: 'string' },
+            password: { type: 'string' },
+          },
+        },
         response: {
           200: {
-            ok: {
-              type: 'string',
+            token: {
+              type: 'string'
             },
           },
         },
@@ -24,20 +31,20 @@ async function routes(fastify, options) {
     },
     async (req, reply) => {
 
-    const username = req.body.username;
-    const password = req.body.password;
+      const username = req.body.username;
+      const password = req.body.password;
 
-    const person = await User.findOne({ username });
-    if (!person) {
-      reply.notFound("Wrong credentials");
-    }
-    if (password != person.password) {
-      reply.notFound("Wrong credentials");
-    }
+      const person = await User.findOne({ username });
+      if (!person) {
+        reply.unauthorized("Wrong credentials");
+      }
+      if (password != person.password) {
+        reply.unauthorized("Wrong credentials");
+      }
 
-    const token = fastify.jwt.sign({ username: username });
-    reply.send({ token });
-  });
+      const token = fastify.jwt.sign({ username: username });
+      reply.send({ token });
+    });
 
   // fastify.get('/all', async (req, reply) => {
   //   const persons = await User.find({}, this.publicFields);

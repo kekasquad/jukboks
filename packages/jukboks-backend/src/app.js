@@ -7,7 +7,7 @@ const port = process.env.PORT ? parseInt(process.env.PORT) : 8080;
 createServer().then((app) =>
   app.listen(port, host, (err, address) => {
     if (err) {
-      fastify.log.error(err);
+      app.log.error(err);
       process.exit(1);
     }
   }),

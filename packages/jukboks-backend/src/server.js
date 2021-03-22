@@ -3,10 +3,6 @@ const mongoose = require('mongoose');
 const { MONGO_URI, isDevelopment, isProd, JWT_SECRET } = require('../config');
 
 async function createServer() {
-
-  if (isProd && !JWT_SECRET) { 
-    throw new Error("JWT_SECRET must be set in prod environment");
-  }
   
   const fastify = Fastify({
     logger: {
