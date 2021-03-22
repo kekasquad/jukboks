@@ -1,4 +1,11 @@
+const bcrypt = require('bcrypt');
 const { User } = require('../models/User');
+
+const BCRYPT_ROUNDS = 12;
+
+const genJWTPayload = (username) => {
+  username;
+};
 
 async function routes(fastify, options) {
   publicFields = {
@@ -9,11 +16,12 @@ async function routes(fastify, options) {
   };
 
   fastify.post(
-    '/auth',
+    '/auth/login',
     {
       schema: {
         body: {
           type: 'object',
+          required: ['username', 'password'],
           properties: {
             username: { type: 'string' },
             password: { type: 'string' },
@@ -32,14 +40,38 @@ async function routes(fastify, options) {
       const { username, password } = req.body;
 
       const person = await User.findOne({ username });
-      if (!person) {
-        reply.unauthorized('Wrong credentials');
-      }
-      if (password != person.password) {
-        reply.unauthorized('Wrong credentials');
+      if (!person || !bcrypt.compareSync(password, person.password)) {
+        return reply.unauthorized('Wrong credentials');
       }
 
-      const token = fastify.jwt.sign({ username: username });
+      const token = fastify.jwt.sign(genJWTPayload(username));
+      reply.send({ token });
+    },
+  );
+
+  fastify.post(
+    '/auth/signup',
+    {
+      schema: {
+        body: {
+          type: 'object',
+          required: ['username', 'password', 'name'],
+          properties: {
+            username: { type: 'string' },
+            password: { type: 'string' },
+            name: { type: 'string' },
+          },
+        },
+      },
+    },
+    async (req, reply) => {
+      let { username, password, name } = req.body;
+
+      password = bcrypt.hashSync(password, BCRYPT_ROUNDS);
+      const user = new User({ username, password, name });
+      await user.save();
+
+      const token = fastify.jwt.sign(genJWTPayload(username));
       reply.send({ token });
     },
   );

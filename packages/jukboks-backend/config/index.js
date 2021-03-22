@@ -1,10 +1,13 @@
-const dotenv = require('dotenv');
+const isDevelopment = process.env.NODE_ENV !== 'production';
 
-dotenv();
+const { parsed } = require('dotenv').config();
+
+if (isDevelopment) {
+  console.log('Env loaded');
+  console.log(parsed);
+}
 
 const MONGO_URI = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017';
-
-const isDevelopment = process.env.NODE_ENV !== 'production';
 
 const isProd = process.env.NODE_ENV === 'production';
 
