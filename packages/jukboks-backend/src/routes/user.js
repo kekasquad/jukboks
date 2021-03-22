@@ -1,12 +1,11 @@
-const { User } = require('../models/User')
+const { User } = require('../models/User');
 
 async function routes(fastify, options) {
-
   publicFields = {
     _id: false,
     username: true,
     name: true,
-    streams: true
+    streams: true,
   };
 
   fastify.post(
@@ -23,28 +22,27 @@ async function routes(fastify, options) {
         response: {
           200: {
             token: {
-              type: 'string'
+              type: 'string',
             },
           },
         },
       },
     },
     async (req, reply) => {
-
-      const username = req.body.username;
-      const password = req.body.password;
+      const { username, password } = req.body;
 
       const person = await User.findOne({ username });
       if (!person) {
-        reply.unauthorized("Wrong credentials");
+        reply.unauthorized('Wrong credentials');
       }
       if (password != person.password) {
-        reply.unauthorized("Wrong credentials");
+        reply.unauthorized('Wrong credentials');
       }
 
       const token = fastify.jwt.sign({ username: username });
       reply.send({ token });
-    });
+    },
+  );
 
   // fastify.get('/all', async (req, reply) => {
   //   const persons = await User.find({}, this.publicFields);
@@ -53,7 +51,6 @@ async function routes(fastify, options) {
   //   }
   //   reply.send(persons);
   // });
-
 }
 
 module.exports = routes;

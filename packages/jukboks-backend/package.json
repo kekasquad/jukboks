@@ -3,7 +3,8 @@
   "version": "0.0.1",
   "license": "MIT",
   "scripts": {
-    "dev": "nodemon src/app.js"
+    "dev": "nodemon src/app.js",
+    "lint": "eslint --fix ."
   },
   "devDependencies": {
     "@types/node": "^14.14.35",
@@ -15,6 +16,7 @@
     "prettier": "^2.2.1"
   },
   "dependencies": {
+    "dotenv": "^8.2.0",
     "fastify": "^3.14.0",
     "fastify-jwt": "^2.4.0",
     "fastify-plugin": "^3.0.0",

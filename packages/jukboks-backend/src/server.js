@@ -3,7 +3,6 @@ const mongoose = require('mongoose');
 const { MONGO_URI, isDevelopment, isProd, JWT_SECRET } = require('../config');
 
 async function createServer() {
-  
   const fastify = Fastify({
     logger: {
       prettyPrint: isDevelopment,
@@ -25,12 +24,12 @@ async function createServer() {
     uri: MONGO_URI,
   });
 
+  fastify.register(require('fastify-jwt'), {
+    secret: JWT_SECRET,
+  });
+
   // Register WS before handlers
   fastify.register(require('./plugins/ws'));
-
-  fastify.register(require('fastify-jwt'), {
-    secret: JWT_SECRET
-  });
 
   fastify.get(
     '/ping',
