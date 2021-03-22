@@ -1,8 +1,13 @@
 const Fastify = require('fastify');
 const mongoose = require('mongoose');
-const { MONGO_URI, isDevelopment } = require('../config');
+const { MONGO_URI, isDevelopment, isProd, JWT_SECRET } = require('../config');
 
 async function createServer() {
+
+  if (isProd && !JWT_SECRET) { 
+    throw new Error("JWT_SECRET must be set in prod environment");
+  }
+  
   const fastify = Fastify({
     logger: {
       prettyPrint: isDevelopment,
@@ -18,12 +23,18 @@ async function createServer() {
     },
   });
 
-  // fastify.register(require('./plugins/mongoose'), {
-  //   uri: MONGO_URI,
-  // });
+  fastify.register(require('fastify-sensible'));
+
+  fastify.register(require('./plugins/mongoose'), {
+    uri: MONGO_URI,
+  });
 
   // Register WS before handlers
   fastify.register(require('./plugins/ws'));
+
+  fastify.register(require('fastify-jwt'), {
+    secret: JWT_SECRET
+  });
 
   fastify.get(
     '/ping',
