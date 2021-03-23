@@ -55,6 +55,13 @@ async function routes(fastify, options) {
             name: { type: 'string' },
           },
         },
+        response: {
+          200: {
+            token: {
+              type: 'string',
+            },
+          },
+        },
       },
     },
     async (req, reply) => {
