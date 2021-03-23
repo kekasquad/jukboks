@@ -20,12 +20,14 @@ async function createServer() {
 
   fastify.register(require('fastify-sensible'));
 
-  fastify.register(require('./plugins/mongoose'), {
-    uri: MONGO_URI,
-  });
-
   fastify.register(require('fastify-jwt'), {
     secret: JWT_SECRET,
+  });
+
+  fastify.register(require('./plugins/auth'));
+
+  fastify.register(require('./plugins/mongoose'), {
+    uri: MONGO_URI,
   });
 
   // Register WS before handlers

@@ -1,20 +1,13 @@
 const bcrypt = require('bcrypt');
-const { User } = require('../models/User');
+const { User, publicFields } = require('../models/User');
 
 const BCRYPT_ROUNDS = 12;
 
-const genJWTPayload = (username) => {
-  username;
-};
+const genJWTPayload = (username) => ({
+  username,
+});
 
 async function routes(fastify, options) {
-  publicFields = {
-    _id: false,
-    username: true,
-    name: true,
-    streams: true,
-  };
-
   fastify.post(
     '/auth/login',
     {
@@ -67,8 +60,14 @@ async function routes(fastify, options) {
     async (req, reply) => {
       let { username, password, name } = req.body;
 
+      let user;
+      user = await User.findOne({ username });
+      if (user) {
+        return reply.unprocessableEntity('User already exists');
+      }
+
       password = bcrypt.hashSync(password, BCRYPT_ROUNDS);
-      const user = new User({ username, password, name });
+      user = new User({ username, password, name });
       await user.save();
 
       const token = fastify.jwt.sign(genJWTPayload(username));
@@ -76,13 +75,21 @@ async function routes(fastify, options) {
     },
   );
 
-  // fastify.get('/all', async (req, reply) => {
-  //   const persons = await User.find({}, this.publicFields);
-  //   if (!persons) {
-  //     reply.notFound("Users not found");
-  //   }
-  //   reply.send(persons);
-  // });
+  fastify.get(
+    '/me',
+    {
+      preValidation: [fastify.authenticate],
+    },
+    async (req, reply) => {
+      const user = await User.findOne({ username: req.user.username }, publicFields).populate('streams');
+
+      if (!user) {
+        return reply.notFound();
+      }
+
+      reply.send(user);
+    },
+  );
 }
 
 module.exports = routes;
