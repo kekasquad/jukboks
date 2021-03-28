@@ -1,33 +1,60 @@
 <script>
-  export let name;
+  let background = "/img/backgrounds/mainPage.png";
+  let vectorSvg = "/img/backgrounds/mainPageVector.svg";
 </script>
 
-<main>
-  <h1>Hello {name}!</h1>
-  <p>
-    Visit the <a href="https://svelte.dev/tutorial">Svelte tutorial</a> to learn
-    how to build Svelte apps.
-  </p>
-</main>
+<div class='outer'>
+  <div class='inner' style="background: url({vectorSvg}); background-size: 100% 100%;">
+    <h1>jukboks</h1>
+  </div>
+  <img src={background} alt="mainpicture" />
+</div>
 
 <style>
-  main {
-    text-align: center;
-    padding: 1em;
-    max-width: 240px;
-    margin: 0 auto;
+
+  .outer {
+    width: 100vw;
+    height: 100vh;
+    padding: 0px;
+    margin: 0px;
+    display: flex;
+    justify-content: center; /*Центрирование по горизонтали*/
+    align-items: center;     /*Центрирование по вертикали */
+  }
+
+  img {
+    width: 100%;
+    height: 100%;
+    padding: 0px;
+    margin: 0px;
+    z-index: 1;
+    position: absolute;
+  }
+
+  .inner {
+    width: 400px;
+    height: 400px;
+    /* background: url("/img/backgrounds/mainPageVector.svg"); */
+    /* background-size: 100% 100%; */
+    z-index: 10;
+    justify-content: center;
+    display: flex;
+    align-items: center;
   }
 
   h1 {
-    color: #ff3e00;
-    text-transform: uppercase;
-    font-size: 4em;
-    font-weight: 100;
+    font-family: "Courier Prime";
+    font-style: normal;
+    font-weight: normal;
+    font-size: 72px;
+    line-height: 81px;
+    color: #FFFFFF;
   }
 
-  @media (min-width: 640px) {
+  /* @media (min-width: 640px) {
     main {
       max-width: none;
     }
-  }
+  } */
+  
 </style>
