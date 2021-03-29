@@ -27,8 +27,8 @@
   }
 
   .innerMain {
-    width: 400px;
-    height: 400px;
+    width: 450px;
+    height: 450px;
     /* background: url("/img/backgrounds/mainPageVector.svg"); */
     /* background-size: 100% 100%; */
     z-index: 10;
@@ -38,7 +38,6 @@
   }
 
   .innerMain h1 {
-    font-family: "Courier Prime";
     font-style: normal;
     font-weight: normal;
     font-size: 72px;

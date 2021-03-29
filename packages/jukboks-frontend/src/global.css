@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Courier+Prime&display=swap');
+
 html,
 body {
   position: relative;
@@ -10,7 +12,7 @@ body {
   margin: 0;
   padding: 0px;
   box-sizing: border-box;
-  font-family: "Courier Prime";
+  font-family: "Courier Prime", monospace;
 }
 
 a {
