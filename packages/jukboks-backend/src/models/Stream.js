@@ -1,15 +1,19 @@
 const mongoose = require('mongoose');
 const { nanoid } = require('nanoid');
+const { SongSchema } = require('./Song');
 
 const StreamSchema = new mongoose.Schema({
-  _id: mongoose.Types.ObjectId,
-  uuid: { type: String, default: () => nanoid() },
+  uuid: { type: String, default: () => nanoid(), unique: true },
   author: { type: Schema.Types.ObjectId, ref: 'User', required: true }, // author <-> User
-  playlist: { type: mongoose.Types.ObjectId, ref: 'Playlist', required: true }, // Stream.playlistId <-> Playlist.streamId
-  visualization: { type: Boolean, default: False },
-  reactions: { type: Boolean, default: False },
-  private: { type: Boolean, default: False },
+  songs: [{ type: SongSchema, required: true }],
+  visualization: { type: Boolean, default: false },
+  reactions: { type: Boolean, default: false },
+  isPrivate: { type: Boolean, default: true },
+  dt_start: { type: Date },
 });
+
+// TODO: add virtual `dt_end`
+// TODO: add virtual `status`:`[DRAFT, SCHEDULED, STARTED, ENDED]`
 
 const Stream = mongoose.model('Stream', StreamSchema);
 
