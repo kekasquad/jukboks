@@ -29,8 +29,8 @@ async function routes(fastify, options) {
         },
       },
     },
-    async (req, reply) => {
-      const { username, password } = req.body;
+    async (request, reply) => {
+      const { username, password } = request.body;
 
       const person = await User.findOne({ username });
       if (!person || !bcrypt.compareSync(password, person.password)) {
@@ -64,8 +64,8 @@ async function routes(fastify, options) {
         },
       },
     },
-    async (req, reply) => {
-      let { username, password, name } = req.body;
+    async (request, reply) => {
+      let { username, password, name } = request.body;
 
       let user;
       user = await User.findOne({ username });
@@ -87,8 +87,8 @@ async function routes(fastify, options) {
     {
       preValidation: [fastify.authenticate],
     },
-    async (req, reply) => {
-      const user = await User.findOne({ username: req.user.username }, publicFields).populate('streams');
+    async (request, reply) => {
+      const user = await User.findOne({ username: request.user.username }, publicFields).populate('streams');
 
       if (!user) {
         return reply.notFound();
