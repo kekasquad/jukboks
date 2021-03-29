@@ -3,16 +3,20 @@
   let vectorSvg = "/img/backgrounds/mainPageVector.svg";
 </script>
 
-<div class='outer'>
-  <div class='inner' style="background: url({vectorSvg}); background-size: 100% 100%;">
+<div class='outerMain' style="background: url({background}); background-size: 100% 100%;">
+  <div class='innerMain' style="background: url({vectorSvg}); background-size: 100% 100%;">
     <h1>jukboks</h1>
   </div>
-  <img src={background} alt="mainpicture" />
+</div>
+
+<div class='outerSecondary'>
+  <div class='innerSecondary'>
+  </div>
 </div>
 
 <style>
 
-  .outer {
+  .outerMain {
     width: 100vw;
     height: 100vh;
     padding: 0px;
@@ -22,16 +26,7 @@
     align-items: center;     /*Центрирование по вертикали */
   }
 
-  img {
-    width: 100%;
-    height: 100%;
-    padding: 0px;
-    margin: 0px;
-    z-index: 1;
-    position: absolute;
-  }
-
-  .inner {
+  .innerMain {
     width: 400px;
     height: 400px;
     /* background: url("/img/backgrounds/mainPageVector.svg"); */
@@ -42,13 +37,19 @@
     align-items: center;
   }
 
-  h1 {
+  .innerMain h1 {
     font-family: "Courier Prime";
     font-style: normal;
     font-weight: normal;
     font-size: 72px;
     line-height: 81px;
     color: #FFFFFF;
+  }
+
+  .outerSecondary {
+    width: 100vw;
+    height: 200vh;
+    background: linear-gradient(180deg, #B9669F 0%, #9ADFF2 100%);;
   }
 
   /* @media (min-width: 640px) {
