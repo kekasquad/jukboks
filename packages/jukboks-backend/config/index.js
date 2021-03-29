@@ -20,8 +20,8 @@ if (isProd && !JWT_SECRET) {
 }
 
 module.exports = {
-  MONGO_URI,
   isDevelopment,
   isProd,
   JWT_SECRET,
+  MONGO_URI,
 };
