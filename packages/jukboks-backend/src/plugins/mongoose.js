@@ -1,4 +1,4 @@
-const fastifyPlugin = require('fastify-plugin');
+const fp = require('fastify-plugin');
 const mongoose = require('mongoose');
 
 async function mongooseConnector(fastify, { uri, settings }, next) {
@@ -22,6 +22,6 @@ async function mongooseConnector(fastify, { uri, settings }, next) {
   next();
 }
 
-module.exports = fastifyPlugin(mongooseConnector, {
+module.exports = fp(mongooseConnector, {
   name: 'mongoose',
 });

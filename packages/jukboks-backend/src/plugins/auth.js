@@ -1,4 +1,4 @@
-const fastifyPlugin = require('fastify-plugin');
+const fp = require('fastify-plugin');
 const { TokenExpiredError } = require('jsonwebtoken');
 
 const messages = {
@@ -50,7 +50,7 @@ async function connectAuth(fastify, opts, next) {
   next();
 }
 
-module.exports = fastifyPlugin(connectAuth, {
+module.exports = fp(connectAuth, {
   name: 'auth',
   dependencies: ['fastify-jwt', 'fastify-sensible'],
 });
