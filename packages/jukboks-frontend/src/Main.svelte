@@ -10,7 +10,7 @@
   class="outerMain"
   style="background: url({background}); background-size: cover; background-position: center;"
 >
-  <Link to="/auth">
+  <Link to="/signup">
     <div class="join" style="background: url({join});">
       <h1>Join</h1>
     </div>
