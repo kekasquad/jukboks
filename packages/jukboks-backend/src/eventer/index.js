@@ -15,7 +15,7 @@ class Eventer extends Emittery {
     this.streamsTimers = {};
 
     this.start = this.start.bind(this);
-    this.stop = this.stopt.bind(this);
+    this.stop = this.stop.bind(this);
     this.pull = this.pull.bind(this);
   }
   start() {
@@ -61,4 +61,4 @@ class Eventer extends Emittery {
   }
 }
 
-module.exports = { Eventer };
+module.exports = { Eventer, EveneterEvenets: EVENTS };

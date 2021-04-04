@@ -31,9 +31,10 @@ async function createServer() {
   });
 
   // Register WS before handlers
-  fastify.register(require('./plugins/ws'));
+  // fastify.register(require('./plugins/ws'));
 
   fastify.register(require('./plugins/socket-io'));
+  fastify.register(require('./routes/ws'));
 
   fastify.get(
     '/ping',
