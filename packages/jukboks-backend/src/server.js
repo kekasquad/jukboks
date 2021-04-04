@@ -22,6 +22,12 @@ async function createServer() {
 
   fastify.register(require('fastify-jwt'), {
     secret: JWT_SECRET,
+    verify: {
+      maxAge: "2y",
+    },
+    sign: {
+      expiresIn: "2y"
+    }
   });
 
   fastify.register(require('./plugins/auth'));
