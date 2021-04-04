@@ -7,7 +7,7 @@ const StreamStatus = {
   SCHEDULED: 2,
   STARTED: 3,
   ENDED: 4,
-}
+};
 
 const StreamSchema = new mongoose.Schema({
   uuid: { type: String, default: () => nanoid(), unique: true },
@@ -17,7 +17,7 @@ const StreamSchema = new mongoose.Schema({
   reactions: { type: Boolean, default: false },
   isPrivate: { type: Boolean, default: true },
   dt_start: { type: Date },
-  status: {type: Number, enum: Object.values(StreamStatus), default: StreamStatus.DRAFT}
+  status: { type: Number, enum: Object.values(StreamStatus), default: StreamStatus.DRAFT },
 });
 
 // TODO: add virtual `dt_end`
