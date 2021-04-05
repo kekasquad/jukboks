@@ -3,6 +3,42 @@
   let vectorSvg = "/img/stuff/mainPageVector.svg";
   let join = "img/stuff/join.svg";
   import { Link } from "svelte-routing";
+
+  async function signUp() {
+    let username = document.getElementById("username").value;
+    let name = document.getElementById("name").value;
+    let password = document.getElementById("password").value;
+
+    if (username.length > 0 && name.length > 0 && password.length > 0) {
+      let json = JSON.stringify({
+        username,
+        password,
+        name,
+      });
+
+      try {
+        const res = await fetch("http://localhost:8080/auth/signup", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: json,
+        });
+
+        json = await res.json();
+
+        if (!res.ok) {
+          throw new Error(json.message);
+        }
+
+        localStorage.setItem("token", json.token);
+      } catch (e) {
+        console.log(e);
+      }
+    } else {
+      alert("Fill all fields to join");
+    }
+  }
 </script>
 
 <div
@@ -18,15 +54,12 @@
 
   <div class="authFields">
     <input class="field" id="username" placeholder="username" />
+    <input class="field" id="name" placeholder="name" />
     <input class="field" id="password" placeholder="password" />
-    <input class="field" id="passwordCheck" placeholder="password, again" />
     <Link to="/signin">
       <h2>Already have an account?</h2>
     </Link>
-    <!-- <button id="switch">
-      <h2>Already have an account?</h2>
-    </button> -->
-    <button id="join" style="background: url({join});">
+    <button id="join" style="background: url({join});" on:click={signUp}>
       <h1>Join</h1>
     </button>
   </div>
@@ -122,8 +155,7 @@
     line-height: var(--fieldHeight);
   }
 
-  .field[id="password"],
-  .field[id="passwordCheck"] {
+  .field[id="password"] {
     -webkit-text-security: disc;
   }
 
