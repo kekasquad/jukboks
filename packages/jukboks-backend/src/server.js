@@ -23,11 +23,11 @@ async function createServer() {
   fastify.register(require('fastify-jwt'), {
     secret: JWT_SECRET,
     verify: {
-      maxAge: "2y",
+      maxAge: '2y',
     },
     sign: {
-      expiresIn: "2y"
-    }
+      expiresIn: '2y',
+    },
   });
 
   fastify.register(require('./plugins/auth'));
@@ -35,9 +35,6 @@ async function createServer() {
   fastify.register(require('./plugins/mongoose'), {
     uri: MONGO_URI,
   });
-
-  // Register WS before handlers
-  // fastify.register(require('./plugins/ws'));
 
   fastify.register(require('./plugins/socket-io'));
   fastify.register(require('./routes/ws'));
@@ -62,13 +59,6 @@ async function createServer() {
       return { ok: true };
     },
   );
-
-  fastify.get('/ws', { websocket: true }, (connection, request) => {
-    connection.socket.on('message', async (message) => {
-      fastify.log.debug({ id: request.id, msg: message });
-      connection.socket.send(`Hi! You wrote: ${message}`);
-    });
-  });
 
   fastify.register(require('./routes/user'));
 
