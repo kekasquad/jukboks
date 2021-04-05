@@ -19,9 +19,13 @@ if (isProd && !JWT_SECRET) {
   JWT_SECRET = 'default';
 }
 
+// Public url of jukboks-frontend, needed for CORS
+PUBLIC_URL = process.env.PUBLIC_URL || 'https://jukboks.danil.co';
+
 module.exports = {
   isDevelopment,
   isProd,
   JWT_SECRET,
   MONGO_URI,
+  PUBLIC_URL,
 };

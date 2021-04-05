@@ -1,6 +1,6 @@
 const Fastify = require('fastify');
 const mongoose = require('mongoose');
-const { MONGO_URI, isDevelopment, isProd, JWT_SECRET } = require('../config');
+const { isDevelopment, isProd, MONGO_URI, JWT_SECRET, PUBLIC_URL } = require('../config');
 
 async function createServer() {
   const fastify = Fastify({
@@ -28,6 +28,10 @@ async function createServer() {
     sign: {
       expiresIn: '2y',
     },
+  });
+
+  fastify.register(require('fastify-cors'), {
+    origin: isDevelopment ? /localhost/ : PUBLIC_URL,
   });
 
   fastify.register(require('./plugins/auth'));
