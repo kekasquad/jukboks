@@ -9,6 +9,12 @@ async function mongooseConnector(fastify, { uri, settings }, next) {
     },
     settings,
   );
+
+  mongoose.set('useNewUrlParser', true);
+  mongoose.set('useFindAndModify', false);
+  mongoose.set('useCreateIndex', true);
+  mongoose.set('useUnifiedTopology', true);
+
   await mongoose.connect(uri, settings);
 
   fastify.addHook('onClose', (app, done) => {
