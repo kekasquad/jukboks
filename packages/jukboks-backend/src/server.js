@@ -10,6 +10,7 @@ async function createServer() {
       level: isDevelopment ? 'debug' : 'info',
     },
   });
+
   fastify.register(require('fastify-swagger'), {
     exposeRoute: true,
     routePrefix: '/doc',
@@ -17,9 +18,15 @@ async function createServer() {
       info: 'Jukboks API',
     },
   });
-
   fastify.register(require('fastify-sensible'));
 
+  // Client-side
+  fastify.register(require('fastify-cors'), {
+    origin: isDevelopment ? /localhost/ : PUBLIC_URL,
+  });
+  fastify.register(require('fastify-helmet'), { contentSecurityPolicy: false });
+
+  // Auth
   fastify.register(require('fastify-jwt'), {
     secret: JWT_SECRET,
     verify: {
@@ -29,20 +36,18 @@ async function createServer() {
       expiresIn: '2y',
     },
   });
-
-  fastify.register(require('fastify-cors'), {
-    origin: isDevelopment ? /localhost/ : PUBLIC_URL,
-  });
-
   fastify.register(require('./plugins/auth'));
 
+  // WebSocket
+  fastify.register(require('./plugins/socket-io'));
+  fastify.register(require('./routes/ws'));
+
+  // DB
   fastify.register(require('./plugins/mongoose'), {
     uri: MONGO_URI,
   });
 
-  fastify.register(require('./plugins/socket-io'));
-  fastify.register(require('./routes/ws'));
-
+  // Routes
   fastify.get(
     '/ping',
     {
