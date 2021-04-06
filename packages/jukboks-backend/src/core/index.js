@@ -16,7 +16,7 @@ class Core {
   constructor(io, logger) {
     this.io = io;
     this.logger = logger;
-    this.eventer = new Eventer();
+    this.eventer = new Eventer(logger);
 
     this.registerEveneterHandlers.bind(this)();
 
@@ -27,6 +27,7 @@ class Core {
 
   start() {
     this.eventer.start();
+    this.logger.info('Core started');
   }
 
   stop() {
