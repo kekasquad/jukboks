@@ -38,7 +38,7 @@
 
 <style>
   .outerMain {
-    width: 100vw;
+    width: 100%;
     height: 100vh;
     padding: 0px;
     margin: 0px;
@@ -84,7 +84,7 @@
   }
 
   .outerSecondary {
-    width: 100vw;
+    width: 100%;
     height: auto;
     background: linear-gradient(180deg, #b9669f 0%, #9adff2 100%);
     display: flex;
@@ -109,8 +109,9 @@
   }
 
   .outerSecondary img {
-    margin: 1.5vh 12.5vw 8.5vh;
-    height: 75vh;
+    /* margin: 1.5vh 12.5vw 8.5vh; */
+    /* height: 75vh; */
+    width: 100%;
   }
 
   .outerSecondary h1 {
