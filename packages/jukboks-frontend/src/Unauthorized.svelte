@@ -6,7 +6,7 @@
 </script>
 
 <div class="outer">
-  <h1>You are not Unauthorized :(</h1>
+  <h1>You are not authorized :(</h1>
   <h1>To continue you should <Link to="/signin">login</Link></h1>
 </div>
 
