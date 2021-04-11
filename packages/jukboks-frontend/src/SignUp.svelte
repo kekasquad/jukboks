@@ -2,7 +2,7 @@
   let background = "/img/backgrounds/mainPage.png";
   let vectorSvg = "/img/stuff/mainPageVector.svg";
   let join = "img/stuff/join.svg";
-  import { Link } from "svelte-routing";
+  import { Link, navigate } from "svelte-routing";
 
   async function signUp() {
     let username = document.getElementById("username").value;
@@ -32,8 +32,9 @@
         }
 
         localStorage.setItem("token", json.token);
+        navigate("/profile", { replace: true });
       } catch (e) {
-        console.log(e);
+        alert(e);
       }
     } else {
       alert("Fill all fields to join");
