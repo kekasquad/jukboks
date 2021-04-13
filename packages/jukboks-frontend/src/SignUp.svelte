@@ -1,45 +1,9 @@
 <script>
+  import { Link } from "svelte-routing";
+  import { signUp } from "./stuff/network";
   let background = "/img/backgrounds/mainPage.png";
   let vectorSvg = "/img/stuff/mainPageVector.svg";
   let join = "img/stuff/join.svg";
-  import { Link, navigate } from "svelte-routing";
-
-  async function signUp() {
-    let username = document.getElementById("username").value;
-    let name = document.getElementById("name").value;
-    let password = document.getElementById("password").value;
-
-    if (username.length > 0 && name.length > 0 && password.length > 0) {
-      let json = JSON.stringify({
-        username,
-        password,
-        name,
-      });
-
-      try {
-        const res = await fetch("http://localhost:8080/auth/signup", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: json,
-        });
-
-        json = await res.json();
-
-        if (!res.ok) {
-          throw new Error(json.message);
-        }
-
-        localStorage.setItem("token", json.token);
-        navigate("/profile", { replace: true });
-      } catch (e) {
-        alert(e);
-      }
-    } else {
-      alert("Fill all fields to join");
-    }
-  }
 </script>
 
 <div

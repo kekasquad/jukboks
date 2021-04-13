@@ -1,43 +1,9 @@
 <script>
+  import { Link } from "svelte-routing";
+  import { login } from "./stuff/network";
   let background = "/img/backgrounds/mainPage.png";
   let vectorSvg = "/img/stuff/mainPageVector.svg";
   let join = "img/stuff/join.svg";
-  import { Link, navigate } from "svelte-routing";
-
-  async function logIn() {
-    let username = document.getElementById("username").value;
-    let password = document.getElementById("password").value;
-
-    if (username.length > 0 && password.length > 0) {
-      let json = JSON.stringify({
-        username,
-        password,
-      });
-
-      try {
-        const res = await fetch("http://localhost:8080/auth/login", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: json,
-        });
-
-        json = await res.json();
-
-        if (!res.ok) {
-          throw new Error(json.message);
-        }
-
-        localStorage.setItem("token", json.token);
-        navigate("/profile", { replace: true });
-      } catch (e) {
-        alert(e);
-      }
-    } else {
-      alert("Fill all fields to login");
-    }
-  }
 </script>
 
 <div
@@ -57,7 +23,7 @@
     <Link to="/signup">
       <h2>Sign up</h2>
     </Link>
-    <button id="signIn" style="background: url({join});" on:click={logIn}>
+    <button id="signIn" style="background: url({join});" on:click={login}>
       <h1>Sign in</h1>
     </button>
   </div>
