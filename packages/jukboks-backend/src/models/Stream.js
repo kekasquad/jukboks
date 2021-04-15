@@ -11,10 +11,12 @@ const StreamSchema = new mongoose.Schema({
   // reactions: { type: Boolean, default: false },
   // isPrivate: { type: Boolean, default: true },
   dt_start: { type: Number },
+  dt_end: { type: Number },
   duration: { type: Number }, // duration in *seconds*
 });
 
 StreamSchema.index({ dt_start: -1 });
+StreamSchema.index({ dt_end: -1 });
 
 StreamSchema.virtual('dt_end').get(function () {
   return this.dt_start + this.duration;
@@ -31,4 +33,16 @@ StreamSchema.methods.isEnded = function () {
 
 const Stream = mongoose.model('Stream', StreamSchema);
 
-module.exports = { Stream };
+// Okay i tried using mongoose modllewares for this, but they are awful
+/**
+ * Mutates stream with `dt_end` and `duration`
+ * @param {Stream} stream
+ * @returns {Stream}
+ */
+function calculateTimes(stream) {
+  stream.duration = doc.songs.reduce((acc, song) => acc + song.duration, 0);
+  stream.dt_end = stream.dt_start + duration;
+  return stream;
+}
+
+module.exports = { Stream, calculateTimes };

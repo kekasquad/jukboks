@@ -1,5 +1,4 @@
-const EventEmitter = require('events');
-const { Stream, StreamStatus } = require('../models/Stream');
+const { Stream } = require('../models/Stream');
 const Emittery = require('emittery');
 
 const EVENTS = {
@@ -43,22 +42,32 @@ class Eventer extends Emittery {
     /**
      * Main logic for sending events
      *
-     * For Streams in status `SCHEDULED`:
-     * 1. Pull soonest streams, i.e dt_start - now() <= this.timeBefore
-     * 2. Set timers for firing `streamStarted` event
-     * 3. Before firing an event, check that stream has not changed its state (?)
-     * 4. On `streamStarted` event schedule timers for `song` event (send it 2s earlier?)
+     * 1.
+     * 1.1 Pull soonest streams, i.e dt_start - now() <= this.timeBefore
+     * 1.2 Pull streams already live, i.e dt_start + duration < now()
+     * 2. Set timers for firing `STREAM_STARTED` event
+     * 3. Set timers for firing `SONG_STARTED` event
      */
 
     let streamsScheduled = 0;
     let songsScheduled = 0;
 
-    // 1
+    // 1.1 + 1.2
+    const now = Date.now();
     const streams = await Stream.find({
-      dt_start: {
-        $lt: Date.now() + this.timeBefore,
-        $gt: Date.now(),
-      },
+      $or: [
+        {
+          dt_start: {
+            $lt: now + this.timeBefore,
+            $gt: now,
+          },
+        },
+        {
+          dt_end: {
+            $lt: now,
+          },
+        },
+      ],
     });
 
     // 2
@@ -71,6 +80,7 @@ class Eventer extends Emittery {
       }, stream.dt_start - Date.now());
       streamsScheduled += 1;
 
+      // 3
       let offset = 0;
       for (const song of stream.songs) {
         const id = song._id.toString();
