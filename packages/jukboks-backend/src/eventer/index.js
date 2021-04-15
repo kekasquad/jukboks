@@ -44,7 +44,7 @@ class Eventer extends Emittery {
      *
      * 1.
      * 1.1 Pull soonest streams, i.e dt_start - now() <= this.timeBefore
-     * 1.2 Pull streams already live, i.e dt_start + duration < now()
+     * 1.2 Pull streams already live, i.e dt_start < now() < dt_end
      * 2. Set timers for firing `STREAM_STARTED` event
      * 3. Set timers for firing `SONG_STARTED` event
      */
@@ -63,8 +63,11 @@ class Eventer extends Emittery {
           },
         },
         {
-          dt_end: {
+          dt_start: {
             $lt: now,
+          },
+          dt_end: {
+            $gt: now,
           },
         },
       ],
