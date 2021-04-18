@@ -1,5 +1,5 @@
 <script>
-  import { Jellyfish } from "svelte-loading-spinners";
+  import { Jellyfish } from 'svelte-loading-spinners';
 </script>
 
 <div class="loader">

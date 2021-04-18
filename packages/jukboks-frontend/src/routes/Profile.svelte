@@ -1,14 +1,14 @@
 <script>
   // TODO: add func to button
   // TODO: add streams
-  import Row from "../components/Row.svelte";
-  import Heading from "../components/Heading.svelte";
-  import Button from "../components/Button.svelte";
-  import Loader from "../components/Loader";
-  import { me } from "../utils/network";
-  import { token } from "../utils/stores";
+  import Row from '../components/Row.svelte';
+  import Heading from '../components/Heading.svelte';
+  import Button from '../components/Button.svelte';
+  import Loader from '../components/Loader';
+  import { me } from '../utils/network';
+  import { token } from '../utils/stores';
 
-  let background = "/img/backgrounds/userPage.png";
+  let background = '/img/backgrounds/userPage.png';
 
   let tokenValue;
 
@@ -22,22 +22,10 @@
 {#await promise}
   <Loader />
 {:then user}
-  <div
-    class="outer"
-    style="background: url({background}); background-size: cover; background-position: center;"
-  >
-    <Heading
-      heading={"Welcome, " + user.name}
-      style="align-self: flex-start;"
-    />
-    <Heading
-      heading="Your streams"
-      style="align-self: flex-start; margin-top: 30px"
-    />
-    <Button
-      title="Schedule new"
-      style="margin-top: auto; align-self: flex-end;"
-    />
+  <div class="outer" style="background: url({background}); background-size: cover; background-position: center;">
+    <Heading heading={'Welcome, ' + user.name} style="align-self: flex-start;" />
+    <Heading heading="Your streams" style="align-self: flex-start; margin-top: 30px" />
+    <Button title="Schedule new" style="margin-top: auto; align-self: flex-end;" />
   </div>
 {:catch error}
   <p style="color: red">{error.message}</p>

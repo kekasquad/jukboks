@@ -1,11 +1,11 @@
 <script>
   export let id;
-  import Heading from "../components/Heading";
-  import Loader from "../components/Loader";
-  import { getStream } from "../utils/network";
-  import { token } from "../utils/stores";
+  import Heading from '../components/Heading';
+  import Loader from '../components/Loader';
+  import { getStream } from '../utils/network';
+  import { token } from '../utils/stores';
 
-  let background = "/img/backgrounds/streamPage.png";
+  let background = '/img/backgrounds/streamPage.png';
 
   let tokenValue;
 

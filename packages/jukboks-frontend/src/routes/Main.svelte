@@ -1,26 +1,20 @@
 <script>
-  import { Link } from "svelte-navigator";
+  import { Link } from 'svelte-navigator';
 
-  let background = "/img/backgrounds/mainPage.png";
-  let vectorSvg = "/img/stuff/mainPageVector.svg";
-  let intro = "img/stuff/mainPageIntro.png";
-  let join = "img/stuff/join.svg";
+  let background = '/img/backgrounds/mainPage.png';
+  let vectorSvg = '/img/stuff/mainPageVector.svg';
+  let intro = 'img/stuff/mainPageIntro.png';
+  let join = 'img/stuff/join.svg';
 </script>
 
-<div
-  class="outerMain"
-  style="background: url({background}); background-size: cover; background-position: center;"
->
+<div class="outerMain" style="background: url({background}); background-size: cover; background-position: center;">
   <Link to="/signup">
     <div class="join" style="background: url({join});">
       <h1>Join</h1>
     </div>
   </Link>
 
-  <div
-    class="innerMain"
-    style="background: url({vectorSvg}); background-size: 100% 100%;"
-  >
+  <div class="innerMain" style="background: url({vectorSvg}); background-size: 100% 100%;">
     <h1>jukboks</h1>
   </div>
 </div>
@@ -99,11 +93,11 @@
     margin: 0vh 12.5vw;
   }
 
-  .outerSecondary h2[id="first"] {
+  .outerSecondary h2[id='first'] {
     margin-top: 10vh;
   }
 
-  .outerSecondary h2[id="second"] {
+  .outerSecondary h2[id='second'] {
     margin-top: 5vh;
     align-self: flex-end;
     text-align: right;

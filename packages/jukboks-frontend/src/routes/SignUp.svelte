@@ -1,19 +1,13 @@
 <script>
-  import { Link } from "svelte-navigator";
-  import { signUp } from "../utils/network";
-  let background = "/img/backgrounds/mainPage.png";
-  let vectorSvg = "/img/stuff/mainPageVector.svg";
-  let join = "img/stuff/join.svg";
+  import { Link } from 'svelte-navigator';
+  import { signUp } from '../utils/network';
+  let background = '/img/backgrounds/mainPage.png';
+  let vectorSvg = '/img/stuff/mainPageVector.svg';
+  let join = 'img/stuff/join.svg';
 </script>
 
-<div
-  class="outerMain"
-  style="background: url({background}); background-size: cover; background-position: center;"
->
-  <div
-    class="icon"
-    style="background: url({vectorSvg}); background-size: 100% 100%;"
-  >
+<div class="outerMain" style="background: url({background}); background-size: cover; background-position: center;">
+  <div class="icon" style="background: url({vectorSvg}); background-size: 100% 100%;">
     <h1>jukboks</h1>
   </div>
 
@@ -55,7 +49,7 @@
     align-items: center;
   }
 
-  button[id="join"] {
+  button[id='join'] {
     height: 60px;
     width: 130px;
   }
@@ -120,7 +114,7 @@
     line-height: var(--fieldHeight);
   }
 
-  .field[id="password"] {
+  .field[id='password'] {
     -webkit-text-security: disc;
   }
 

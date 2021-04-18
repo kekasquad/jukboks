@@ -1,11 +1,11 @@
-import { navigate } from "svelte-navigator";
+import { navigate } from 'svelte-navigator';
 import { token } from './stores.js';
 
-const base = "http://localhost:8080";
+const base = 'http://localhost:8080';
 
 async function login() {
-  let username = document.getElementById("username").value;
-  let password = document.getElementById("password").value;
+  let username = document.getElementById('username').value;
+  let password = document.getElementById('password').value;
 
   if (username.length > 0 && password.length > 0) {
     let json = JSON.stringify({
@@ -14,10 +14,10 @@ async function login() {
     });
 
     try {
-      const res = await fetch(base + "/auth/login", {
-        method: "POST",
+      const res = await fetch(base + '/auth/login', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: json,
       });
@@ -28,21 +28,21 @@ async function login() {
         throw new Error(json.message);
       }
 
-      localStorage.setItem("token", json.token);
+      localStorage.setItem('token', json.token);
       token.set(localStorage.getItem('token'));
-      navigate("/profile", { replace: true });
+      navigate('/profile', { replace: true });
     } catch (e) {
       alert(e);
     }
   } else {
-    alert("Fill all fields to login");
+    alert('Fill all fields to login');
   }
 }
 
 async function signUp() {
-  let username = document.getElementById("username").value;
-  let name = document.getElementById("name").value;
-  let password = document.getElementById("password").value;
+  let username = document.getElementById('username').value;
+  let name = document.getElementById('name').value;
+  let password = document.getElementById('password').value;
 
   if (username.length > 0 && name.length > 0 && password.length > 0) {
     let json = JSON.stringify({
@@ -52,10 +52,10 @@ async function signUp() {
     });
 
     try {
-      const res = await fetch(base + "/auth/signup", {
-        method: "POST",
+      const res = await fetch(base + '/auth/signup', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: json,
       });
@@ -66,23 +66,23 @@ async function signUp() {
         throw new Error(json.message);
       }
 
-      localStorage.setItem("token", json.token);
+      localStorage.setItem('token', json.token);
       token.set(localStorage.getItem('token'));
-      navigate("/profile", { replace: true });
+      navigate('/profile', { replace: true });
     } catch (e) {
       alert(e);
     }
   } else {
-    alert("Fill all fields to join");
+    alert('Fill all fields to join');
   }
 }
 
 async function me(token) {
   try {
-    const res = await fetch(base + "/me", {
-      method: "GET",
+    const res = await fetch(base + '/me', {
+      method: 'GET',
       headers: {
-        Authorization: "Bearer " + token,
+        Authorization: 'Bearer ' + token,
       },
     });
 
@@ -101,10 +101,10 @@ async function me(token) {
 
 async function getStream(id, token) {
   try {
-    const res = await fetch(base + "/stream/" + id, {
-      method: "GET",
+    const res = await fetch(base + '/stream/' + id, {
+      method: 'GET',
       headers: {
-        Authorization: "Bearer " + token,
+        Authorization: 'Bearer ' + token,
       },
     });
 

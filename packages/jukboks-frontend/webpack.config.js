@@ -1,33 +1,33 @@
-const path = require("path");
-const HtmlWebpackPlugin = require("html-webpack-plugin");
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const sveltePreprocess = require("svelte-preprocess");
+const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const sveltePreprocess = require('svelte-preprocess');
 
-const mode = process.env.NODE_ENV || "development";
-const prod = mode === "production";
+const mode = process.env.NODE_ENV || 'development';
+const prod = mode === 'production';
 
 module.exports = {
-  entry: ["./src/main.js"],
+  entry: ['./src/main.js'],
   resolve: {
     alias: {
-      svelte: path.dirname(require.resolve("svelte/package.json")),
+      svelte: path.dirname(require.resolve('svelte/package.json')),
     },
-    extensions: [".mjs", ".js", ".svelte"],
-    mainFields: ["svelte", "browser", "module", "main"],
+    extensions: ['.mjs', '.js', '.svelte'],
+    mainFields: ['svelte', 'browser', 'module', 'main'],
   },
   output: {
-    path: path.join(__dirname, "/dist"),
-    filename: "[name].js",
-    chunkFilename: "[name].[id].js",
+    path: path.join(__dirname, '/dist'),
+    filename: '[name].js',
+    chunkFilename: '[name].[id].js',
     clean: true,
-    publicPath: "/"
+    publicPath: '/',
   },
   module: {
     rules: [
       {
         test: /\.svelte$/,
         use: {
-          loader: "svelte-loader",
+          loader: 'svelte-loader',
           options: {
             compilerOptions: {
               dev: !prod,
@@ -40,7 +40,7 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        use: [MiniCssExtractPlugin.loader, "css-loader"],
+        use: [MiniCssExtractPlugin.loader, 'css-loader'],
       },
       {
         // required to prevent errors from Svelte on Webpack 5+
@@ -54,14 +54,14 @@ module.exports = {
   mode,
   plugins: [
     new HtmlWebpackPlugin({
-      template: path.resolve(__dirname, "public/index.html"),
+      template: path.resolve(__dirname, 'public/index.html'),
     }),
     new MiniCssExtractPlugin(),
   ],
-  devtool: prod ? false : "source-map",
+  devtool: prod ? false : 'source-map',
   devServer: {
     historyApiFallback: true,
-    contentBase: path.resolve(__dirname, "dist"),
+    contentBase: path.resolve(__dirname, 'dist'),
     hot: true,
     port: 3000,
   },
