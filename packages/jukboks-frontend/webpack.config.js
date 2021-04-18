@@ -20,6 +20,7 @@ module.exports = {
     filename: "[name].js",
     chunkFilename: "[name].[id].js",
     clean: true,
+    publicPath: "/"
   },
   module: {
     rules: [

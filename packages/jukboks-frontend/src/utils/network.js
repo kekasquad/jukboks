@@ -1,4 +1,4 @@
-import { navigate } from "svelte-routing";
+import { navigate } from "svelte-navigator";
 import { token } from './stores.js';
 
 async function login() {

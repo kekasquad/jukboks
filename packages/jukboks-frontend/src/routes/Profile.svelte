@@ -4,9 +4,9 @@
   import Row from "../components/Row.svelte";
   import Heading from "../components/Heading.svelte";
   import Button from "../components/Button.svelte";
-  import { Link, navigate } from "svelte-routing";
   import { me } from "../utils/network";
   import { token } from "../utils/stores.js";
+  
   let background = "/img/backgrounds/UserPage.png";
 
   let tokenValue;
