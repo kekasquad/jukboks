@@ -6,7 +6,7 @@
   import Button from "../components/Button.svelte";
   import { me } from "../utils/network";
   import { token } from "../utils/stores.js";
-  
+
   let background = "/img/backgrounds/UserPage.png";
 
   let tokenValue;

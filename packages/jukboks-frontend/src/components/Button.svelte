@@ -1,10 +1,10 @@
 <script>
   export let title;
   export let func;
-  let stylish = $$props.style;
+  export let style;
 </script>
 
-<button class="button" on:click={func} style={stylish}>
+<button class="button" on:click={func} {style}>
   <h1>{title}</h1>
 </button>>
 

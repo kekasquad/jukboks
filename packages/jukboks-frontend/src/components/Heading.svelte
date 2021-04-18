@@ -1,9 +1,9 @@
 <script>
   export let heading;
-  let stylish = $$props.style;
+  export let style;
 </script>
 
-<div class="heading" style={stylish}>
+<div class="heading" {style}>
   {heading}
 </div>
 

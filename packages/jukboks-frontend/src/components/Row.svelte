@@ -1,14 +1,14 @@
 <script>
   export let heading;
-  let stylish = $$props.style;
+  export let style;
 </script>
 
-<h1>
+<div class="heading" {style}>
   {heading}
-</h1>
+</div>
 
 <style>
-  h1 {
+  .heading {
     padding: 0px;
     margin: 0px;
     font-size: 36px;

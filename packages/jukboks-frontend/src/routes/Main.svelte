@@ -1,6 +1,6 @@
 <script>
   import { Link } from "svelte-navigator";
-  
+
   let background = "/img/backgrounds/mainPage.png";
   let vectorSvg = "/img/stuff/mainPageVector.svg";
   let intro = "img/stuff/mainPageIntro.png";
