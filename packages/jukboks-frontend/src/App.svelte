@@ -5,6 +5,7 @@
   import SignIn from "./routes/SignIn.svelte";
   import SignUp from "./routes/SignUp.svelte";
   import Profile from "./routes/Profile.svelte";
+  import Soundcloud from "./routes/Soundcloud";
   // export let url = ""; //This property is necessary declare to avoid ignore the Router
 </script>
 
@@ -19,5 +20,6 @@
     <PrivateRoute path="/stream/:id" let:params>
       <h1>{params.id}</h1>
     </PrivateRoute>
+    <Route path="/test/sc" component={Soundcloud} />
   </main>
 </Router>
