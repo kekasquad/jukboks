@@ -1,6 +1,8 @@
 import { navigate } from "svelte-navigator";
 import { token } from './stores.js';
 
+const base = "http://localhost:8080";
+
 async function login() {
   let username = document.getElementById("username").value;
   let password = document.getElementById("password").value;
@@ -12,7 +14,7 @@ async function login() {
     });
 
     try {
-      const res = await fetch("http://localhost:8080/auth/login", {
+      const res = await fetch(base + "/auth/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -50,7 +52,7 @@ async function signUp() {
     });
 
     try {
-      const res = await fetch("http://localhost:8080/auth/signup", {
+      const res = await fetch(base + "/auth/signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -77,7 +79,7 @@ async function signUp() {
 
 async function me(token) {
   try {
-    const res = await fetch("http://localhost:8080/me", {
+    const res = await fetch(base + "/me", {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
@@ -97,4 +99,26 @@ async function me(token) {
   }
 }
 
-export { login, signUp, me };
+async function getStream(id, token) {
+  try {
+    const res = await fetch(base + "/stream/" + id, {
+      method: "GET",
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    });
+
+    let json = await res.json();
+
+    if (!res.ok) {
+      throw new Error(json.message);
+    }
+
+    console.log(json);
+    return json;
+  } catch (e) {
+    alert(e);
+  }
+}
+
+export { login, signUp, me, getStream };

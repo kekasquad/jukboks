@@ -4,24 +4,23 @@
   import Row from "../components/Row.svelte";
   import Heading from "../components/Heading.svelte";
   import Button from "../components/Button.svelte";
+  import Loader from "../components/Loader";
   import { me } from "../utils/network";
-  import { token } from "../utils/stores.js";
+  import { token } from "../utils/stores";
 
-  let background = "/img/backgrounds/UserPage.png";
+  let background = "/img/backgrounds/userPage.png";
 
   let tokenValue;
 
-  const unsubscribe = token.subscribe((value) => {
+  const subscribe = token.subscribe((value) => {
     tokenValue = value;
   });
 
-  console.log(tokenValue);
-  // console.log(token.value);
   let promise = me(tokenValue);
 </script>
 
 {#await promise}
-  <h1>loading...</h1>
+  <Loader />
 {:then user}
   <div
     class="outer"
