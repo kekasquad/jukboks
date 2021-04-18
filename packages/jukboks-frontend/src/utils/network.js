@@ -1,4 +1,5 @@
 import { navigate } from "svelte-routing";
+import { token } from './stores.js';
 
 async function login() {
   let username = document.getElementById("username").value;
@@ -26,6 +27,7 @@ async function login() {
       }
 
       localStorage.setItem("token", json.token);
+      token.set(localStorage.getItem('token'));
       navigate("/profile", { replace: true });
     } catch (e) {
       alert(e);
@@ -63,6 +65,7 @@ async function signUp() {
       }
 
       localStorage.setItem("token", json.token);
+      token.set(localStorage.getItem('token'));
       navigate("/profile", { replace: true });
     } catch (e) {
       alert(e);

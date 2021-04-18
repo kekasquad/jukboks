@@ -18,9 +18,9 @@ const StreamSchema = new mongoose.Schema({
 StreamSchema.index({ dt_start: -1 });
 StreamSchema.index({ dt_end: -1 });
 
-StreamSchema.virtual('dt_end').get(function () {
-  return this.dt_start + this.duration;
-});
+// StreamSchema.virtual('dt_end').get(function () {
+//   return this.dt_start + this.duration;
+// });
 
 StreamSchema.methods.isStarted = function () {
   const now = Date.now();

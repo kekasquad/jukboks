@@ -1,6 +1,6 @@
 <script>
   import { Link } from "svelte-routing";
-  import { signUp } from "./stuff/network";
+  import { login } from "../utils/network";
   let background = "/img/backgrounds/mainPage.png";
   let vectorSvg = "/img/stuff/mainPageVector.svg";
   let join = "img/stuff/join.svg";
@@ -19,13 +19,12 @@
 
   <div class="authFields">
     <input class="field" id="username" placeholder="username" />
-    <input class="field" id="name" placeholder="name" />
     <input class="field" id="password" placeholder="password" />
-    <Link to="/signin">
-      <h2>Already have an account?</h2>
+    <Link to="/signup">
+      <h2>Sign up</h2>
     </Link>
-    <button id="join" style="background: url({join});" on:click={signUp}>
-      <h1>Join</h1>
+    <button id="signIn" style="background: url({join});" on:click={login}>
+      <h1>Sign in</h1>
     </button>
   </div>
 </div>
@@ -55,9 +54,10 @@
     align-items: center;
   }
 
-  button[id="join"] {
+  button[id="signIn"] {
     height: 60px;
-    width: 130px;
+    width: 200px;
+    /* display: none; */
   }
 
   button h1 {
@@ -125,8 +125,8 @@
   }
 
   /* @media (min-width: 640px) {
-          main {
-            max-width: none;
-          }
-        } */
+        main {
+          max-width: none;
+        }
+      } */
 </style>
