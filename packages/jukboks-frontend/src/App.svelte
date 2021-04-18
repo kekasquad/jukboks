@@ -13,8 +13,11 @@
     <Route path="/" component={Main} />
     <Route path="/signin" component={SignIn} />
     <Route path="/signup" component={SignUp} />
+    <PrivateRoute path="/profile">
+      <Profile />
+    </PrivateRoute>
     <PrivateRoute path="/stream/:id" let:params>
-        <h1>{params.id}</h1>
+      <h1>{params.id}</h1>
     </PrivateRoute>
   </main>
 </Router>
