@@ -70,6 +70,8 @@ async function createServer() {
   );
 
   fastify.register(require('./routes/user'));
+  fastify.register(require('./routes/stream'));
+  fastify.register(require('./routes/song'));
 
   return fastify;
 }
