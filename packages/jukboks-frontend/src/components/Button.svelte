@@ -6,7 +6,7 @@
 
 <button class="button" on:click={func} {style}>
   <h1>{title}</h1>
-</button>>
+</button>
 
 <style>
   h1 {
