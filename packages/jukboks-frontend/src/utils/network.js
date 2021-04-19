@@ -121,4 +121,30 @@ async function getStream(id, token) {
   }
 }
 
-export { login, signUp, me, getStream };
+async function getSong(url, token) {
+  try {
+    let sentJson = JSON.stringify({
+      url,
+    });
+
+    const res = await fetch(base + '/song', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token,
+      },
+      body: sentJson,
+    });
+
+    let json = await res.json();
+
+    if (!res.ok) {
+      throw new Error(json.message);
+    }
+
+  } catch (e) {
+    alert(e);
+  }
+}
+
+export { login, signUp, me, getStream, getSong };
