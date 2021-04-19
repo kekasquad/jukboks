@@ -13,6 +13,7 @@
     "prettier": "2.2.1",
     "prettier-plugin-svelte": "^2.1.6",
     "svelte": "^3.32.3",
+    "svelte-calendar": "^2.0.4",
     "svelte-check": "^1.1.35",
     "svelte-loader": "^3.0.0",
     "svelte-loading-spinners": "^0.1.4",

@@ -8,6 +8,9 @@
   import Profile from './routes/Profile.svelte';
   import Soundcloud from './routes/Soundcloud';
   import Stream from './routes/Stream.svelte';
+  import CreateStream from './routes/CreateStream.svelte';
+  import NotFound from './routes/NotFound.svelte';
+
   // export let url = ""; //This property is necessary declare to avoid ignore the Router
 </script>
 
@@ -23,9 +26,13 @@
     <PrivateRoute path="/profile">
       <Profile />
     </PrivateRoute>
+    <PrivateRoute path="/new/stream" let:params>
+      <CreateStream />
+    </PrivateRoute>
     <PrivateRoute path="/stream/:id" let:params>
       <Stream id={params.id} />
     </PrivateRoute>
     <Route path="/test/sc" component={Soundcloud} />
+    <Route component={NotFound} />
   </main>
 </Router>
