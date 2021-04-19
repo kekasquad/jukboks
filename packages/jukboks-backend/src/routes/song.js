@@ -9,10 +9,11 @@ async function routes(fastify, options) {
     },
     async (request, reply) => {
       let songURL = request.body.url;
-      let metadata = await parseMetadataByUrl(songURL);
-      let json;
+      // console.log(songURL);
+      let metadata = await parseMetadataByUrl('https://soundcloud.com/fkatwigsupdates/vggapmashup');
+      // let json;
       console.log(metadata);
-      reply.send(json);
+      // reply.send(json);
     },
   );
 }
