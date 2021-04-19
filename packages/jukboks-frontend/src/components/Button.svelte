@@ -26,4 +26,8 @@
     justify-content: center;
     align-items: center;
   }
+
+  .button:hover {
+    cursor: pointer;
+  }
 </style>

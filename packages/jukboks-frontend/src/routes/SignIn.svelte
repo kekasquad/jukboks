@@ -112,6 +112,7 @@
     color: #cccccc;
     font-size: var(--fieldFont);
     line-height: var(--fieldHeight);
+    text-align: center;
   }
 
   .field[id='password'] {
