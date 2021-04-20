@@ -58,7 +58,7 @@ function normalizeMetadata(meta) {
     duration: set('duration', (s) => toSeconds(parse(s))),
     'soundcloud:user': set('artist', (s) => s.split('/').pop()),
   };
-  console.log(meta);
+
   for (const [key, value] of Object.entries(meta)) {
     if (key in apply) {
       apply[key](value);
