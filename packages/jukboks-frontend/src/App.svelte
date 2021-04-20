@@ -10,6 +10,9 @@
   import Stream from './routes/Stream.svelte';
   import CreateStream from './routes/CreateStream.svelte';
   import NotFound from './routes/NotFound.svelte';
+  import { subscribe } from './utils/api';
+
+  subscribe();
 
   // export let url = ""; //This property is necessary declare to avoid ignore the Router
 </script>

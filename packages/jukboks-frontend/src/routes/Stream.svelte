@@ -2,18 +2,11 @@
   export let id;
   import Heading from '../components/Heading';
   import Loader from '../components/Loader';
-  import { getStream } from '../utils/network';
-  import { token } from '../utils/stores';
+  import { getStream } from '../utils/api';
 
   let background = '/img/backgrounds/streamPage.png';
 
-  let tokenValue;
-
-  const subscribe = token.subscribe((value) => {
-    tokenValue = value;
-  });
-
-  let promise = getStream(id, tokenValue);
+  let promise = getStream(id);
 </script>
 
 {#await promise}

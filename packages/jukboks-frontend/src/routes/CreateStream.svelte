@@ -3,16 +3,10 @@
   import Button from '../components/Button.svelte';
   import Input from '../components/Input.svelte';
   import Datepicker from 'svelte-calendar';
-  import { token } from '../utils/stores';
-  import { getSong } from '../utils/network';
+  import { getSong } from '../utils/api';
 
   let background = '/img/backgrounds/createStreamPage.png';
-  let tokenValue;
   let inputURL = '';
-
-  const subscribe = token.subscribe((value) => {
-    tokenValue = value;
-  });
 
   let start = new Date();
   let end = new Date();
@@ -20,7 +14,7 @@
   let formattedSelected;
 
   function add() {
-    getSong(inputURL, tokenValue);
+    getSong(inputURL);
   }
 
   function createStream() {

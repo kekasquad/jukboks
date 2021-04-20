@@ -6,31 +6,18 @@
   import Heading from '../components/Heading.svelte';
   import Button from '../components/Button.svelte';
   import Loader from '../components/Loader';
-  import { me } from '../utils/network';
-  import { token, username, userName } from '../utils/stores';
+  import { me } from '../utils/api';
+  import { saveUser } from '../utils/stores';
 
   let background = '/img/backgrounds/userPage.png';
 
-  let tokenValue;
+  let promise = me();
 
-  const subscribe = token.subscribe((value) => {
-    tokenValue = value;
-  });
-
-  let promise = me(tokenValue);
+  saveUser();
 
   function scheduleStream() {
     navigate('/new/stream', { replace: true });
   }
-
-  async function saveUser() {
-    let json = await promise;
-    localStorage.setItem('username', json.username);
-    localStorage.setItem('userName', json.name);
-    username.set(localStorage.getItem('username'));
-    userName.set(localStorage.getItem('userName'));
-  }
-  saveUser();
 </script>
 
 {#await promise}

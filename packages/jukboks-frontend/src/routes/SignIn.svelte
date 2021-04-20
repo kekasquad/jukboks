@@ -1,6 +1,6 @@
 <script>
   import { Link } from 'svelte-navigator';
-  import { login } from '../utils/network';
+  import { login } from '../utils/api';
   let background = '/img/backgrounds/mainPage.png';
   let vectorSvg = '/img/stuff/mainPageVector.svg';
   let join = 'img/stuff/join.svg';

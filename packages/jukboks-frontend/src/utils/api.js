@@ -3,6 +3,14 @@ import { token } from './stores.js';
 
 const base = 'http://localhost:8080';
 
+let tokenValue;
+
+function subscribe() {
+  token.subscribe((value) => {
+    tokenValue = value;
+  });
+}
+
 async function login() {
   let username = document.getElementById('username').value;
   let password = document.getElementById('password').value;
@@ -77,12 +85,12 @@ async function signUp() {
   }
 }
 
-async function me(token) {
+async function me() {
   try {
     const res = await fetch(base + '/me', {
       method: 'GET',
       headers: {
-        Authorization: 'Bearer ' + token,
+        Authorization: 'Bearer ' + tokenValue,
       },
     });
 
@@ -92,19 +100,18 @@ async function me(token) {
       throw new Error(json.message);
     }
 
-    console.log(json);
     return json;
   } catch (e) {
     alert(e);
   }
 }
 
-async function getStream(id, token) {
+async function getStream(id) {
   try {
     const res = await fetch(base + '/stream/' + id, {
       method: 'GET',
       headers: {
-        Authorization: 'Bearer ' + token,
+        Authorization: 'Bearer ' + tokenValue,
       },
     });
 
@@ -121,7 +128,7 @@ async function getStream(id, token) {
   }
 }
 
-async function getSong(url, token) {
+async function getSong(url) {
   try {
     let sentJson = JSON.stringify({
       url,
@@ -131,7 +138,7 @@ async function getSong(url, token) {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + token,
+        Authorization: 'Bearer ' + tokenValue,
       },
       body: sentJson,
     });
@@ -142,9 +149,11 @@ async function getSong(url, token) {
       throw new Error(json.message);
     }
 
+    console.log(json);
+
   } catch (e) {
     alert(e);
   }
 }
 
-export { login, signUp, me, getStream, getSong };
+export { subscribe, login, signUp, me, getStream, getSong };
