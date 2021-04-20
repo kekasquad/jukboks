@@ -1,3 +1,4 @@
+const { SongSchema } = require('../models/Song');
 const { parseMetadataByUrl } = require('../soundcloud/index');
 
 async function routes(fastify, options) {
@@ -9,11 +10,23 @@ async function routes(fastify, options) {
     },
     async (request, reply) => {
       let songURL = request.body.url;
-      // console.log(songURL);
-      let metadata = await parseMetadataByUrl('https://soundcloud.com/fkatwigsupdates/vggapmashup');
-      // let json;
+      let metadata = await parseMetadataByUrl(songURL);
       console.log(metadata);
-      // reply.send(json);
+      let title = metadata['og:title'];
+      let url = metadata['og:url'];
+      // let imageURL = metadata['og:image'];
+      let artistURL = metadata['soundcloud:user'];
+      let artistMetadata = await parseMetadataByUrl(artistURL);
+      let artist = artistMetadata['og:title'];
+      let duration = 180;
+      //TODO: duration
+      let song = JSON.stringify({
+        title,
+        url,
+        artist,
+        duration,
+      });
+      reply.send(song);
     },
   );
 }
