@@ -19,7 +19,6 @@
   "dependencies": {
     "bcrypt": "^5.0.1",
     "cheerio": "^1.0.0-rc.5",
-    "cheerio-select-tmp": "^0.1.1",
     "dotenv": "^8.2.0",
     "emittery": "^0.8.1",
     "fastify": "^3.14.0",
