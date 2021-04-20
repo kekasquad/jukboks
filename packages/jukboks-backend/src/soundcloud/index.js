@@ -12,7 +12,6 @@ const client = got.extend({
 
 const parseMetadataByUrl = async (url) => {
   const resp = await client.get(url);
-  console.log(url); //Don't print anything
   const $ = cheerio.load(resp.body);
 
   const nodes = $('meta');
