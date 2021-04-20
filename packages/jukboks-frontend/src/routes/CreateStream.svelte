@@ -13,8 +13,9 @@
   end.setMonth(start.getMonth() + 3);
   let formattedSelected;
 
-  function add() {
-    getSong(inputURL);
+  async function add() {
+    let song = await getSong(inputURL);
+    console.log(song);
   }
 
   function createStream() {

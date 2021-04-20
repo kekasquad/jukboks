@@ -149,7 +149,7 @@ async function getSong(url) {
       throw new Error(json.message);
     }
 
-    console.log(json);
+    return json;
 
   } catch (e) {
     alert(e);
