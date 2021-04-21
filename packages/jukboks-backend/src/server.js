@@ -18,7 +18,9 @@ async function createServer() {
       info: 'Jukboks API',
     },
   });
-  fastify.register(require('fastify-sensible'));
+  fastify.register(require('fastify-sensible'), {
+    errorHandler: false,
+  });
 
   // Client-side
   fastify.register(require('fastify-cors'), {
@@ -36,6 +38,21 @@ async function createServer() {
       expiresIn: '2y',
     },
   });
+
+  fastify.setErrorHandler(function (error, request, reply) {
+    if (fastify.httpErrors.createError.isHttpError(error)) {
+      if (error.headers) reply.headers(error.headers);
+      if (!error.expose) {
+        fastify.log.error(error);
+        return reply.code(error.status).send({ error: 'Something went wrong' });
+      }
+      return reply.send({ error: error.message });
+    } else {
+      fastify.log.error(error);
+      return reply.code(500).send({ error: 'Something went wrong' });
+    }
+  });
+
   fastify.register(require('./plugins/auth'));
 
   // WebSocket

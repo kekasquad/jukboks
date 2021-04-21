@@ -97,7 +97,7 @@ class Eventer extends Emittery {
         offset += song.duration * 1000;
       }
     }
-    this.logger.info({ msg: 'Pull complete', streamsScheduled, songsScheduled });
+    this.logger.debug({ msg: 'Pull complete', streamsScheduled, songsScheduled });
     this.logger.debug({ streams: Object.keys(this.streamsTimers), songs: Object.keys(this.songsTimers) });
   }
 }
