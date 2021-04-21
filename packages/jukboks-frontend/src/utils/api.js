@@ -1,14 +1,38 @@
 import { navigate } from 'svelte-navigator';
-import { token } from './stores.js';
+import ky from 'ky';
+import { token as tokenStore, user } from './stores.js';
 
-const base = 'http://localhost:8080';
+const API_BASE = 'http://localhost:8080';
 
 let tokenValue;
 
 function subscribe() {
-  token.subscribe((value) => {
+  tokenStore.subscribe((value) => {
     tokenValue = value;
   });
+}
+
+const authHook = (request) => {
+  if (tokenValue) {
+    request.headers.set('Authorization', `Bearer ${tokenValue}`);
+  }
+};
+
+const client = ky.extend({
+  prefixUrl: API_BASE,
+  hooks: {
+    beforeRequest: [authHook],
+  },
+});
+
+async function login2(login, password) {
+  const { token } = await client.post('/auth/login', { json: { login, password } }).json();
+  tokenStore.set(token);
+  // ???? naviagte
+}
+
+async function signup2(login, name, password) {
+  const { token } = await client.post('/auth/signup');
 }
 
 async function login() {
@@ -22,7 +46,7 @@ async function login() {
     });
 
     try {
-      const res = await fetch(base + '/auth/login', {
+      const res = await fetch(API_BASE + '/auth/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -60,7 +84,7 @@ async function signUp() {
     });
 
     try {
-      const res = await fetch(base + '/auth/signup', {
+      const res = await fetch(API_BASE + '/auth/signup', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -87,7 +111,7 @@ async function signUp() {
 
 async function me() {
   try {
-    const res = await fetch(base + '/me', {
+    const res = await fetch(API_BASE + '/me', {
       method: 'GET',
       headers: {
         Authorization: 'Bearer ' + tokenValue,
@@ -108,7 +132,7 @@ async function me() {
 
 async function getStream(id) {
   try {
-    const res = await fetch(base + '/stream/' + id, {
+    const res = await fetch(API_BASE + '/stream/' + id, {
       method: 'GET',
       headers: {
         Authorization: 'Bearer ' + tokenValue,
@@ -134,7 +158,7 @@ async function getSong(url) {
       url,
     });
 
-    const res = await fetch(base + '/song', {
+    const res = await fetch(API_BASE + '/song', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -150,7 +174,6 @@ async function getSong(url) {
     }
 
     return json;
-
   } catch (e) {
     alert(e);
   }
