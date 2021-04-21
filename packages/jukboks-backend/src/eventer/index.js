@@ -91,7 +91,7 @@ class Eventer extends Emittery {
           this.songsTimers[song._id.toString()] = setTimeout(() => {
             delete this.songsTimers[id];
             this.emit(EVENTS.SONG_STARTED, song);
-          }, stream.dt_start + offset * 1000 - Date.now());
+          }, stream.dt_start + offset - Date.now());
           songsScheduled += 1;
         }
         offset += song.duration * 1000;
