@@ -1,186 +1,71 @@
-import { navigate } from 'svelte-navigator';
 import ky from 'ky';
-import { token as tokenStore, user } from './stores.js';
+import { token as tokenStore } from './stores.js';
 
 const API_BASE = 'http://localhost:8080';
 
 let tokenValue;
 
-function subscribe() {
+async function initStores() {
   tokenStore.subscribe((value) => {
     tokenValue = value;
   });
+  await me();
 }
 
-const authHook = (request) => {
+const setAuthorizationHook = (request) => {
   if (tokenValue) {
     request.headers.set('Authorization', `Bearer ${tokenValue}`);
+  }
+};
+
+const resetTokenHook = async (_request, _options, response) => {
+  if (response.status === 401) {
+    tokenStore.set('');
   }
 };
 
 const client = ky.extend({
   prefixUrl: API_BASE,
   hooks: {
-    beforeRequest: [authHook],
+    beforeRequest: [setAuthorizationHook],
+    afterResponse: [resetTokenHook],
   },
 });
 
-async function login2(login, password) {
-  const { token } = await client.post('/auth/login', { json: { login, password } }).json();
+async function login(username, password) {
+  const { token } = await client.post('auth/login', { json: { username, password } }).json();
   tokenStore.set(token);
-  // ???? naviagte
 }
 
-async function signup2(login, name, password) {
-  const { token } = await client.post('/auth/signup');
-}
-
-async function login() {
-  let username = document.getElementById('username').value;
-  let password = document.getElementById('password').value;
-
-  if (username.length > 0 && password.length > 0) {
-    let json = JSON.stringify({
-      username,
-      password,
-    });
-
-    try {
-      const res = await fetch(API_BASE + '/auth/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: json,
-      });
-
-      json = await res.json();
-
-      if (!res.ok) {
-        throw new Error(json.message);
-      }
-
-      localStorage.setItem('token', json.token);
-      token.set(localStorage.getItem('token'));
-      navigate('/profile', { replace: true });
-    } catch (e) {
-      alert(e);
-    }
-  } else {
-    alert('Fill all fields to login');
-  }
-}
-
-async function signUp() {
-  let username = document.getElementById('username').value;
-  let name = document.getElementById('name').value;
-  let password = document.getElementById('password').value;
-
-  if (username.length > 0 && name.length > 0 && password.length > 0) {
-    let json = JSON.stringify({
-      username,
-      password,
-      name,
-    });
-
-    try {
-      const res = await fetch(API_BASE + '/auth/signup', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: json,
-      });
-
-      json = await res.json();
-
-      if (!res.ok) {
-        throw new Error(json.message);
-      }
-
-      localStorage.setItem('token', json.token);
-      token.set(localStorage.getItem('token'));
-      navigate('/profile', { replace: true });
-    } catch (e) {
-      alert(e);
-    }
-  } else {
-    alert('Fill all fields to join');
-  }
+async function signup(username, name, password) {
+  const { token } = await client.post('auth/signup', { json: { username, name, password } }).json();
+  tokenStore.set(token);
 }
 
 async function me() {
-  try {
-    const res = await fetch(API_BASE + '/me', {
-      method: 'GET',
-      headers: {
-        Authorization: 'Bearer ' + tokenValue,
-      },
-    });
-
-    let json = await res.json();
-
-    if (!res.ok) {
-      throw new Error(json.message);
-    }
-
-    return json;
-  } catch (e) {
-    alert(e);
-  }
+  const user = await client.get('me').json();
+  return user;
 }
 
 async function getStream(id) {
-  try {
-    const res = await fetch(API_BASE + '/stream/' + id, {
-      method: 'GET',
-      headers: {
-        Authorization: 'Bearer ' + tokenValue,
-      },
-    });
+  const stream = await client.get(`stream/${id}`).json();
+  return stream;
+}
 
-    let json = await res.json();
-
-    if (!res.ok) {
-      throw new Error(json.message);
-    }
-
-    console.log(json);
-    return json;
-  } catch (e) {
-    alert(e);
-  }
+/**
+ *
+ * @param {Object} stream
+ * @param {Song[]} stream.songs
+ * @param {Number} stream.dt_start - unix timestamp, milliseconds
+ */
+async function createStream(stream) {
+  const created = await client.post('stream', { json: stream }).json();
+  return created;
 }
 
 async function getSong(url) {
-  try {
-    let sentJson = JSON.stringify({
-      url,
-    });
-
-    const res = await fetch(API_BASE + '/song', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + tokenValue,
-      },
-      body: sentJson,
-    });
-
-    let json = await res.json();
-
-    if (!res.ok) {
-      throw new Error(json.message);
-    }
-
-    if (!json.title || !json.url || !json.artist || !json.duration) {
-      throw new Error("Wrong url");
-    }
-
-    return json;
-  } catch (e) {
-    alert(e);
-  }
+  const song = await client.post('song', { json: { url } }).json();
+  return song;
 }
 
-export { subscribe, login, signUp, me, getStream, getSong };
+export { initStores, login, signup, me, getStream, createStream, getSong };

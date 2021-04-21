@@ -34,6 +34,7 @@ async function routes(fastify, options) {
     {
       preValidation: [fastify.authenticate],
       // TODO: add schema + strict validation
+      // TODO: prevent mass assignment
     },
     async (request, reply) => {
       let stream = Stream(request.body);

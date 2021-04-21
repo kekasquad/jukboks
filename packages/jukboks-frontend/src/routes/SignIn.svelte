@@ -1,9 +1,21 @@
 <script>
-  import { Link } from 'svelte-navigator';
-  import { login } from '../utils/api';
+  import { Link, navigate } from 'svelte-navigator';
+  import * as api from '../utils/api';
   let background = '/img/backgrounds/mainPage.png';
   let vectorSvg = '/img/stuff/mainPageVector.svg';
   let join = 'img/stuff/join.svg';
+  let error;
+
+  let username, password;
+
+  async function login() {
+    try {
+      await api.login(username, password);
+    } catch (err) {
+      error = (await err.response.json()).error;
+      console.error(err);
+    }
+  }
 </script>
 
 <div class="outerMain" style="background: url({background}); background-size: cover; background-position: center;">
@@ -12,8 +24,11 @@
   </div>
 
   <div class="authFields">
-    <input class="field" id="username" placeholder="username" />
-    <input class="field" id="password" placeholder="password" />
+    {#if error}
+      <div>{error}</div>
+    {/if}
+    <input class="field" id="username" placeholder="username" bind:value={username} />
+    <input class="field" id="password" placeholder="password" bind:value={password} />
     <Link to="/signup">
       <h2>Sign up</h2>
     </Link>

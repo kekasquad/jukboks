@@ -7,13 +7,10 @@
   import Button from '../components/Button.svelte';
   import Loader from '../components/Loader';
   import { me } from '../utils/api';
-  import { saveUser } from '../utils/stores';
 
   let background = '/img/backgrounds/userPage.png';
 
   let promise = me();
-
-  saveUser();
 
   function scheduleStream() {
     navigate('/new/stream', { replace: true });
@@ -29,7 +26,9 @@
     <Button title="Schedule new" style="margin-top: auto; align-self: flex-end;" func={scheduleStream} />
   </div>
 {:catch error}
-  <p style="color: red">{error.message}</p>
+  {#await error.response.json() then j}
+    <p style="color: red">{j.error}</p>
+  {/await}
 {/await}
 
 <style>

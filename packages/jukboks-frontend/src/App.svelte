@@ -1,5 +1,6 @@
 <script>
-  import { Router, Link, Route } from 'svelte-navigator';
+  import { Router, Link, Route, navigate } from 'svelte-navigator';
+  import Loader from './components/Loader.svelte';
   import PrivateRoute from './routes/PrivateRoute.svelte';
   import AuthorizedRoute from './routes/AuthorizedRoute.svelte';
   import Main from './routes/Main.svelte';
@@ -10,9 +11,9 @@
   import Stream from './routes/Stream.svelte';
   import CreateStream from './routes/CreateStream.svelte';
   import NotFound from './routes/NotFound.svelte';
-  import { subscribe } from './utils/api';
+  import { initStores } from './utils/api';
 
-  subscribe();
+  initStores().catch((_) => navigate('/signin'));
 
   // export let url = ""; //This property is necessary declare to avoid ignore the Router
 </script>
