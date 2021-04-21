@@ -173,6 +173,10 @@ async function getSong(url) {
       throw new Error(json.message);
     }
 
+    if (!json.title || !json.url || !json.artist || !json.duration) {
+      throw new Error("Wrong url");
+    }
+
     return json;
   } catch (e) {
     alert(e);
