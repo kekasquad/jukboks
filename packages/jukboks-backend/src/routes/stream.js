@@ -9,7 +9,8 @@ const ERROR = {
 };
 
 async function routes(fastify, options) {
-  // Stream model
+  // #region Stream document
+
   fastify.get(
     '/stream/:uuid',
     {
@@ -68,7 +69,10 @@ async function routes(fastify, options) {
     },
   );
 
-  // Song
+  // #endregion
+
+  // #region Stream's song
+
   fastify.get(
     '/stream/:uuid/songs',
     {
@@ -109,6 +113,8 @@ async function routes(fastify, options) {
       return stream.songs;
     },
   );
+
+  // #endregion
 
   // TODO: add route to extract metadata from Soundcloud URL and add song
 }

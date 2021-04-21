@@ -33,7 +33,7 @@ StreamSchema.methods.isEnded = function () {
 
 const Stream = mongoose.model('Stream', StreamSchema);
 
-// Okay i tried using mongoose modllewares for this, but they are awful
+// Okay i tried using mongoose middlewares for this, but they are awful
 /**
  * Mutates stream with `dt_end` and `duration`
  * @param {Stream} stream
