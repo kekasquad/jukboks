@@ -1,4 +1,5 @@
 <script>
+  import { fade } from 'svelte/transition';
   import Loader from '../components/Loader';
   import Heading from '../components/Heading.svelte';
   import Button from '../components/Button.svelte';
@@ -14,13 +15,18 @@
   let start = new Date();
   let end = new Date();
   end.setMonth(start.getMonth() + 3);
+
   let formattedSelected;
+  let error;
 
   async function add() {
     let song = await getSong(inputURL);
-    if (song) {
+    if (song.title && song.url && song.artist && song.duration) {
       songs.push(song);
       songs = songs;
+      error = null;
+    } else {
+      error = "Can't parse URL";
     }
   }
 
@@ -38,6 +44,9 @@
       style="align-self: flex-start; width: 100%; margin-top: 54px;"
       bind:value={inputURL}
     />
+    {#if error}
+      <div out:fade={{ duration: 100 }} in:fade={{ duration: 100 }}>{error}</div>
+    {/if}
     <Button title="Add" style="align-self: flex-end;" func={add} />
     <Datepicker {start} {end} style="width: 100%; display: block;" bind:formattedSelected>
       <button class="calendar">{formattedSelected}</button>
@@ -67,6 +76,7 @@
 
   .left,
   .right {
+    color: white;
     height: 100%;
     padding: 0px;
     margin: 0px;
