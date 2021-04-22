@@ -20,7 +20,10 @@ async function routes(fastify, options) {
     },
     async (request, reply) => {
       const { uuid } = request.params;
-      const stream = await Stream.findOne({ uuid });
+      const stream = await Stream.findOne({ uuid }, publicFields).populate({
+        path: 'author',
+        select: 'username -_id',
+      });
 
       if (!stream) {
         return reply.notFound(ERROR.NOT_EXISTS);
@@ -40,20 +43,17 @@ async function routes(fastify, options) {
     async (request, reply) => {
       let stream = Stream(request.body);
       const user = await User.findOne({ username: request.user.username });
-      console.log(user);
       stream.author = user._id;
       calculateTimes(stream);
-      console.log(stream);
       await stream.save();
       let id = stream._id;
       user.streams.push(stream._id);
-      // user.streams = [];
       await user.save();
       const savedStream = await Stream.findOne({ _id: id }, publicFields).populate({
         path: 'author',
         select: 'username -_id',
       });
-      reply.send(savedStream);
+      reply.send(savedStream.toJSON());
     },
   );
 
