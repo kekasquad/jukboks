@@ -3,8 +3,19 @@ const { Schema } = require('mongoose');
 const { nanoid } = require('nanoid');
 const { SongSchema } = require('./Song');
 
+const publicFields = {
+  _id: false,
+  title: true,
+  author: true,
+  songs: true,
+  dt_start: true,
+  dt_end: true,
+  duration: true,
+};
+
 const StreamSchema = new mongoose.Schema({
   uuid: { type: String, default: () => nanoid(), unique: true },
+  title: { type: String, required: true },
   author: { type: Schema.Types.ObjectId, ref: 'User', required: true }, // author <-> User
   songs: [{ type: SongSchema, required: true }],
   // visualization: { type: Boolean, default: false },
@@ -41,8 +52,8 @@ const Stream = mongoose.model('Stream', StreamSchema);
  */
 function calculateTimes(stream) {
   stream.duration = stream.songs.reduce((acc, song) => acc + song.duration, 0);
-  stream.dt_end = stream.dt_start + stream.duration;
+  stream.dt_end = stream.dt_start + stream.duration * 1000;
   return stream;
 }
 
-module.exports = { Stream, calculateTimes };
+module.exports = { Stream, calculateTimes, publicFields };

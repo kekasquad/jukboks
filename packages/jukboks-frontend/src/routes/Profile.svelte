@@ -25,7 +25,7 @@
     <Heading heading="Your streams" style="align-self: flex-start; margin-top: 30px" />
     <div class="streams">
       {#each user.streams as stream}
-        <StreamRow style="align-self: flex-start;" time={stream.dt_start} />
+        <StreamRow style="align-self: flex-start;" title={stream.title} time={stream.dt_start} uuid={stream.uuid} />
       {/each}
     </div>
     <Button title="Schedule new" style="margin-top: auto; align-self: flex-end;" func={scheduleStream} />

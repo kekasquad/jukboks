@@ -11,6 +11,7 @@
 
   let background = '/img/backgrounds/createStreamPage.png';
   let inputURL = '';
+  let title = '';
   let songs = [];
 
   let start = new Date();
@@ -21,7 +22,7 @@
   let error;
   let createError;
   let selected;
-  let hours = 8;
+  let hours = 22;
   let minutes = 23;
 
   async function add() {
@@ -36,11 +37,20 @@
   }
 
   async function createStream() {
+    if (songs.length == 0) {
+      createError = 'Add some songs!';
+      return;
+    }
+    if (title.length < 1) {
+      createError = 'Add title!';
+      return;
+    }
     let dt_start = selected.getTime() + (hours * 60 + minutes) * 60 * 1000;
-    let stream = { songs, dt_start };
+    let stream = { title, songs, dt_start };
     try {
       stream = await api.createStream(stream);
       if (stream) {
+        console.log(stream);
         createError = null;
         navigate('/profile');
       } else {
@@ -64,6 +74,11 @@
       <div out:fade={{ duration: 100 }} in:fade={{ duration: 100 }}>{error}</div>
     {/if}
     <Button title="Add" style="align-self: flex-end;" func={add} />
+    <Input
+      placeholder="Stream title"
+      style="align-self: flex-start; width: 100%; margin-top: 54px;"
+      bind:value={title}
+    />
     <Datepicker {start} {end} style="width: 100%; display: block;" bind:formattedSelected bind:selected>
       <button class="calendar">{formattedSelected}</button>
     </Datepicker>

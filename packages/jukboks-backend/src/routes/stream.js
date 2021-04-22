@@ -1,4 +1,4 @@
-const { Stream, calculateTimes } = require('../models/Stream');
+const { Stream, calculateTimes, publicFields } = require('../models/Stream');
 const { User } = require('../models/User');
 
 // TODO: authorize operations
@@ -45,10 +45,15 @@ async function routes(fastify, options) {
       calculateTimes(stream);
       console.log(stream);
       await stream.save();
+      let id = stream._id;
       user.streams.push(stream._id);
       // user.streams = [];
       await user.save();
-      reply.send(stream);
+      const savedStream = await Stream.findOne({ _id: id }, publicFields).populate({
+        path: 'author',
+        select: 'username -_id',
+      });
+      reply.send(savedStream);
     },
   );
 

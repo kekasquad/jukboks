@@ -33,8 +33,8 @@
     <PrivateRoute path="/new/stream" let:params>
       <CreateStream />
     </PrivateRoute>
-    <PrivateRoute path="/stream/:id" let:params>
-      <Stream id={params.id} />
+    <PrivateRoute path="/stream/:uuid" let:params>
+      <Stream uuid={params.uuid} />
     </PrivateRoute>
     <Route path="/test/sc" component={Soundcloud} />
     <Route component={NotFound} />
