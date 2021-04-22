@@ -47,8 +47,8 @@ async function me() {
   return user;
 }
 
-async function getStream(id) {
-  const stream = await client.get(`stream/${id}`).json();
+async function getStream(uuid) {
+  const stream = await client.get(`stream/${uuid}`).json();
   return stream;
 }
 

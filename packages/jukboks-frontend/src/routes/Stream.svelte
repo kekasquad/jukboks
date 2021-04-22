@@ -7,16 +7,40 @@
   let background = '/img/backgrounds/streamPage.png';
 
   let promise = api.getStream(uuid);
+  let date = new Date();
+  let time = date.getTime();
+
+  function dateFrom(mseconds) {
+    let begin = new Date();
+    begin.setTime(mseconds);
+    return begin.toLocaleString();
+  }
+
+  function enterTheStream() {
+    console.log('rofl');
+  }
 </script>
 
 {#await promise}
   <Loader />
 {:then stream}
   <div class="outer" style="background: url({background}); background-size: cover; background-position: center;">
-    la
+    <div class="shadow" />
+    <h1>{stream.title} by {stream.author.username}</h1>
+    {#if time < stream.dt_start}
+      <h1>Wait for the start at {dateFrom(stream.dt_start)}</h1>
+    {:else if time < stream.dt_end}
+      <h1 class="enter" on:click={enterTheStream}>Enter the stream</h1>
+    {:else}
+      <h1>Stream has ended</h1>
+    {/if}
   </div>
 {:catch error}
-  <p style="color: red">{error.message}</p>
+  <div class="outer" style="background: url({background}); background-size: cover; background-position: center;">
+    {#await error.response.json() then j}
+      <p style="color: red">{j.error}</p>
+    {/await}
+  </div>
 {/await}
 
 <style>
@@ -30,5 +54,43 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    text-align: center;
+  }
+
+  .shadow {
+    position: absolute;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+    padding: 0px;
+    margin: 0px;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 300;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  h1 {
+    z-index: 301;
+    font-size: 32px;
+    line-height: 36px;
+    padding: 0px;
+    margin: 0px;
+    margin-bottom: 20px;
+  }
+
+  .enter {
+    background: linear-gradient(90deg, #9adff2 0%, #b9669f 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: #b9669f;
+    z-index: 302;
+    text-decoration-line: underline;
+  }
+
+  .enter:hover {
+    cursor: pointer;
   }
 </style>
