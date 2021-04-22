@@ -1,14 +1,17 @@
 <script>
-  export let heading;
+  export let time;
   export let style;
+
+  let date = new Date();
+  date.setTime(time);
 </script>
 
-<div class="heading" {style}>
-  {heading}
+<div class="time" {style}>
+  {date.toLocaleString()}
 </div>
 
 <style>
-  .heading {
+  .time {
     padding: 0px;
     margin: 0px;
     font-size: 36px;
