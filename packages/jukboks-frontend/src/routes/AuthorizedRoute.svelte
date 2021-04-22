@@ -5,7 +5,7 @@
   export let path;
 </script>
 
-<Route {path} let:params let:location let:navigate>
+<Route {path} let:params let:location let:navigate primary={false}>
   <AuthorizedRouteGuard>
     <slot {params} {location} {navigate} />
   </AuthorizedRouteGuard>

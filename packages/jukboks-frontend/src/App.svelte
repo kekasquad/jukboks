@@ -20,7 +20,7 @@
 
 <Router>
   <main>
-    <Route path="/" component={Main} />
+    <Route path="/" component={Main} primary={false} />
     <AuthorizedRoute path="/signin">
       <SignIn />
     </AuthorizedRoute>
