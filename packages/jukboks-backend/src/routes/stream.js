@@ -1,4 +1,5 @@
-const { Stream } = require('../models/Stream');
+const { Stream, calculateTimes } = require('../models/Stream');
+const { User } = require('../models/User');
 
 // TODO: authorize operations
 // TODO(kabachook): set `additionalProperties: false` in schema
@@ -38,6 +39,15 @@ async function routes(fastify, options) {
     },
     async (request, reply) => {
       let stream = Stream(request.body);
+      const user = await User.findOne({ username: request.user.username });
+      console.log(user);
+      stream.author = user._id;
+      calculateTimes(stream);
+      console.log(stream);
+      await stream.save();
+      user.streams.push(stream._id);
+      // user.streams = [];
+      await user.save();
       reply.send(stream);
     },
   );

@@ -6,7 +6,8 @@
   import Input from '../components/Input.svelte';
   import Datepicker from 'svelte-calendar';
   import Song from '../components/Song.svelte';
-  import { getSong } from '../utils/api';
+  import * as api from '../utils/api';
+  import { navigate } from 'svelte-navigator';
 
   let background = '/img/backgrounds/createStreamPage.png';
   let inputURL = '';
@@ -18,9 +19,13 @@
 
   let formattedSelected;
   let error;
+  let createError;
+  let selected;
+  let hours = 8;
+  let minutes = 23;
 
   async function add() {
-    let song = await getSong(inputURL);
+    let song = await api.getSong(inputURL);
     if (song.title && song.url && song.artist && song.duration) {
       songs.push(song);
       songs = songs;
@@ -30,10 +35,21 @@
     }
   }
 
-  function createStream() {
-    console.log(formattedSelected);
-    // let id;
-    // navigate('/stream/{id}', { replace: true });
+  async function createStream() {
+    let dt_start = selected.getTime() + (hours * 60 + minutes) * 60 * 1000;
+    let stream = { songs, dt_start };
+    try {
+      stream = await api.createStream(stream);
+      if (stream) {
+        createError = null;
+        navigate('/profile');
+      } else {
+        console.log('Something wrong with method createStream');
+      }
+    } catch (err) {
+      createError = (await err.response.json()).error;
+      console.error(err);
+    }
   }
 </script>
 
@@ -48,7 +64,7 @@
       <div out:fade={{ duration: 100 }} in:fade={{ duration: 100 }}>{error}</div>
     {/if}
     <Button title="Add" style="align-self: flex-end;" func={add} />
-    <Datepicker {start} {end} style="width: 100%; display: block;" bind:formattedSelected>
+    <Datepicker {start} {end} style="width: 100%; display: block;" bind:formattedSelected bind:selected>
       <button class="calendar">{formattedSelected}</button>
     </Datepicker>
   </div>
@@ -60,6 +76,9 @@
       {/each}
     </div>
     <Button title="Schedule" style="margin-top: auto; align-self: flex-end;" func={createStream} />
+    {#if createError}
+      <div out:fade={{ duration: 100 }} in:fade={{ duration: 100 }}>{createError}</div>
+    {/if}
   </div>
 </div>
 

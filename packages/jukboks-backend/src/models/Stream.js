@@ -10,7 +10,7 @@ const StreamSchema = new mongoose.Schema({
   // visualization: { type: Boolean, default: false },
   // reactions: { type: Boolean, default: false },
   // isPrivate: { type: Boolean, default: true },
-  dt_start: { type: Number },
+  dt_start: { type: Number, required: true },
   dt_end: { type: Number },
   duration: { type: Number }, // duration in *seconds*
 });
@@ -40,8 +40,8 @@ const Stream = mongoose.model('Stream', StreamSchema);
  * @returns {Stream}
  */
 function calculateTimes(stream) {
-  stream.duration = doc.songs.reduce((acc, song) => acc + song.duration, 0);
-  stream.dt_end = stream.dt_start + duration;
+  stream.duration = stream.songs.reduce((acc, song) => acc + song.duration, 0);
+  stream.dt_end = stream.dt_start + stream.duration;
   return stream;
 }
 
