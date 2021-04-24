@@ -5,12 +5,8 @@ const { SongSchema } = require('./Song');
 
 const publicFields = {
   _id: false,
-  title: true,
-  author: true,
-  songs: true,
-  dt_start: true,
-  dt_end: true,
-  duration: true,
+  __v: false,
+  songs: false,
 };
 
 const StreamSchema = new mongoose.Schema({
