@@ -1,14 +1,22 @@
 <script>
-  export let uuid;
-  import Heading from '../components/Heading';
+  import { fade } from 'svelte/transition';
+  import Title from '../components/Title';
   import Loader from '../components/Loader';
   import * as api from '../utils/api';
+  import * as ws from '../utils/ws';
+
+  export let uuid;
 
   let background = '/img/backgrounds/streamPage.png';
 
   let promise = api.getStream(uuid);
   let date = new Date();
   let time = date.getTime();
+
+  let entered = false;
+  let songTitle = ''; //TODO: bind with title
+  let songArtist = ''; //TODO: bind with artist
+  let song;
 
   function dateFrom(mseconds) {
     let begin = new Date();
@@ -17,7 +25,8 @@
   }
 
   function enterTheStream() {
-    console.log('rofl');
+    ws.connectToSocket();
+    entered = true; //TODO change the logic of setting
   }
 </script>
 
@@ -25,14 +34,21 @@
   <Loader />
 {:then stream}
   <div class="outer" style="background: url({background}); background-size: cover; background-position: center;">
-    <div class="shadow" />
-    <h1>{stream.title} by {stream.author.username}</h1>
-    {#if time < stream.dt_start}
-      <h1>Wait for the start at {dateFrom(stream.dt_start)}</h1>
-    {:else if time < stream.dt_end}
-      <h1 class="enter" on:click={enterTheStream}>Enter the stream</h1>
+    {#if !entered}
+      <!-- TODO: create a separate element and present it -->
+      <div class="shadow" out:fade={{ duration: 100 }} in:fade={{ duration: 100 }} />
+      <h1 out:fade={{ duration: 100 }}>{stream.title} by {stream.author.username}</h1>
+      {#if time < stream.dt_start}
+        <h1>Wait for the start at {dateFrom(stream.dt_start)}</h1>
+      {:else if time < stream.dt_end}
+        <h1 class="enter" on:click={enterTheStream} out:fade={{ duration: 100 }}>Enter the stream</h1>
+      {:else}
+        <h1>Stream has ended</h1>
+      {/if}
     {:else}
-      <h1>Stream has ended</h1>
+      <!-- TODO: make stream structure after entering -->
+      <!-- TODO: create a separate element and present it -->
+      <Title title="{stream.title} by {stream.author.username}" />
     {/if}
   </div>
 {:catch error}
