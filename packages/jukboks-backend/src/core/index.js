@@ -1,9 +1,9 @@
 const socketio = require('socket.io');
-const { Eventer, EveneterEvenets } = require('../eventer');
+const { Eventer, EVENTER_EVENTS } = require('../eventer');
 const { registerStreamHandlers, STREAM_EVENTS } = require('./stream');
 
 const EVENTS = {
-  ...EveneterEvenets,
+  ...EVENTER_EVENTS,
   ...STREAM_EVENTS,
 };
 
@@ -36,11 +36,13 @@ class Core {
 
   registerEveneterHandlers() {
     this.eventer.on(EVENTS.STREAM_STARTED, (stream) => {
+      this.logger.debug({ msg: 'Stream started', uuid: stream.uuid });
       this.io.to(stream.uuid).emit(EVENTS.STREAM_STARTED);
     });
-    this.eventer.on(EVENTS.SONG_STARTED, ({song, stream}) => {
+    this.eventer.on(EVENTS.SONG_STARTED, ({ song, stream }) => {
+      this.logger.debug({ msg: 'Song started', uuid: stream.uuid, id: song._id });
       this.io.to(stream.uuid).emit(EVENTS.SONG_STARTED, song);
-    })
+    });
   }
 
   addSocket(socket) {

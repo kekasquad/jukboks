@@ -47,8 +47,8 @@ const Stream = mongoose.model('Stream', StreamSchema);
  * @returns {Stream}
  */
 function calculateTimes(stream) {
-  stream.duration = stream.songs.reduce((acc, song) => acc + song.duration, 0);
-  stream.dt_end = stream.dt_start + stream.duration * 1000;
+  stream.duration = stream.songs.reduce((acc, song) => acc + song.duration, 0); // seconds!
+  stream.dt_end = stream.dt_start + stream.duration * 1000; // milliseconds!
   return stream;
 }
 

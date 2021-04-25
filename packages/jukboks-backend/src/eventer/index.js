@@ -1,6 +1,8 @@
 const { Stream } = require('../models/Stream');
 const Emittery = require('emittery');
 
+const EMITTED = Symbol('EMITTED');
+
 const EVENTS = {
   STREAM_STARTED: 'stream:started',
   SONG_STARTED: 'song:started',
@@ -72,34 +74,40 @@ class Eventer extends Emittery {
         },
       ],
     });
+    this.logger.debug({ msg: 'Streams found', streams });
 
     // 2
     for (const stream of streams) {
       if (stream.uuid in this.streamsTimers) continue;
 
-      this.streamsTimers[stream.uuid] = setTimeout(() => {
-        delete this.streamsTimers[stream.uuid];
-        this.emit(EVENTS.STREAM_STARTED, stream);
-      }, stream.dt_start - Date.now());
-      streamsScheduled += 1;
+      if (now < stream.dt_start) {
+        this.streamsTimers[stream.uuid] = setTimeout(() => {
+          delete this.streamsTimers[stream.uuid];
+          // this.streamsTimers[stream.uuid] = EMITTED;
+          this.emit(EVENTS.STREAM_STARTED, stream);
+        }, stream.dt_start - Date.now());
+        streamsScheduled += 1;
+      }
 
       // 3
       let offset = 0;
       for (const song of stream.songs) {
         const id = song._id.toString();
-        if (!(id in this.songsTimers)) {
+        if (!(id in this.songsTimers) && now < stream.dt_start + offset) {
           this.songsTimers[song._id.toString()] = setTimeout(() => {
             delete this.songsTimers[id];
-            this.emit(EVENTS.SONG_STARTED, {song, stream});
+            // this.songsTimers[id] = EMITTED;
+            this.emit(EVENTS.SONG_STARTED, { song, stream });
           }, stream.dt_start + offset - Date.now());
           songsScheduled += 1;
         }
         offset += song.duration * 1000;
       }
     }
+    this.logger.debug({ msg: 'Timers', stream: this.streamsTimers, song: this.songsTimers });
     this.logger.debug({ msg: 'Pull complete', streamsScheduled, songsScheduled });
-    this.logger.debug({ streams: Object.keys(this.streamsTimers), songs: Object.keys(this.songsTimers) });
+    this.logger.debug({ msg: 'Plan', streams: Object.keys(this.streamsTimers), songs: Object.keys(this.songsTimers) });
   }
 }
 
-module.exports = { Eventer, EveneterEvenets: EVENTS };
+module.exports = { Eventer, EVENTER_EVENTS: EVENTS };

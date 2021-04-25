@@ -31,19 +31,25 @@ const { Stream, calculateTimes } = require('../src/models/Stream');
     author: user._id,
     songs: [
       {
+        title: 'Zero song',
+        artist: 'Test artist',
+        url: 'https://soundcloud.com/test/test',
+        duration: 5
+      },
+      {
         title: 'First song',
         artist: 'Test artist',
         url: 'https://soundcloud.com/test/test',
-        duration: 5 * 1000
+        duration: 10
       },
       {
         title: 'Second song',
         artist: 'Test artist',
         url: 'https://soundcloud.com/test/test',
-        duration: 5 * 1000,
+        duration: 10,
       },
     ],
-    dt_start: Date.now() + 5 * 1000,
+    dt_start: Date.now() + 10 * 1000,
   });
   calculateTimes(stream);
   await stream.save();

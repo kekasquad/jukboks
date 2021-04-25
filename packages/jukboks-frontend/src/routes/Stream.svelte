@@ -24,8 +24,9 @@
     return begin.toLocaleString();
   }
 
-  function enterTheStream() {
-    ws.connectToSocket();
+  async function enterTheStream() {
+    await ws.connect();
+    ws.join(uuid);
     entered = true; //TODO change the logic of setting
   }
 </script>
