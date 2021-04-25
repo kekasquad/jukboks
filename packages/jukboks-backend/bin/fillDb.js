@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const { MONGO_URI } = require('../config');
 const { User } = require('../src/models/User');
-const { Stream } = require('../src/models/Stream');
+const { Stream, calculateTimes } = require('../src/models/Stream');
 
 (async () => {
   mongoose.set('useNewUrlParser', true);
@@ -27,21 +27,30 @@ const { Stream } = require('../src/models/Stream');
   await user.save();
 
   const stream = new Stream({
+    title: 'Test streams',
     author: user._id,
     songs: [
       {
-        title: 'Test song',
+        title: 'First song',
         artist: 'Test artist',
         url: 'https://soundcloud.com/test/test',
-        duration: 3 * 60 * 1000,
+        duration: 5 * 1000
+      },
+      {
+        title: 'Second song',
+        artist: 'Test artist',
+        url: 'https://soundcloud.com/test/test',
+        duration: 5 * 1000,
       },
     ],
-    dt_start: Date.now() + 15 * 1000,
-    duration: 3 * 60 * 1000,
+    dt_start: Date.now() + 5 * 1000,
   });
+  calculateTimes(stream);
   await stream.save();
   user.streams.push(stream._id);
   await user.save();
+
+  console.log(stream.uuid);
   console.log('done');
   process.exit();
 })();

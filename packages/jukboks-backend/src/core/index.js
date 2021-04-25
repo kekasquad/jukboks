@@ -38,6 +38,9 @@ class Core {
     this.eventer.on(EVENTS.STREAM_STARTED, (stream) => {
       this.io.to(stream.uuid).emit(EVENTS.STREAM_STARTED);
     });
+    this.eventer.on(EVENTS.SONG_STARTED, ({song, stream}) => {
+      this.io.to(stream.uuid).emit(EVENTS.SONG_STARTED, song);
+    })
   }
 
   addSocket(socket) {
