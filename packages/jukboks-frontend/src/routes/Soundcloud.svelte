@@ -26,7 +26,7 @@
     sc.bind(SC.Widget.Events.PLAY, () => {
       sc.getCurrentSound((s) => {
         console.log(`PLAYING`);
-        // console.dir(s);
+        console.dir(s);
       });
     });
 
@@ -34,7 +34,7 @@
   });
 </script>
 
-<button on:click={toggle}>Play/Pause</button>
+<!-- <button on:click={toggle}>Play/Pause</button> -->
 <iframe
   id="widget"
   title="SoundCloud Widget"
