@@ -1,9 +1,12 @@
 import { io } from 'socket.io-client';
+import { song } from './stores';
 
 const WS_BASE = 'ws://localhost:8080';
 
 const EVENTS = {
   STREAM_JOIN: 'stream:join',
+  STREAM_STARTED: 'stream:started',
+  SONG_STARTED: 'song:started',
 };
 
 const socket = io(WS_BASE, { transports: ['websocket'], autoConnect: false });
@@ -17,8 +20,12 @@ socket.on('disconnect', () => {
 });
 
 socket.prependAny((event, ...args) => {
-    console.log(`${event}: ${JSON.stringify(args)}`);
-})
+  console.log(`${event}: ${JSON.stringify(args)}`);
+});
+
+socket.on(EVENTS.SONG_STARTED, (newSong) => {
+  song.set(newSong);
+});
 
 function connect() {
   return new Promise((resolve, reject) => {
@@ -41,4 +48,4 @@ async function join(uuid) {
   socket.emit(EVENTS.STREAM_JOIN, uuid);
 }
 
-export { connect, join };
+export { connect, join, socket, EVENTS };

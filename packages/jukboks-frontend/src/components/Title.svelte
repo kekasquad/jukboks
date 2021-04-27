@@ -5,7 +5,7 @@
   export let style;
 </script>
 
-<div class="title" {style} in:fade={{ duration: 300 }}>
+<div class="title" {style} in:fade={{ duration: 100 }}>
   {title}
 </div>
 
