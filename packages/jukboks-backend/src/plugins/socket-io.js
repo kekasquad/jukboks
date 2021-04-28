@@ -1,3 +1,4 @@
+require('events').captureRejections = true;
 const fp = require('fastify-plugin');
 
 module.exports = fp(

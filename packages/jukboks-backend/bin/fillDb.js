@@ -34,13 +34,13 @@ const { Stream, calculateTimes } = require('../src/models/Stream');
         title: 'Zero song',
         artist: 'Test artist',
         url: 'https://soundcloud.com/test/test',
-        duration: 5
+        duration: 5,
       },
       {
         title: 'First song',
         artist: 'Test artist',
         url: 'https://soundcloud.com/test/test',
-        duration: 10
+        duration: 10,
       },
       {
         title: 'Second song',
