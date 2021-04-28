@@ -1,32 +1,23 @@
 <script>
-  import { fade } from 'svelte/transition';
-  import Title from '../components/Title';
   import Loader from '../components/Loader';
   import Preview from '../components/Preview';
   import StreamContent from '../components/StreamContent';
   import * as api from '../utils/api';
-  import * as ws from '../utils/ws';
+  import { plays } from '../utils/stores';
 
   export let uuid;
-
-  const EVENTS = {
-    STREAM_STARTED: 'stream:started',
-    SONG_STARTED: 'song:started',
-  };
 
   let background = '/img/backgrounds/streamPage.png';
 
   let promise = api.getStream(uuid);
-
-  let entered = false;
 </script>
 
 {#await promise}
   <Loader />
 {:then stream}
   <div class="outer" style="background: url({background}); background-size: cover; background-position: center;">
-    {#if !entered}
-      <Preview {stream} bind:entered><div class="shadow" /></Preview>
+    {#if !$plays}
+      <Preview {stream}><div class="shadow" /></Preview>
     {:else}
       <StreamContent {stream} />
     {/if}

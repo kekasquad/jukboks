@@ -8,5 +8,10 @@ token.subscribe((value) => {
 
 export const song = writable();
 song.subscribe((value) => {
-  console.log(`Setting somg to ${value}`);
+  console.log(`Setting song to ${value}`);
+});
+
+export const plays = writable();
+plays.subscribe((value) => {
+  console.log(`Setting plays to ${value}`);
 });

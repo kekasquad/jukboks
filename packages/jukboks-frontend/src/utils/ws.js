@@ -1,5 +1,5 @@
 import { io } from 'socket.io-client';
-import { song } from './stores';
+import { plays, song } from './stores';
 
 const WS_BASE = 'ws://localhost:8080';
 
@@ -21,6 +21,12 @@ socket.on('disconnect', () => {
 
 socket.prependAny((event, ...args) => {
   console.log(`${event}: ${JSON.stringify(args)}`);
+});
+
+
+
+socket.on(EVENTS.STREAM_STARTED, (...args) => {
+  plays.set(true);
 });
 
 socket.on(EVENTS.SONG_STARTED, (newSong) => {
@@ -48,4 +54,4 @@ async function join(uuid) {
   socket.emit(EVENTS.STREAM_JOIN, uuid);
 }
 
-export { connect, join, socket, EVENTS };
+export { connect, join };

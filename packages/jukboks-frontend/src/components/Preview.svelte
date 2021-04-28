@@ -1,9 +1,10 @@
 <script>
   import { fade } from 'svelte/transition';
+  import Loader from '../components/Loader';
   import * as ws from '../utils/ws';
 
   export let stream;
-  export let entered;
+  let entered = false;
 
   let date = new Date();
   let time = date.getTime();
@@ -19,10 +20,6 @@
     return time < stream.dt_start;
   }
 
-  function isPlaying() {
-    return time < stream.dt_end;
-  }
-
   function isEnded() {
     return time > stream.dt_end;
   }
@@ -33,38 +30,28 @@
   }
 
   async function joinTheStream() {
-    if (!isEnded()) {
-      await ws.connect().catch(onError);
-      await ws.join(stream.uuid).catch(onError);
-    } else {
-      onError();
-    }
+    await ws.connect().catch(onError);
+    await ws.join(stream.uuid).catch(onError);
+    entered = true;
   }
 
   async function enterTheStream() {
     await joinTheStream().catch(onError);
-    entered = true;
   }
-
-  if (isNotStarted()) {
-    joinTheStream().catch(onError);
-  }
-
-  ws.socket.on(ws.EVENTS.STREAM_STARTED, (...args) => {
-    entered = true;
-  });
 </script>
 
 {#if !error}
   <div class="outer" out:fade={{ duration: 100 }}>
     <slot />
     <h1>{stream.title} by {stream.author.username}</h1>
-    {#if isNotStarted()}
-      <h1>Wait for the start at {dateFrom(stream.dt_start)}</h1>
-    {:else if isPlaying()}
+    {#if !entered && !isEnded()}
       <h1 class="enter" on:click={enterTheStream}>Enter the stream</h1>
-    {:else}
+    {:else if isNotStarted()}
+      <h1>Wait for the start at {dateFrom(stream.dt_start)}</h1>
+    {:else if isEnded()}
       <h1>Stream has ended</h1>
+    {:else}
+      <h1>Wait for some seconds...</h1>
     {/if}
   </div>
 {:else}
