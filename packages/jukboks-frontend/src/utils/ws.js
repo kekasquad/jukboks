@@ -23,8 +23,6 @@ socket.prependAny((event, ...args) => {
   console.log(`${event}: ${JSON.stringify(args)}`);
 });
 
-
-
 socket.on(EVENTS.STREAM_STARTED, (...args) => {
   plays.set(true);
 });
