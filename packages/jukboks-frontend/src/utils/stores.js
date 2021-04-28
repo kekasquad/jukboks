@@ -8,7 +8,7 @@ token.subscribe((value) => {
 
 export const song = writable();
 song.subscribe((value) => {
-  console.log(`Setting song to ${value}`);
+  console.log(`Setting song to ${JSON.stringify(value)}`);
 });
 
 export const plays = writable();

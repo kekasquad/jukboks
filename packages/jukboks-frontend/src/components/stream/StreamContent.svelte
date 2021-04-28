@@ -15,7 +15,7 @@
       title="{$song.title} by {$song.artist}"
       style="align-self: flex-start; margin-top: auto; text-align: left;"
     />
-    <Widget url={$song.url} />
+    <Widget url={$song.url} offset={$song.offset} />
   </div>
 {:else}
   <Loader />

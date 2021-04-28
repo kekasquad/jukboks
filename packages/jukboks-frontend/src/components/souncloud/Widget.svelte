@@ -2,6 +2,7 @@
   import { onMount } from 'svelte';
   import { SC } from './api';
   export let url = 'https://soundcloud.com/lustry/i-fell-into-your-brown-eyes';
+  export let offset = 0;
   // export let autoplay = true;
 
   let widget;
@@ -19,8 +20,10 @@
 
     sc.bind(SC.Widget.Events.READY, () => {
       console.log('READY');
-      // if (autoplay) sc.play(); // WebAudio Policy wtf???
-      // TODO: autoresume on user interaction
+      if (offset && offset > 0) {
+        //offset - milliseconds
+        sc.seekTo(offset);
+      }
     });
 
     sc.bind(SC.Widget.Events.PLAY, () => {

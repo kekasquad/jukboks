@@ -29,6 +29,9 @@ socket.on(EVENTS.STREAM_STARTED, (...args) => {
 
 socket.on(EVENTS.SONG_STARTED, (newSong) => {
   song.set(newSong);
+  if (newSong.offset) {
+    plays.set(true);
+  }
 });
 
 function connect() {

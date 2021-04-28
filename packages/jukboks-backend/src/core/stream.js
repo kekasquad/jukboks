@@ -33,8 +33,9 @@ const registerStreamHandlers = (io, logger, socket) => {
       let elapsed = 0;
       for (const song of stream.songs) {
         if (elapsed < played && played < elapsed + song.duration * 1000) {
-          // Send current playing song with offset
-          socket.emit(EVENTER_EVENTS.SONG_STARTED, { ...song, offset: Math.floor((played - elapsed) / 1000) });
+          // Send current playing song with offset (milliseconds)
+          // 1000 milliseconds for network delay
+          socket.emit(EVENTER_EVENTS.SONG_STARTED, { ...song._doc, offset: played - elapsed + 1000 });
           break;
         }
         elapsed += song.duration * 1000;
