@@ -1,5 +1,5 @@
 <script>
-  import { Link, navigate } from 'svelte-navigator';
+  import { Link } from 'svelte-navigator';
   import * as api from '../utils/api';
   let background = '/img/backgrounds/mainPage.png';
   let vectorSvg = '/img/stuff/mainPageVector.svg';
