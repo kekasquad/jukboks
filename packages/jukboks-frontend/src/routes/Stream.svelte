@@ -4,7 +4,6 @@
   import Loader from '../components/Loader';
   import Preview from '../components/Preview';
   import StreamContent from '../components/StreamContent';
-  import { song } from '../utils/stores';
   import * as api from '../utils/api';
   import * as ws from '../utils/ws';
 
@@ -29,7 +28,7 @@
     {#if !entered}
       <Preview {stream} bind:entered><div class="shadow" /></Preview>
     {:else}
-      <StreamContent {stream} bind:song={$song} />
+      <StreamContent {stream} />
     {/if}
   </div>
 {:catch error}
