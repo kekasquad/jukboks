@@ -47,7 +47,8 @@ class Core {
 
   addSocket(socket) {
     socket[Symbol.for('nodejs.rejection')] = (err) => {
-      socket.emit('error', err);
+      this.logger.error(err);
+      socket.emit('error', err.message);
     };
 
     registerStreamHandlers(this.io, this.logger, socket);

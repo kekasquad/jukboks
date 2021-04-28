@@ -1,4 +1,4 @@
-const Stream = require('../models/Stream');
+const { Stream } = require('../models/Stream');
 const { EVENTER_EVENTS } = require('../eventer');
 
 const EVENTS = {
