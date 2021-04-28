@@ -1,13 +1,11 @@
 <script>
   import { fade } from 'svelte/transition';
-  import Loader from '../components/Loader';
-  import Title from '../components/Title';
-  import Soundcloud from '../routes/Soundcloud';
-  import { song } from '../utils/stores';
+  import Loader from '../Loader';
+  import Title from '../Title';
+  import Widget from '../souncloud/Widget';
+  import { song } from '../../utils/stores';
 
   export let stream;
-
-  let error;
 </script>
 
 {#if $song}
@@ -17,7 +15,7 @@
       title="{$song.title} by {$song.artist}"
       style="align-self: flex-start; margin-top: auto; text-align: left;"
     />
-    <Soundcloud url={$song.url} />
+    <Widget url={$song.url} />
   </div>
 {:else}
   <Loader />

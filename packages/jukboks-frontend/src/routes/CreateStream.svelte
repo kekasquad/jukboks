@@ -1,11 +1,11 @@
 <script>
   import { fade } from 'svelte/transition';
   import Loader from '../components/Loader';
-  import Heading from '../components/Heading.svelte';
-  import Button from '../components/Button.svelte';
-  import Input from '../components/Input.svelte';
+  import Heading from '../components/Heading';
+  import Button from '../components/Button';
+  import Input from '../components/Input';
   import Datepicker from 'svelte-calendar';
-  import Song from '../components/Song.svelte';
+  import Song from '../components/Song';
   import * as api from '../utils/api';
   import { navigate } from 'svelte-navigator';
 
@@ -22,8 +22,8 @@
   let error;
   let createError;
   let selected;
-  let hours = 22;
-  let minutes = 23;
+  let hours = 16;
+  let minutes = 59;
 
   async function add() {
     let song = await api.getSong(inputURL);

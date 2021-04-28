@@ -1,5 +1,5 @@
 import ky from 'ky';
-import { token as tokenStore } from './stores.js';
+import { token as tokenStore } from './stores';
 
 const API_BASE = 'http://localhost:8080';
 

@@ -1,18 +1,18 @@
 <script>
   import { useNavigate, useLocation } from 'svelte-navigator';
-  import { token } from '../utils/stores';
+  import { token } from '../../utils/stores';
 
   const navigate = useNavigate();
   const location = useLocation();
 
-  $: if ($token) {
-    navigate('/profile', {
+  $: if (!$token) {
+    navigate('/signin', {
       state: { from: $location.pathname },
       replace: true,
     });
   }
 </script>
 
-{#if !$token}
+{#if $token}
   <slot />
 {/if}

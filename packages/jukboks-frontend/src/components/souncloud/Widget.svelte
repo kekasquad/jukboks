@@ -1,6 +1,6 @@
 <script>
   import { onMount } from 'svelte';
-  import { SC } from '../sc/api';
+  import { SC } from './api';
   export let url = 'https://soundcloud.com/lustry/i-fell-into-your-brown-eyes';
   // export let autoplay = true;
 

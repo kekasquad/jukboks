@@ -2,9 +2,9 @@
   // TODO: add func to button
   // TODO: add streams
   import { navigate } from 'svelte-navigator';
-  import StreamRow from '../components/StreamRow.svelte';
-  import Heading from '../components/Heading.svelte';
-  import Button from '../components/Button.svelte';
+  import StreamRow from '../components/stream/StreamRow';
+  import Heading from '../components/Heading';
+  import Button from '../components/Button';
   import Loader from '../components/Loader';
   import { me } from '../utils/api';
 

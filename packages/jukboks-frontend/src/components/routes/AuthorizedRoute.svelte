@@ -1,6 +1,6 @@
 <script>
   import { Route } from 'svelte-navigator';
-  import AuthorizedRouteGuard from './AuthorizedRouteGuard.svelte';
+  import AuthorizedRouteGuard from './AuthorizedRouteGuard';
 
   export let path;
 </script>

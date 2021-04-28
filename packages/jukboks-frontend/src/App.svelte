@@ -1,16 +1,14 @@
 <script>
-  import { Router, Link, Route, navigate } from 'svelte-navigator';
-  import Loader from './components/Loader.svelte';
-  import PrivateRoute from './routes/PrivateRoute.svelte';
-  import AuthorizedRoute from './routes/AuthorizedRoute.svelte';
-  import Main from './routes/Main.svelte';
-  import SignIn from './routes/SignIn.svelte';
-  import SignUp from './routes/SignUp.svelte';
-  import Profile from './routes/Profile.svelte';
-  import Soundcloud from './routes/Soundcloud';
-  import Stream from './routes/Stream.svelte';
-  import CreateStream from './routes/CreateStream.svelte';
-  import NotFound from './routes/NotFound.svelte';
+  import { Router, Route, navigate } from 'svelte-navigator';
+  import PrivateRoute from './components/routes/PrivateRoute';
+  import AuthorizedRoute from './components/routes/AuthorizedRoute';
+  import Main from './routes/Main';
+  import SignIn from './routes/SignIn';
+  import SignUp from './routes/SignUp';
+  import Profile from './routes/Profile';
+  import Stream from './routes/Stream';
+  import CreateStream from './routes/CreateStream';
+  import NotFound from './routes/NotFound';
   import { initStores } from './utils/api';
 
   initStores().catch((_) => navigate('/signin'));
@@ -36,7 +34,6 @@
     <PrivateRoute path="/stream/:uuid" let:params>
       <Stream uuid={params.uuid} />
     </PrivateRoute>
-    <Route path="/test/sc" component={Soundcloud} />
     <Route component={NotFound} />
   </main>
 </Router>

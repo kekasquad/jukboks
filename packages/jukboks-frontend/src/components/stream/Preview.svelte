@@ -1,7 +1,6 @@
 <script>
   import { fade } from 'svelte/transition';
-  import Loader from '../components/Loader';
-  import * as ws from '../utils/ws';
+  import * as ws from '../../utils/ws';
 
   export let stream;
   let entered = false;
@@ -29,14 +28,10 @@
     console.log('Error on connecting to socket: ' + reason);
   }
 
-  async function joinTheStream() {
+  async function enterTheStream() {
     await ws.connect().catch(onError);
     await ws.join(stream.uuid).catch(onError);
     entered = true;
-  }
-
-  async function enterTheStream() {
-    await joinTheStream().catch(onError);
   }
 </script>
 

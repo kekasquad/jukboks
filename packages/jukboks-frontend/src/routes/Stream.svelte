@@ -1,7 +1,7 @@
 <script>
   import Loader from '../components/Loader';
-  import Preview from '../components/Preview';
-  import StreamContent from '../components/StreamContent';
+  import Preview from '../components/stream/Preview';
+  import StreamContent from '../components/stream/StreamContent';
   import * as api from '../utils/api';
   import { plays } from '../utils/stores';
 
