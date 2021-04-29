@@ -2,7 +2,7 @@
   import { fade } from 'svelte/transition';
 
   export let title;
-  export let style;
+  export let style = '';
 </script>
 
 <div class="title" {style} in:fade={{ duration: 100 }}>

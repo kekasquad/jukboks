@@ -2,7 +2,7 @@
   import { fade } from 'svelte/transition';
 
   export let song;
-  export let style;
+  export let style = '';
 </script>
 
 <div class="song" {style} out:fade={{ duration: 100 }} in:fade={{ duration: 100 }}>

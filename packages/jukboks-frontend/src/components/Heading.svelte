@@ -1,6 +1,6 @@
 <script>
   export let heading;
-  export let style;
+  export let style = '';
 </script>
 
 <div class="heading" {style}>

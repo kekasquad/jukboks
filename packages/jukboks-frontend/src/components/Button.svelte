@@ -1,7 +1,7 @@
 <script>
   export let title;
   export let func;
-  export let style;
+  export let style = '';
 </script>
 
 <button class="button" on:click={func} {style}>
