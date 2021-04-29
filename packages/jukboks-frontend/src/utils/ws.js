@@ -6,6 +6,7 @@ const WS_BASE = 'ws://localhost:8080';
 const EVENTS = {
   STREAM_JOIN: 'stream:join',
   STREAM_STARTED: 'stream:started',
+  STREAM_ENDED: 'stream:ended',
   SONG_STARTED: 'song:started',
 };
 
@@ -25,6 +26,10 @@ socket.prependAny((event, ...args) => {
 
 socket.on(EVENTS.STREAM_STARTED, (...args) => {
   plays.set(true);
+});
+
+socket.on(EVENTS.STREAM_ENDED, (...args) => {
+  plays.set(false);
 });
 
 socket.on(EVENTS.SONG_STARTED, (newSong) => {

@@ -41,7 +41,7 @@ class Core {
     });
 
     this.eventer.on(EVENTS.STREAM_ENDED, (stream) => {
-      this.logger.debug({ msg: 'Stream started', uuid: stream.uuid });
+      this.logger.debug({ msg: 'Stream ended', uuid: stream.uuid });
       this.io.to(stream.uuid).emit(EVENTS.STREAM_ENDED);
     });
 

@@ -36,7 +36,7 @@
 </script>
 
 {#if !error}
-  <div class="outer" out:fade={{ duration: 100 }}>
+  <div class="outer" out:fade={{ duration: 100 }} in:fade={{ duration: 100, delay: 150 }}>
     <slot />
     <h1>{stream.title} by {stream.author.username}</h1>
     {#if !entered && !isEnded()}

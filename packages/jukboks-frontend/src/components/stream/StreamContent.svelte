@@ -9,7 +9,7 @@
 </script>
 
 {#if $song}
-  <div class="outer" in:fade={{ duration: 100, delay: 150 }}>
+  <div class="outer" in:fade={{ duration: 100, delay: 150 }} out:fade={{ duration: 100 }}>
     <Title title="{stream.title} by {stream.author.username}" />
     <Title
       title="{$song.title} by {$song.artist}"
