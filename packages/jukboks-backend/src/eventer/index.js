@@ -1,8 +1,6 @@
 const { Stream } = require('../models/Stream');
 const Emittery = require('emittery');
 
-const EMITTED = Symbol('EMITTED');
-
 const EVENTS = {
   STREAM_STARTED: 'stream:started',
   STREAM_ENDED: 'stream:ended',
@@ -85,7 +83,6 @@ class Eventer extends Emittery {
       if (now < stream.dt_start) {
         this.streamsTimers[stream.uuid] = setTimeout(() => {
           delete this.streamsTimers[stream.uuid];
-          // this.streamsTimers[stream.uuid] = EMITTED;
           this.emit(EVENTS.STREAM_STARTED, stream);
         }, stream.dt_start - Date.now());
         streamsScheduled += 1;
@@ -106,11 +103,12 @@ class Eventer extends Emittery {
         offset += song.duration * 1000;
       }
 
-      // TODO: not sure it's neccesary
-      this.streamsEndTimers[stream.uuid] = setTimeout(() => {
-        delete this.streamsEndTimers[stream.uuid];
-        this.emit(EVENTS.STREAM_ENDED, stream);
-      }, stream.dt_end - Date.now());
+      if (!(stream.uuid in this.streamsEndTimers)) {
+        this.streamsEndTimers[stream.uuid] = setTimeout(() => {
+          delete this.streamsEndTimers[stream.uuid];
+          this.emit(EVENTS.STREAM_ENDED, stream);
+        }, stream.dt_end - Date.now());
+      }
     }
     this.logger.debug({ msg: 'Timers', stream: this.streamsTimers, song: this.songsTimers });
     this.logger.debug({ msg: 'Pull complete', streamsScheduled, songsScheduled });

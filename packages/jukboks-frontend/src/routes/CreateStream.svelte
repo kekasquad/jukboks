@@ -1,10 +1,12 @@
 <script>
   import { fade } from 'svelte/transition';
+  import { onMount } from 'svelte';
   import Loader from '../components/Loader';
   import Heading from '../components/Heading';
   import Button from '../components/Button';
   import Input from '../components/Input';
   import Datepicker from 'svelte-calendar';
+  import { TimepickerUI } from 'timepicker-ui';
   import Song from '../components/Song';
   import * as api from '../utils/api';
   import { navigate } from 'svelte-navigator';
@@ -12,9 +14,38 @@
   let background = '/img/backgrounds/createStreamPage.png';
   let inputURL = '';
   let title = '';
+  let time = '';
   let songs = [];
+  let timePicker;
+  let timePickerInput;
+
+  onMount(() => {
+    const newTimepicker = new TimepickerUI(timePicker, {
+      mobile: true,
+      enableSwitchIcon: true,
+      theme: 'crane-radius',
+    });
+    newTimepicker.create();
+  });
 
   let start = new Date();
+  if (start.getHours() > 13) {
+    time += start.getHours() - 12;
+  } else {
+    time += start.getHours();
+  }
+  time += ':';
+  if (start.getMinutes() < 10) {
+    time += '0' + start.getMinutes();
+  } else {
+    time += start.getMinutes();
+  }
+  if (start.getHours() > 13) {
+    time += ' PM';
+  } else {
+    time += ' AM';
+  }
+
   let end = new Date();
   end.setMonth(start.getMonth() + 3);
 
@@ -22,8 +53,6 @@
   let error;
   let createError;
   let selected;
-  let hours = 16;
-  let minutes = 59;
 
   async function add() {
     let song = await api.getSong(inputURL);
@@ -45,6 +74,18 @@
       createError = 'Add title!';
       return;
     }
+    let timePickerInputValue = timePickerInput.value;
+    let dayTime = timePickerInputValue.split(' ')[1];
+    let hours = Number(timePickerInputValue.split(' ')[0].split(':')[0]);
+    let minutes = Number(timePickerInputValue.split(' ')[0].split(':')[1]);
+    if (dayTime == 'PM') {
+      hours += 12;
+    }
+    if (hours == '24') {
+      hours = 0;
+    }
+    console.log(dayTime, hours, minutes);
+
     let dt_start = selected.getTime() + (hours * 60 + minutes) * 60 * 1000;
     let stream = { title, songs, dt_start };
     try {
@@ -79,9 +120,14 @@
       style="align-self: flex-start; width: 100%; margin-top: 54px;"
       bind:value={title}
     />
-    <Datepicker {start} {end} style="width: 100%; display: block;" bind:formattedSelected bind:selected>
-      <button class="calendar">{formattedSelected}</button>
-    </Datepicker>
+    <div style="display: flex; justify-content: space-between;">
+      <Datepicker {start} {end} style="width: 55%;" bind:formattedSelected bind:selected>
+        <button class="calendar">{formattedSelected}</button>
+      </Datepicker>
+      <div class="timepicker-ui" bind:this={timePicker} style="width: 40%">
+        <input class="timepicker-ui-input" bind:value={time} bind:this={timePickerInput} style="width: 100%" />
+      </div>
+    </div>
   </div>
   <div class="right">
     <Heading heading="Added songs" style="text-align: left; align-self: flex-start;" />
@@ -144,5 +190,22 @@
     width: 100%;
     height: 70%;
     overflow-y: auto;
+  }
+
+  .timepicker-ui-input {
+    background: rgba(185, 102, 159, 0.7);
+    border-color: transparent;
+    font-size: 16px;
+    line-height: normal;
+    color: #ffffff;
+    text-align: center;
+    width: auto;
+  }
+
+  .timepicker-ui-input::placeholder {
+    color: #cccccc;
+    font-size: 16px;
+    line-height: normal;
+    text-align: center;
   }
 </style>
