@@ -74,6 +74,7 @@
       createError = 'Add title!';
       return;
     }
+
     let timePickerInputValue = timePickerInput.value;
     let dayTime = timePickerInputValue.split(' ')[1];
     let hours = Number(timePickerInputValue.split(' ')[0].split(':')[0]);
