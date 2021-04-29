@@ -5,6 +5,7 @@ const EMITTED = Symbol('EMITTED');
 
 const EVENTS = {
   STREAM_STARTED: 'stream:started',
+  STREAM_ENDED: 'stream:ended',
   SONG_STARTED: 'song:started',
 };
 
@@ -20,6 +21,7 @@ class Eventer extends Emittery {
 
     this.streamsTimers = {};
     this.songsTimers = {};
+    this.streamsEndTimers = {};
 
     this.start = this.start.bind(this);
     this.stop = this.stop.bind(this);
@@ -103,6 +105,12 @@ class Eventer extends Emittery {
         }
         offset += song.duration * 1000;
       }
+
+      // TODO: not sure it's neccesary
+      this.streamsEndTimers[stream.uuid] = setTimeout(() => {
+        delete this.streamsEndTimers[stream.uuid];
+        this.emit(EVENTS.STREAM_ENDED, stream);
+      }, stream.dt_end - Date.now());
     }
     this.logger.debug({ msg: 'Timers', stream: this.streamsTimers, song: this.songsTimers });
     this.logger.debug({ msg: 'Pull complete', streamsScheduled, songsScheduled });

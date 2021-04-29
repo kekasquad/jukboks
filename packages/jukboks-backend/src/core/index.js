@@ -39,6 +39,12 @@ class Core {
       this.logger.debug({ msg: 'Stream started', uuid: stream.uuid });
       this.io.to(stream.uuid).emit(EVENTS.STREAM_STARTED);
     });
+
+    this.eventer.on(EVENTS.STREAM_ENDED, (stream) => {
+      this.logger.debug({ msg: 'Stream started', uuid: stream.uuid });
+      this.io.to(stream.uuid).emit(EVENTS.STREAM_ENDED);
+    });
+
     this.eventer.on(EVENTS.SONG_STARTED, ({ song, stream }) => {
       this.logger.debug({ msg: 'Song started', uuid: stream.uuid, id: song._id });
       this.io.to(stream.uuid).emit(EVENTS.SONG_STARTED, song);
