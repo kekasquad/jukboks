@@ -2,7 +2,7 @@
   // TODO: add func to button
   // TODO: add streams
   import { navigate } from 'svelte-navigator';
-  import StreamRow from '../components/stream/StreamRow';
+  import StreamsView from '../components/stream/StreamsView.svelte';
   import Heading from '../components/Heading';
   import Button from '../components/Button';
   import Loader from '../components/Loader';
@@ -23,11 +23,7 @@
   <div class="outer" style="background: url({background}); background-size: cover; background-position: center;">
     <Heading heading={'Welcome, ' + user.name} style="align-self: flex-start;" />
     <Heading heading="Your streams" style="align-self: flex-start; margin-top: 30px" />
-    <div class="streams">
-      {#each user.streams as stream}
-        <StreamRow style="align-self: flex-start;" title={stream.title} time={stream.dt_start} uuid={stream.uuid} />
-      {/each}
-    </div>
+    <StreamsView streams={user.streams} />
     <Button title="Schedule new" style="margin-top: auto; align-self: flex-end;" func={scheduleStream} />
   </div>
 {:catch error}
@@ -47,12 +43,5 @@
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
-  }
-
-  .streams {
-    width: 100%;
-    height: 60%;
-    overflow-y: auto;
-    margin-top: 10px;
   }
 </style>
