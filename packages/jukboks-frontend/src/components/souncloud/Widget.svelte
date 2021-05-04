@@ -1,15 +1,22 @@
 <script>
   import { onMount } from 'svelte';
   import { SC } from './api';
-  export let url = 'https://soundcloud.com/lustry/i-fell-into-your-brown-eyes';
-  export let offset = 0;
-  // export let autoplay = true;
+  import { song } from '../../utils/stores';
 
   let widget;
   let sc;
 
-  // functions
-  let toggle;
+  var options = [];
+  options.auto_play = true;
+  const onSongChange = (song) => {
+    if (sc) {
+      sc.load(song.url, options);
+    }
+  };
+  $: onSongChange($song);
+
+  let songUrl = $song.url;
+  let offset = $song.offset;
 
   // Need onmount, since we can only bind after `sc` is set to Element
   onMount(() => {
@@ -32,21 +39,17 @@
         console.dir(s);
       });
     });
-
-    toggle = sc.toggle.bind(sc);
   });
 </script>
 
-<!-- <button on:click={toggle}>Play/Pause</button> -->
 <iframe
   id="widget"
   title="SoundCloud Widget"
   bind:this={widget}
-  src="https://w.soundcloud.com/player/?url={url}&auto_play=true"
+  src="https://w.soundcloud.com/player/?url={songUrl}&auto_play=true"
   allow="autoplay"
 />
 
-<!-- allow={autoplay ? 'autoplay;' : null} -->
 <style>
   #widget {
     z-index: -1;
