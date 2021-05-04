@@ -19,15 +19,11 @@ const StreamSchema = new mongoose.Schema({
   // isPrivate: { type: Boolean, default: true },
   dt_start: { type: Number, required: true },
   dt_end: { type: Number },
-  duration: { type: Number }, // duration in *seconds*
+  duration: { type: Number }, // duration in *ms*
 });
 
 StreamSchema.index({ dt_start: -1 });
 StreamSchema.index({ dt_end: -1 });
-
-// StreamSchema.virtual('dt_end').get(function () {
-//   return this.dt_start + this.duration;
-// });
 
 StreamSchema.methods.isStarted = function () {
   const now = Date.now();
@@ -47,8 +43,8 @@ const Stream = mongoose.model('Stream', StreamSchema);
  * @returns {Stream}
  */
 function calculateTimes(stream) {
-  stream.duration = stream.songs.reduce((acc, song) => acc + song.duration, 0); // seconds!
-  stream.dt_end = stream.dt_start + stream.duration * 1000; // milliseconds!
+  stream.duration = stream.songs.reduce((acc, song) => acc + song.duration, 0); // milliseconds!
+  stream.dt_end = stream.dt_start + stream.duration; // milliseconds!
   return stream;
 }
 

@@ -34,22 +34,22 @@ const { Stream, calculateTimes } = require('../src/models/Stream');
         title: 'Zero song',
         artist: 'Test artist',
         url: 'https://soundcloud.com/test/test',
-        duration: 5,
+        duration: 5000,
       },
       {
         title: 'First song',
         artist: 'Test artist',
         url: 'https://soundcloud.com/test/test',
-        duration: 10,
+        duration: 10000,
       },
       {
         title: 'Second song',
         artist: 'Test artist',
         url: 'https://soundcloud.com/test/test',
-        duration: 10,
+        duration: 10000,
       },
     ],
-    dt_start: Date.now() + 10 * 1000,
+    dt_start: Date.now() + 10000,
   });
   calculateTimes(stream);
   await stream.save();

@@ -10,6 +10,9 @@ const ERRORS = {
   ENDED: 'Stream has already eneded',
 };
 
+// Network delay to the client
+const NETWORK_PING = 250;
+
 const registerStreamHandlers = (io, logger, socket) => {
   const joinStream = async (uuid) => {
     logger.info({ msg: 'Client joined stream', uuid, id: socket.id });
@@ -27,15 +30,15 @@ const registerStreamHandlers = (io, logger, socket) => {
     if (Date.now() > stream.dt_start) {
       // TODO: check for race conditions
 
-      const played = Date.now() - stream.dt_start; // ms
+      const played = Date.now() - stream.dt_start;
 
       let elapsed = 0;
       for (const song of stream.songs) {
         // find song such as: songPrev < now < song
-        if (elapsed < played && played < elapsed + song.duration * 1000) {
+        if (elapsed < played && played < elapsed + song.duration) {
           // Send current playing song with offset (milliseconds)
           // 1000 milliseconds for network delay
-          socket.emit(EVENTER_EVENTS.SONG_STARTED, { ...song._doc, offset: Math.round((played - elapsed) / 1000) });
+          socket.emit(EVENTER_EVENTS.SONG_STARTED, { ...song._doc, offset: played - elapsed + NETWORK_PING });
           break;
         }
         elapsed += song.duration * 1000;

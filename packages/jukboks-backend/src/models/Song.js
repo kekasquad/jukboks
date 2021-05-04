@@ -4,7 +4,7 @@ const SongSchema = new mongoose.Schema({
   title: String,
   artist: String,
   url: String,
-  duration: Number, // duration in *seconds*
+  duration: Number, // ms!
 });
 
 SongSchema.options.toJSON = {

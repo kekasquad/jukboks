@@ -100,7 +100,7 @@ class Eventer extends Emittery {
           }, stream.dt_start + offset - Date.now());
           songsScheduled += 1;
         }
-        offset += song.duration * 1000;
+        offset += song.duration;
       }
 
       if (!(stream.uuid in this.streamsEndTimers)) {
