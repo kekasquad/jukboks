@@ -34,6 +34,7 @@ class Core {
     this.eventer.stop();
   }
 
+  // All the handlers for the events from Eventer -> Core -> Client
   registerEveneterHandlers() {
     this.eventer.on(EVENTS.STREAM_STARTED, (stream) => {
       this.logger.debug({ msg: 'Stream started', uuid: stream.uuid });
@@ -60,6 +61,7 @@ class Core {
       socket.emit('error', err.message);
     };
 
+    // All the handlers for the events from Client -> Core
     registerStreamHandlers(this.io, this.logger, socket);
   }
 }
