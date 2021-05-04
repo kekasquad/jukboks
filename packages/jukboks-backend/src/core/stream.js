@@ -3,6 +3,7 @@ const { EVENTER_EVENTS } = require('../eventer');
 
 const EVENTS = {
   STREAM_JOIN: 'stream:join',
+  STREAM_LISTENERS: 'stream:listeners',
 };
 
 const ERRORS = {
@@ -11,7 +12,7 @@ const ERRORS = {
 };
 
 // Network delay to the client
-const NETWORK_PING = 250;
+const NETWORK_DELAY = 250;
 
 const registerStreamHandlers = (io, logger, socket) => {
   const joinStream = async (uuid) => {
@@ -37,14 +38,37 @@ const registerStreamHandlers = (io, logger, socket) => {
         // find song such as: songPrev < now < song
         if (elapsed < played && played < elapsed + song.duration) {
           // Send current playing song with offset (milliseconds)
-          // 1000 milliseconds for network delay
-          socket.emit(EVENTER_EVENTS.SONG_STARTED, { ...song._doc, offset: played - elapsed + NETWORK_PING });
+          // + network delay
+          socket.emit(EVENTER_EVENTS.SONG_STARTED, { ...song._doc, offset: played - elapsed + NETWORK_DELAY });
           break;
         }
         elapsed += song.duration * 1000;
       }
     }
   };
+
+  // WIP: not working in cluster
+  const streamListeners = (cb) => {
+    const rooms = socket.rooms;
+    if (!rooms) {
+      throw new Error(ERRORS.NOT_FOUND);
+    }
+
+    const listeners = {};
+    const ioRooms = io.of('/').adapter.rooms;
+    for (const room of rooms) {
+      // exclude the default room
+      if (room == socket.id) continue;
+
+      listeners[room] = ioRooms.get(room).size;
+    }
+
+    cb({
+      listeners,
+    });
+  };
+
+  socket.on(EVENTS.STREAM_LISTENERS, streamListeners);
 
   socket.on(EVENTS.STREAM_JOIN, joinStream);
 };

@@ -33,19 +33,19 @@ const { Stream, calculateTimes } = require('../src/models/Stream');
       {
         title: 'Zero song',
         artist: 'Test artist',
-        url: 'https://soundcloud.com/test/test',
+        url: 'https://soundcloud.com/lustry/i-fell-into-your-brown-eyes',
         duration: 5000,
       },
       {
         title: 'First song',
         artist: 'Test artist',
-        url: 'https://soundcloud.com/test/test',
+        url: 'https://soundcloud.com/therealbonjr/its-ok-youre-ok',
         duration: 10000,
       },
       {
         title: 'Second song',
         artist: 'Test artist',
-        url: 'https://soundcloud.com/test/test',
+        url: 'https://soundcloud.com/lustry/i-fell-into-your-brown-eyes',
         duration: 10000,
       },
     ],

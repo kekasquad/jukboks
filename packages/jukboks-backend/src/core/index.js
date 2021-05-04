@@ -40,9 +40,12 @@ class Core {
       this.io.to(stream.uuid).emit(EVENTS.STREAM_STARTED);
     });
 
-    this.eventer.on(EVENTS.STREAM_ENDED, (stream) => {
+    this.eventer.on(EVENTS.STREAM_ENDED, async (stream) => {
       this.logger.debug({ msg: 'Stream ended', uuid: stream.uuid });
       this.io.to(stream.uuid).emit(EVENTS.STREAM_ENDED);
+
+      // leave stream rooms
+      this.io.in(stream.uuid).socketsLeave(stream.uuid);
     });
 
     this.eventer.on(EVENTS.SONG_STARTED, ({ song, stream }) => {
