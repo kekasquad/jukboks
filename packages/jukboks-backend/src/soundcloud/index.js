@@ -55,7 +55,7 @@ function normalizeMetadata(meta) {
   const apply = {
     'og:title': set('title'),
     'og:url': set('url'),
-    duration: set('duration', (s) => toSeconds(parse(s))),
+    duration: set('duration', (s) => toSeconds(parse(s)) * 1000),
     'soundcloud:user': set('artist', (s) => s.split('/').pop()),
   };
 

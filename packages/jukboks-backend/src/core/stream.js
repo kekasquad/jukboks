@@ -42,7 +42,7 @@ const registerStreamHandlers = (io, logger, socket) => {
           socket.emit(EVENTER_EVENTS.SONG_STARTED, { ...song._doc, offset: played - elapsed + NETWORK_DELAY });
           break;
         }
-        elapsed += song.duration * 1000;
+        elapsed += song.duration;
       }
     }
   };
