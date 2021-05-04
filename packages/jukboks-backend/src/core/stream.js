@@ -26,16 +26,16 @@ const registerStreamHandlers = (io, logger, socket) => {
 
     if (Date.now() > stream.dt_start) {
       // TODO: check for race conditions
-      // TODO: move to function
 
-      const played = Date.now() - stream.dt_start;
+      const played = Date.now() - stream.dt_start; // ms
 
       let elapsed = 0;
       for (const song of stream.songs) {
+        // find song such as: songPrev < now < song
         if (elapsed < played && played < elapsed + song.duration * 1000) {
           // Send current playing song with offset (milliseconds)
           // 1000 milliseconds for network delay
-          socket.emit(EVENTER_EVENTS.SONG_STARTED, { ...song._doc, offset: played - elapsed + 1000 });
+          socket.emit(EVENTER_EVENTS.SONG_STARTED, { ...song._doc, offset: Math.round((played - elapsed) / 1000) });
           break;
         }
         elapsed += song.duration * 1000;
