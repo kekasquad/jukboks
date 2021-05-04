@@ -6,6 +6,7 @@ const WS_BASE = 'ws://localhost:8080';
 const EVENTS = {
   STREAM_JOIN: 'stream:join',
   STREAM_STARTED: 'stream:started',
+  STREAM_LISTENERS: 'stream:listeners',
   STREAM_ENDED: 'stream:ended',
   SONG_STARTED: 'song:started',
 };
@@ -60,4 +61,11 @@ async function join(uuid) {
   socket.emit(EVENTS.STREAM_JOIN, uuid);
 }
 
-export { connect, join };
+async function getListeners() {
+  if (!socket.connected) {
+    throw new Error('Socket is not connected');
+  }
+  socket.emit(EVENTS.STREAM_LISTENERS, console.log);
+}
+
+export { connect, join, getListeners };

@@ -31,6 +31,7 @@
   async function enterTheStream() {
     await ws.connect().catch(onError);
     await ws.join(stream.uuid).catch(onError);
+    await ws.getListeners().catch(onError);
     entered = true;
   }
 </script>
