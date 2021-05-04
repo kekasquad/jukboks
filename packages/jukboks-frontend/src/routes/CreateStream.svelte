@@ -92,6 +92,10 @@
     console.log(dayTime, hours, minutes);
 
     let dt_start = selected.getTime() + (hours * 60 + minutes) * 60 * 1000;
+    if (dt_start < new Date()) {
+      createError = 'Set correct time!';
+      return;
+    }
     let stream = { title, songs, dt_start };
     try {
       stream = await api.createStream(stream);
@@ -141,10 +145,12 @@
         <Song {song} />
       {/each}
     </div>
-    <Button title="Schedule" style="margin-top: auto; align-self: flex-end;" func={createStream} />
     {#if createError}
-      <div out:fade={{ duration: 100 }} in:fade={{ duration: 100 }}>{createError}</div>
+      <div out:fade={{ duration: 100 }} in:fade={{ duration: 100 }} style=" align-self: flex-end; margin-top: 10px;">
+        {createError}
+      </div>
     {/if}
+    <Button title="Schedule" style="margin-top: auto; align-self: flex-end;" func={createStream} />
   </div>
 </div>
 
