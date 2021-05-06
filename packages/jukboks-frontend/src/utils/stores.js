@@ -6,6 +6,12 @@ token.subscribe((value) => {
   localStorage.setItem('token', value ?? '');
 });
 
+export const username = writable(localStorage.getItem('username'));
+username.subscribe((value) => {
+  console.log(`Setting username to ${value}`);
+  localStorage.setItem('username', value ?? '');
+});
+
 export const song = writable();
 song.subscribe((value) => {
   console.log(`Setting song to ${JSON.stringify(value)}`);

@@ -1,5 +1,5 @@
 import ky from 'ky';
-import { token as tokenStore } from './stores';
+import { token as tokenStore, username } from './stores';
 
 const API_BASE = 'http://localhost:8080';
 
@@ -44,6 +44,7 @@ async function signup(username, name, password) {
 
 async function me() {
   const user = await client.get('me').json();
+  username.set(user.username);
   return user;
 }
 
