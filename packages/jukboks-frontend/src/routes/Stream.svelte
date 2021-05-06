@@ -17,7 +17,7 @@
 {:then stream}
   <div class="outer" style="background: url({background}); background-size: cover; background-position: center;">
     {#if !$plays}
-      <Preview {stream}><div class="shadow" /></Preview>
+      <Preview {stream} />
     {:else}
       <StreamContent {stream} />
     {/if}
@@ -42,20 +42,5 @@
     justify-content: center;
     align-items: center;
     text-align: center;
-  }
-
-  .shadow {
-    position: absolute;
-    top: 0px;
-    left: 0px;
-    width: 100%;
-    height: 100%;
-    padding: 0px;
-    margin: 0px;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
   }
 </style>
