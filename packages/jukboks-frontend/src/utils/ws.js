@@ -1,5 +1,5 @@
 import { io } from 'socket.io-client';
-import { plays, song } from './stores';
+import { plays, song, token as tokenStore } from './stores';
 
 const WS_BASE = 'ws://localhost:8080';
 
@@ -11,7 +11,17 @@ const EVENTS = {
   SONG_STARTED: 'song:started',
 };
 
-const socket = io(WS_BASE, { transports: ['websocket'], autoConnect: false });
+let tokenValue;
+
+tokenStore.subscribe((value) => {
+  tokenValue = value;
+});
+
+const socket = io(WS_BASE, {
+  transports: ['websocket'], autoConnect: false, auth: {
+    token: tokenValue,
+  },
+});
 
 socket.on('connect', () => {
   console.log('conected, socket id: ' + socket.id);
