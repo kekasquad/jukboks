@@ -85,7 +85,7 @@ async function routes(fastify, options) {
   fastify.get(
     '/me',
     {
-      preValidation: [fastify.authenticate],
+      preValidation: [fastify.authenticate, fastify.getUser],
     },
     async (request, reply) => {
       const user = await User.findOne({ username: request.user.username }, publicFields).populate('streams');
