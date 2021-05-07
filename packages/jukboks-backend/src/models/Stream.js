@@ -14,12 +14,12 @@ const StreamSchema = new mongoose.Schema({
   title: { type: String, required: true },
   author: { type: Schema.Types.ObjectId, ref: 'User', required: true }, // author <-> User
   songs: [{ type: SongSchema, required: true }],
-  // visualization: { type: Boolean, default: false },
-  // reactions: { type: Boolean, default: false },
-  // isPrivate: { type: Boolean, default: true },
   dt_start: { type: Number, required: true },
   dt_end: { type: Number },
   duration: { type: Number }, // duration in *ms*
+  // Live settings
+  showSongs: { type: Boolean, default: true },
+  reactions: { type: Boolean, default: false },
 });
 
 StreamSchema.index({ dt_start: -1 });
