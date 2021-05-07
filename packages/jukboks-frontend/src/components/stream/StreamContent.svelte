@@ -4,11 +4,15 @@
   import Title from '../Title';
   import Widget from '../souncloud/Widget';
   import { song, username } from '../../utils/stores';
-  import Shadow from '../Shadow.svelte';
+  import Shadow from '../Shadow';
+  import Popup from '../Popup';
 
   export let stream;
 
   let isPanelShown = false;
+  let isPopupShown = false;
+
+  let popupText = '';
 
   function showPanel() {
     isPanelShown = true;
@@ -19,12 +23,31 @@
       isPanelShown = false;
     }
   }
+
+  function share() {
+    navigator.clipboard.writeText(window.location.href).then(
+      function () {
+        popupText = 'Link was copied to the clipboard!';
+        isPopupShown = true;
+        setTimeout(function () {
+          popupText = '';
+          isPopupShown = false;
+        }, 5000);
+      },
+      function () {
+        console.log('not cliped');
+      },
+    );
+  }
 </script>
 
 <svelte:window on:keydown={handleKeydown} />
 
 {#if $song}
   <div class="outer" in:fade={{ duration: 100, delay: 150 }} out:fade={{ duration: 100 }}>
+    {#if isPopupShown}
+      <Popup message={popupText} />
+    {/if}
     {#if isPanelShown}
       <div class="panel" in:fade={{ duration: 100, delay: 150 }} out:fade={{ duration: 100 }}>
         <Shadow />
@@ -52,9 +75,14 @@
           </div>
         </div>
         <div class="bottomButtons">
-          <div><div class="button" style="margin-right: auto;">Next</div></div>
-          <div style="display: flex; justify-content: center;"><div class="button">Share</div></div>
-          <div><div class="button" style="margin-left: auto;">Send</div></div>
+          <div class="buttonContainer"><div class="button" style="margin-right: auto;">Next</div></div>
+          <div class="buttonContainer" style="justify-content: center;">
+            <div class="button" on:click={share}>Share</div>
+          </div>
+          <div class="buttonContainer messageContainer">
+            <textarea class="message" type="text" placeholder="Type your message" />
+            <div class="button" style="margin-left: auto;">Send</div>
+          </div>
         </div>
       </div>
     {:else}
@@ -150,7 +178,7 @@
     flex-direction: row;
     z-index: 1;
     justify-content: center;
-    align-items: center;
+    align-items: flex-end;
     text-align: right;
     width: 100%;
   }
@@ -177,5 +205,26 @@
     width: min-content;
     cursor: pointer;
     position: relative;
+  }
+
+  .buttonContainer {
+    display: flex;
+    align-items: flex-end;
+  }
+
+  .messageContainer {
+    display: flex;
+    flex-direction: column;
+    z-index: 1;
+    align-items: center;
+    width: 100%;
+  }
+
+  .message {
+    width: 100%;
+    height: 20vh;
+    color: white;
+    background: transparent;
+    resize: none;
   }
 </style>
