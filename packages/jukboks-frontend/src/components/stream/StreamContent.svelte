@@ -13,12 +13,20 @@
   function showPanel() {
     isPanelShown = true;
   }
+
+  function handleKeydown(event) {
+    if (event.keyCode == 27) {
+      isPanelShown = false;
+    }
+  }
 </script>
+
+<svelte:window on:keydown={handleKeydown} />
 
 {#if $song}
   <div class="outer" in:fade={{ duration: 100, delay: 150 }} out:fade={{ duration: 100 }}>
     {#if isPanelShown}
-      <div class="panel">
+      <div class="panel" in:fade={{ duration: 100, delay: 150 }} out:fade={{ duration: 100 }}>
         <Shadow />
         <div class="bottomButtons">
           <div><div class="button" style="margin-right: auto;">Next</div></div>
