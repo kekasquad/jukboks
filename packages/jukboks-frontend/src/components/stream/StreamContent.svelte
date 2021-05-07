@@ -28,6 +28,29 @@
     {#if isPanelShown}
       <div class="panel" in:fade={{ duration: 100, delay: 150 }} out:fade={{ duration: 100 }}>
         <Shadow />
+        <div class="info" style="margin-top: 70px;">
+          <div class="row">
+            <Title title="Currently playing:" style="width: 40%; margin-right: 5%;" />
+            <Title title="ii" style="width: 55%; text-align: left;" />
+          </div>
+          <div class="row" style="margin-top: 24px;">
+            <Title title="Next:" style="width: 40%; margin-right: 5%;" />
+            <Title title="ooooo" style="width: 55%; text-align: left;" />
+          </div>
+          <div class="row" style="margin-top: 24px;">
+            <Title title="Live:" style="width: 40%; margin-right: 5%;" />
+            <Title title="qqqqq" style="width: 55%; text-align: left;" />
+          </div>
+        </div>
+        <div class="info" style="margin-top: 50px;">
+          <div class="row">
+            <Title title="Controls:" style="width: 40%; margin-right: 5%; align-self: flex-start;" />
+            <div class="controls" style="width: 55%; text-align: left;">
+              <Title title="ell" style="width: 100%;" />
+              <Title title="pufpufpuf" style="width: 100%;" />
+            </div>
+          </div>
+        </div>
         <div class="bottomButtons">
           <div><div class="button" style="margin-right: auto;">Next</div></div>
           <div style="display: flex; justify-content: center;"><div class="button">Share</div></div>
@@ -40,7 +63,7 @@
           {#if stream.author.username == $username}
             <div class="admin" on:click={showPanel}>Admin</div>
           {/if}
-          <Title title="{stream.title} by {stream.author.username}" />
+          <Title title="{stream.title} by {stream.author.username}" style="grid-area: title;" />
         </div>
         <Title
           title="{$song.title} by {$song.artist}"
@@ -87,8 +110,9 @@
 
   .head {
     display: inline-grid;
-    grid-template-columns: 1fr 3fr 1fr;
+    grid-template-columns: repeat(5, 1fr);
     width: 100%;
+    grid-template-areas: 'admin title title title temp';
   }
 
   .admin {
@@ -98,6 +122,7 @@
     position: relative;
     justify-self: start;
     cursor: pointer;
+    grid-area: admin;
   }
 
   .panel {
@@ -109,6 +134,33 @@
     text-align: center;
     width: 100%;
     height: 100%;
+  }
+
+  .info {
+    display: flex;
+    flex-direction: column;
+    z-index: 1;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
+  }
+
+  .row {
+    display: flex;
+    flex-direction: row;
+    z-index: 1;
+    justify-content: center;
+    align-items: center;
+    text-align: right;
+    width: 100%;
+  }
+
+  .controls {
+    display: flex;
+    flex-direction: column;
+    z-index: 1;
+    align-items: center;
+    width: 100%;
   }
 
   .bottomButtons {
