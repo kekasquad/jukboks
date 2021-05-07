@@ -63,9 +63,7 @@ const registerStreamHandlers = (io, logger, socket) => {
       listeners[room] = ioRooms.get(room).size;
     }
 
-    cb({
-      listeners,
-    });
+    cb(listeners);
   };
 
   socket.on(EVENTS.STREAM_LISTENERS, streamListeners);
