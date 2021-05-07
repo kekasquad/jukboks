@@ -70,7 +70,6 @@ const registerStreamHandlers = (io, logger, socket) => {
   };
 
   socket.on(EVENTS.STREAM_LISTENERS, streamListeners);
-
   socket.on(EVENTS.STREAM_JOIN, joinStream);
 };
 
