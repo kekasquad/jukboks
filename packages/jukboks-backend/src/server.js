@@ -54,6 +54,7 @@ async function createServer() {
   });
 
   fastify.register(require('./plugins/auth'));
+  fastify.register(require('./plugins/user'));
 
   // WebSocket
   fastify.register(require('./plugins/socket-io'));
