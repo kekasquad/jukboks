@@ -73,14 +73,14 @@
   /* Style the buttons inside the tab */
   .tab button {
     background-color: inherit;
-    border-radius: 10px;
+    border-radius: 20px;
     border: none;
     color: white;
     outline: none;
     cursor: pointer;
     transition: 0.3s;
     font-size: 32px;
-    padding: 10px 0px;
+    padding: 10px 20px;
   }
 
   /* Change background color of buttons on hover */

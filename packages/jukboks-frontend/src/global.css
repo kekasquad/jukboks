@@ -69,3 +69,19 @@ button:not(:disabled):active {
 button:focus {
   border-color: #666;
 }
+
+textarea {
+  border-color: #828ed3;
+}
+
+textarea:focus {
+  outline: none !important;
+  border-color: #828ed3;
+  box-shadow: 0 0 10px #828ed3;
+}
+
+input:focus {
+  outline: none !important;
+  border-color: #b9669f;
+  box-shadow: 0 0 10px #b9669f;
+}
