@@ -54,18 +54,22 @@ function connect() {
   });
 }
 
-async function join(uuid) {
-  if (!socket.connected) {
-    throw new Error('Socket is not connected');
-  }
-  socket.emit(EVENTS.STREAM_JOIN, uuid);
+function join(uuid) {
+  return new Promise((resolve, reject) => {
+    if (!socket.connected) {
+      reject('Socket is not connected');
+    }
+    socket.emit(EVENTS.STREAM_JOIN, uuid, resolve);
+  });
 }
 
-async function getListeners() {
-  if (!socket.connected) {
-    throw new Error('Socket is not connected');
-  }
-  socket.emit(EVENTS.STREAM_LISTENERS, console.log);
+function getListeners() {
+  return new Promise((resolve, reject) => {
+    if (!socket.connected) {
+      reject('Socket is not connected');
+    }
+    socket.emit(EVENTS.STREAM_LISTENERS, resolve);
+  });
 }
 
 export { connect, join, getListeners };

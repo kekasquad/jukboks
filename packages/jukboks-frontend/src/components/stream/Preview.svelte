@@ -32,7 +32,7 @@
   async function enterTheStream() {
     await ws.connect().catch(onError);
     await ws.join(stream.uuid).catch(onError);
-    await ws.getListeners().catch(onError);
+    await ws.getListeners().then(console.log).catch(onError);
     entered = true;
   }
 </script>

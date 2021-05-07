@@ -15,8 +15,7 @@ const ERRORS = {
 const NETWORK_DELAY = 250;
 
 const registerStreamHandlers = (io, logger, socket) => {
-  const joinStream = async (uuid) => {
-    logger.info({ msg: 'Client joined stream', uuid, id: socket.id });
+  const joinStream = async (uuid, cb) => {
     const stream = await Stream.findOne({ uuid });
     if (!stream) {
       throw new Error(ERRORS.NOT_FOUND);
@@ -27,6 +26,7 @@ const registerStreamHandlers = (io, logger, socket) => {
     }
 
     socket.join(uuid);
+    logger.debug({ msg: 'stream:join', uuid, id: socket.id });
 
     if (Date.now() > stream.dt_start) {
       // TODO: check for race conditions
@@ -45,17 +45,20 @@ const registerStreamHandlers = (io, logger, socket) => {
         elapsed += song.duration;
       }
     }
+    cb();
   };
 
   // WIP: not working in cluster
+  // TODO: counting all ws sockets instead of unique users
   const streamListeners = (cb) => {
-    const rooms = socket.rooms;
+    const rooms = socket.rooms; // Set<string>
     if (!rooms) {
       throw new Error(ERRORS.NOT_FOUND);
     }
+    logger.debug({ msg: 'stream:listeners', rooms: Array.from(rooms) });
 
     const listeners = {};
-    const ioRooms = io.of('/').adapter.rooms;
+    const ioRooms = io.of('/').adapter.rooms; // room -> sid
     for (const room of rooms) {
       // exclude the default room
       if (room == socket.id) continue;
