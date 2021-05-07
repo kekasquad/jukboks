@@ -29,7 +29,7 @@
   });
 
   let start = new Date();
-  if (start.getHours() > 13) {
+  if (start.getHours() >= 13) {
     time += start.getHours() - 12;
   } else {
     if (start.getHours() == 0) {
@@ -44,7 +44,7 @@
   } else {
     time += start.getMinutes();
   }
-  if (start.getHours() > 13 || start.getHours() == 0) {
+  if (start.getHours() >= 13 || start.getHours() == 0) {
     time += ' PM';
   } else {
     time += ' AM';
