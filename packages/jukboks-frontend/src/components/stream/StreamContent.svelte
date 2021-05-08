@@ -3,9 +3,10 @@
   import Loader from '../Loader';
   import Title from '../Title';
   import Widget from '../souncloud/Widget';
-  import { song, username } from '../../utils/stores';
+  import { song, username, message } from '../../utils/stores';
   import Shadow from '../Shadow';
   import Popup from '../Popup';
+  import * as api from '../../utils/api';
 
   export let stream;
 
@@ -14,7 +15,27 @@
 
   let popupText = '';
 
-  function showPanel() {
+  let currentTrack;
+  let nextTrack;
+  let live;
+  //TODO: add controls bool values;
+  let getStreamInfoError;
+
+  async function showPanel() {
+    try {
+      let streamInfo = await api.getStreamInfo();
+      if (streamInfo) {
+        currentTrack = streamInfo.current;
+        nextTrack = streamInfo.next;
+        live = streamInfo.live;
+        isPanelShown = true;
+      } else {
+        console.log('Something wrong with method getStreamInfo');
+      }
+    } catch (err) {
+      getStreamInfoError = (await err.response.json()).error;
+      console.error(err);
+    }
     isPanelShown = true;
   }
 
@@ -39,6 +60,16 @@
       },
     );
   }
+
+  const onMessage = (message) => {
+    popupText = message;
+    isPopupShown = true;
+    setTimeout(function () {
+      popupText = '';
+      isPopupShown = false;
+    }, 5000);
+  };
+  $: onMessage($message);
 </script>
 
 <svelte:window on:keydown={handleKeydown} />
@@ -54,15 +85,15 @@
         <div class="info" style="margin-top: 70px;">
           <div class="row">
             <Title title="Currently playing:" style="width: 40%; margin-right: 5%;" />
-            <Title title="ii" style="width: 55%; text-align: left;" />
+            <Title bind:title={currentTrack} style="width: 55%; text-align: left;" />
           </div>
           <div class="row" style="margin-top: 24px;">
             <Title title="Next:" style="width: 40%; margin-right: 5%;" />
-            <Title title="ooooo" style="width: 55%; text-align: left;" />
+            <Title bind:title={nextTrack} style="width: 55%; text-align: left;" />
           </div>
           <div class="row" style="margin-top: 24px;">
             <Title title="Live:" style="width: 40%; margin-right: 5%;" />
-            <Title title="qqqqq" style="width: 55%; text-align: left;" />
+            <Title bind:title={live} style="width: 55%; text-align: left;" />
           </div>
         </div>
         <div class="info" style="margin-top: 50px;">
@@ -75,11 +106,8 @@
           </div>
         </div>
         <div class="bottomButtons">
-          <div class="buttonContainer"><div class="button" style="margin-right: auto;">Next</div></div>
-          <div class="buttonContainer" style="justify-content: center;">
-            <div class="button" on:click={share}>Share</div>
-          </div>
-          <div class="buttonContainer messageContainer">
+          <div class="button" on:click={share}>Share</div>
+          <div class="messageContainer">
             <textarea class="message" type="text" placeholder="Type your message" />
             <div class="button" style="margin-left: auto;">Send</div>
           </div>
@@ -195,8 +223,9 @@
     width: 100%;
     margin-top: auto;
     z-index: 1;
-    display: inline-grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
   }
 
   .button {
@@ -207,17 +236,12 @@
     position: relative;
   }
 
-  .buttonContainer {
-    display: flex;
-    align-items: flex-end;
-  }
-
   .messageContainer {
     display: flex;
     flex-direction: column;
     z-index: 1;
     align-items: center;
-    width: 100%;
+    width: 30%;
   }
 
   .message {

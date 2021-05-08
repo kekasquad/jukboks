@@ -9,6 +9,7 @@ const EVENTS = {
   STREAM_LISTENERS: 'stream:listeners',
   STREAM_ENDED: 'stream:ended',
   SONG_STARTED: 'song:started',
+  STREAM_MESSAGE: 'stream:message',
 };
 
 let tokenValue;
@@ -48,6 +49,10 @@ socket.on(EVENTS.SONG_STARTED, (newSong) => {
   if (newSong.offset) {
     plays.set(true);
   }
+});
+
+socket.on(EVENTS.STREAM_MESSAGE, (newMessage) => {
+  message.set(newMessage);
 });
 
 function connect() {

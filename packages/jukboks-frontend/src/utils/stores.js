@@ -21,3 +21,8 @@ export const plays = writable();
 plays.subscribe((value) => {
   console.log(`Setting plays to ${value}`);
 });
+
+export const message = writable();
+message.subscribe((value) => {
+  console.log(`Setting message to ${value}`);
+});

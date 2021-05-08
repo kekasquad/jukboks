@@ -3,13 +3,15 @@
   import Preview from '../components/stream/Preview';
   import StreamContent from '../components/stream/StreamContent';
   import * as api from '../utils/api';
-  import { plays, song } from '../utils/stores';
+  import { plays, song, message } from '../utils/stores';
 
   export let uuid;
 
   let background = '/img/backgrounds/streamPage.png';
 
   song.set(null);
+  plays.set(false);
+  message.set(null);
 
   let promise = api.getStream(uuid);
 </script>

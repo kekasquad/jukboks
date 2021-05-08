@@ -64,9 +64,14 @@ async function createStream(stream) {
   return created;
 }
 
+async function getStreamInfo(uuid) {
+  const streamInfo = await client.get(`stream/${uuid}/info`).json();
+  return streamInfo;
+}
+
 async function getSong(url) {
   const song = await client.post('song', { json: { url } }).json();
   return song;
 }
 
-export { initStores, login, signup, me, getStream, createStream, getSong };
+export { initStores, login, signup, me, getStream, createStream, getStreamInfo, getSong };
