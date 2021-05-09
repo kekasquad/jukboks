@@ -19,7 +19,7 @@ const StreamSchema = new mongoose.Schema({
   duration: { type: Number }, // duration in *ms*
   // Live settings
   showSongs: { type: Boolean, default: true },
-  reactions: { type: Boolean, default: false },
+  reactions: { type: Boolean, default: true },
 });
 
 StreamSchema.index({ dt_start: -1 });
