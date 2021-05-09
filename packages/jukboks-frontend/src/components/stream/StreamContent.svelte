@@ -19,7 +19,17 @@
   let nextTrack;
   let live;
   //TODO: add controls bool values;
+  let textAreaMessage = '';
   let getStreamInfoError;
+
+  function showPopup(text) {
+    popupText = text;
+    isPopupShown = true;
+    setTimeout(function () {
+      popupText = '';
+      isPopupShown = false;
+    }, 5000);
+  }
 
   async function showPanel() {
     try {
@@ -48,12 +58,7 @@
   function share() {
     navigator.clipboard.writeText(window.location.href).then(
       function () {
-        popupText = 'Link was copied to the clipboard!';
-        isPopupShown = true;
-        setTimeout(function () {
-          popupText = '';
-          isPopupShown = false;
-        }, 5000);
+        showPopup('Link was copied to the clipboard!');
       },
       function () {
         console.log('not cliped');
@@ -61,13 +66,23 @@
     );
   }
 
+  async function send() {
+    try {
+      if (textAreaMessage && textAreaMessage.length > 0) {
+        await api.sendMessage(textAreaMessage);
+        textAreaMessage = '';
+      } else {
+        showPopup('First add some text!');
+      }
+    } catch {
+      showPopup('Something has happened');
+    }
+  }
+
   const onMessage = (message) => {
-    popupText = message;
-    isPopupShown = true;
-    setTimeout(function () {
-      popupText = '';
-      isPopupShown = false;
-    }, 5000);
+    if (message) {
+      showPopup(message);
+    }
   };
   $: onMessage($message);
 </script>
@@ -108,8 +123,8 @@
         <div class="bottomButtons">
           <div class="button" on:click={share}>Share</div>
           <div class="messageContainer">
-            <textarea class="message" type="text" placeholder="Type your message" />
-            <div class="button" style="margin-left: auto;">Send</div>
+            <textarea class="message" bind:value={textAreaMessage} type="text" placeholder="Type your message" />
+            <div class="button" on:click={send} style="margin-left: auto;">Send</div>
           </div>
         </div>
       </div>
