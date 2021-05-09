@@ -156,7 +156,7 @@ async function routes(fastify, options) {
       }
 
       if (!isStreamLive(stream)) {
-        return reply.conflict(ERRORS.STREAM_NOT_LIVE);
+        return reply.conflict(ERROR.STREAM_NOT_LIVE);
       }
 
       let elapsed = 0;
@@ -193,16 +193,16 @@ async function routes(fastify, options) {
       }
 
       if (!isStreamLive(stream)) {
-        return reply.conflict(ERRORS.STREAM_NOT_LIVE);
+        return reply.conflict(ERROR.STREAM_NOT_LIVE);
       }
 
       if (!fastify.core.isUserJoined(request.user._id, uuid)) {
-        return reply.conflict(ERRORS.USER_NOT_JOINED);
+        return reply.conflict(ERROR.USER_NOT_JOINED);
       }
 
       const { reaction } = request.body;
       fastify.core.reaction(uuid, reaction);
-      return reply.status(202);
+      return reply.status(202).send();
     },
   );
 
@@ -219,21 +219,21 @@ async function routes(fastify, options) {
         return reply.notFound(ERROR.NOT_EXISTS);
       }
 
-      if (request.user._id.equals(stream.author)) {
+      if (!request.user._id.equals(stream.author)) {
         return reply.forbidden();
       }
 
       if (!isStreamLive(stream)) {
-        return reply.conflict(ERRORS.STREAM_NOT_LIVE);
+        return reply.conflict(ERROR.STREAM_NOT_LIVE);
       }
 
       if (!fastify.core.isUserJoined(request.user._id, uuid)) {
-        return reply.conflict(ERRORS.USER_NOT_JOINED);
+        return reply.conflict(ERROR.USER_NOT_JOINED);
       }
 
       const { message } = request.body;
       fastify.core.message(uuid, message);
-      reply.status(202);
+      return reply.status(202).send();
     },
   );
 
