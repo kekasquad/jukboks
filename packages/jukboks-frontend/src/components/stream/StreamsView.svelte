@@ -19,7 +19,7 @@
       tablinks[i].style.backgroundColor = 'unset';
     }
     document.getElementById(tabName).style.display = 'block';
-    evt.currentTarget.style.backgroundColor = '#b9669f';
+    evt.currentTarget.style.backgroundColor = 'rgba(185, 102, 159, 0.7)';
   }
 
   onMount(function () {

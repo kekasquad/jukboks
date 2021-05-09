@@ -13,12 +13,12 @@
     padding: 0px;
     margin: 0px;
     font-size: 48px;
-    line-height: 54px;
+    line-height: normal;
     color: #ffffff;
   }
 
   .button {
-    padding: 0px;
+    padding: 5px 10px;
     margin: 0px;
     background-color: transparent;
     border-color: transparent;
@@ -30,5 +30,9 @@
 
   .button:hover {
     cursor: pointer;
+  }
+
+  .button:active {
+    background-color: rgba(185, 102, 159, 0.7);
   }
 </style>
