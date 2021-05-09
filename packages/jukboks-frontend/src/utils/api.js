@@ -69,12 +69,12 @@ async function getStreamInfo(uuid) {
   return streamInfo;
 }
 
-async function sendMessage(message) {
+async function sendMessage(uuid, message) {
   const sended = await client.post(`stream/${uuid}/message`, { json: message }).json();
   return sended;
 }
 
-async function sendReaction(reaction) {
+async function sendReaction(uuid, reaction) {
   const sended = await client.post(`stream/${uuid}/reaction`, { json: reaction }).json();
   return sended;
 }

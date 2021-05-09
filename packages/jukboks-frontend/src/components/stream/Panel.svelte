@@ -7,6 +7,7 @@
 
   export let isPopupShown;
   export let popupText;
+  export let streamUuid;
 
   let isContentShown = false;
 
@@ -28,7 +29,7 @@
 
   async function showPanel() {
     try {
-      let streamInfo = await api.getStreamInfo();
+      let streamInfo = await api.getStreamInfo(streamUuid);
       if (streamInfo) {
         currentTrack = streamInfo.current;
         nextTrack = streamInfo.next;
@@ -60,7 +61,7 @@
   async function send() {
     try {
       if (textAreaMessage && textAreaMessage.length > 0) {
-        await api.sendMessage(textAreaMessage);
+        await api.sendMessage(streamUuid, textAreaMessage);
         textAreaMessage = '';
       } else {
         showPopup('First add some text!');

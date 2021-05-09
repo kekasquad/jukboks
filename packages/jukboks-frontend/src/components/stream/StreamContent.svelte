@@ -36,7 +36,7 @@
 
   async function sendReaction(emotion) {
     try {
-      await api.sendReaction(emotion);
+      await api.sendReaction(stream.uuid, emotion);
     } catch {
       showPopup('Something has happened');
     }
@@ -65,7 +65,7 @@
       <Popup message={popupText} />
     {/if}
     {#if isPanelShown}
-      <Panel bind:isPopupShown bind:popupText />
+      <Panel bind:isPopupShown bind:popupText streamUuid={stream.uuid} />
     {:else}
       <div class="content" in:fade={{ duration: 100, delay: 150 }} out:fade={{ duration: 100 }}>
         <div class="head">
