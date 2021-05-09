@@ -21,7 +21,7 @@ class Core {
   constructor(io, logger) {
     this.io = io;
     this.eventer = new Eventer(logger);
-    this.listenersCounter = new ListenersCounter(io, eventer, logger);
+    this.listenersCounter = new ListenersCounter(io, this.eventer, logger);
     this.logger = logger;
 
     autobind(this);
