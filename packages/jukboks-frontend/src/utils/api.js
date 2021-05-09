@@ -1,7 +1,7 @@
 import ky from 'ky';
 import { token as tokenStore, username } from './stores';
 
-const API_BASE = 'http://localhost:8080';
+const API_BASE = process.env.API_BASE;
 
 let tokenValue;
 

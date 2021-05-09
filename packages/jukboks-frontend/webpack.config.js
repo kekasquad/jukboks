@@ -1,4 +1,5 @@
 const path = require('path');
+const { EnvironmentPlugin } = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const sveltePreprocess = require('svelte-preprocess');
@@ -57,6 +58,11 @@ module.exports = {
       template: path.resolve(__dirname, 'public/index.html'),
     }),
     new MiniCssExtractPlugin(),
+    // Set defaults
+    new EnvironmentPlugin({
+      NODE_ENV: mode,
+      API_BASE: 'http://localhost:8080',
+    }),
   ],
   devtool: prod ? false : 'source-map',
   devServer: {
