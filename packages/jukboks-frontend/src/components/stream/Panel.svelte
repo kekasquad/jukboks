@@ -32,7 +32,12 @@
       let streamInfo = await api.getStreamInfo(streamUuid);
       if (streamInfo) {
         currentTrack = streamInfo.current;
-        nextTrack = streamInfo.next;
+        if (streamInfo.next) {
+          nextTrack = streamInfo.next;
+        } else {
+          nextTrack = '-';
+        }
+
         live = streamInfo.live;
         isContentShown = true;
       } else {
