@@ -3,10 +3,10 @@
   import Loader from '../Loader';
   import Title from '../Title';
   import Widget from '../souncloud/Widget';
-  import { song, username, message } from '../../utils/stores';
-  import Shadow from '../Shadow';
+  import Panel from './Panel';
   import Popup from '../Popup';
   import * as api from '../../utils/api';
+  import { song, username, message } from '../../utils/stores';
 
   export let stream;
 
@@ -15,12 +15,11 @@
 
   let popupText = '';
 
-  let currentTrack;
-  let nextTrack;
-  let live;
-  //TODO: add controls bool values;
-  let textAreaMessage = '';
-  let getStreamInfoError;
+  function handleKeydown(event) {
+    if (event.keyCode == 27) {
+      isPanelShown = false;
+    }
+  }
 
   function showPopup(text) {
     popupText = text;
@@ -32,51 +31,7 @@
   }
 
   async function showPanel() {
-    try {
-      let streamInfo = await api.getStreamInfo();
-      if (streamInfo) {
-        currentTrack = streamInfo.current;
-        nextTrack = streamInfo.next;
-        live = streamInfo.live;
-        isPanelShown = true;
-      } else {
-        console.log('Something wrong with method getStreamInfo');
-      }
-    } catch (err) {
-      getStreamInfoError = (await err.response.json()).error;
-      console.error(err);
-    }
     isPanelShown = true;
-  }
-
-  function handleKeydown(event) {
-    if (event.keyCode == 27) {
-      isPanelShown = false;
-    }
-  }
-
-  function share() {
-    navigator.clipboard.writeText(window.location.href).then(
-      function () {
-        showPopup('Link was copied to the clipboard!');
-      },
-      function () {
-        console.log('not cliped');
-      },
-    );
-  }
-
-  async function send() {
-    try {
-      if (textAreaMessage && textAreaMessage.length > 0) {
-        await api.sendMessage(textAreaMessage);
-        textAreaMessage = '';
-      } else {
-        showPopup('First add some text!');
-      }
-    } catch {
-      showPopup('Something has happened');
-    }
   }
 
   const onMessage = (message) => {
@@ -95,39 +50,7 @@
       <Popup message={popupText} />
     {/if}
     {#if isPanelShown}
-      <div class="panel" in:fade={{ duration: 100, delay: 150 }} out:fade={{ duration: 100 }}>
-        <Shadow />
-        <div class="info" style="margin-top: 70px;">
-          <div class="row">
-            <Title title="Currently playing:" style="width: 40%; margin-right: 5%;" />
-            <Title bind:title={currentTrack} style="width: 55%; text-align: left;" />
-          </div>
-          <div class="row" style="margin-top: 24px;">
-            <Title title="Next:" style="width: 40%; margin-right: 5%;" />
-            <Title bind:title={nextTrack} style="width: 55%; text-align: left;" />
-          </div>
-          <div class="row" style="margin-top: 24px;">
-            <Title title="Live:" style="width: 40%; margin-right: 5%;" />
-            <Title bind:title={live} style="width: 55%; text-align: left;" />
-          </div>
-        </div>
-        <div class="info" style="margin-top: 50px;">
-          <div class="row">
-            <Title title="Controls:" style="width: 40%; margin-right: 5%; align-self: flex-start;" />
-            <div class="controls" style="width: 55%; text-align: left;">
-              <Title title="ell" style="width: 100%;" />
-              <Title title="pufpufpuf" style="width: 100%;" />
-            </div>
-          </div>
-        </div>
-        <div class="bottomButtons">
-          <div class="button" on:click={share}>Share</div>
-          <div class="messageContainer">
-            <textarea class="message" bind:value={textAreaMessage} type="text" placeholder="Type your message" />
-            <div class="button" on:click={send} style="margin-left: auto;">Send</div>
-          </div>
-        </div>
-      </div>
+      <Panel bind:isPopupShown bind:popupText />
     {:else}
       <div class="content" in:fade={{ duration: 100, delay: 150 }} out:fade={{ duration: 100 }}>
         <div class="head">
@@ -194,76 +117,5 @@
     justify-self: start;
     cursor: pointer;
     grid-area: admin;
-  }
-
-  .panel {
-    display: flex;
-    flex-direction: column;
-    z-index: 1;
-    justify-content: flex-start;
-    align-items: center;
-    text-align: center;
-    width: 100%;
-    height: 100%;
-  }
-
-  .info {
-    display: flex;
-    flex-direction: column;
-    z-index: 1;
-    justify-content: space-around;
-    align-items: center;
-    width: 100%;
-  }
-
-  .row {
-    display: flex;
-    flex-direction: row;
-    z-index: 1;
-    justify-content: center;
-    align-items: flex-end;
-    text-align: right;
-    width: 100%;
-  }
-
-  .controls {
-    display: flex;
-    flex-direction: column;
-    z-index: 1;
-    align-items: center;
-    width: 100%;
-  }
-
-  .bottomButtons {
-    width: 100%;
-    margin-top: auto;
-    z-index: 1;
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-  }
-
-  .button {
-    font-size: 32px;
-    line-height: 36px;
-    width: min-content;
-    cursor: pointer;
-    position: relative;
-  }
-
-  .messageContainer {
-    display: flex;
-    flex-direction: column;
-    z-index: 1;
-    align-items: center;
-    width: 30%;
-  }
-
-  .message {
-    width: 100%;
-    height: 20vh;
-    color: white;
-    background: transparent;
-    resize: none;
   }
 </style>
