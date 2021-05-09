@@ -8,6 +8,7 @@ const { User } = require('../models/User');
 const ERROR = {
   NOT_EXISTS: 'Stream does not exists',
   STREAM_NOT_LIVE: 'Stream is not live',
+  USER_NOT_JOINED: "You haven't joined the stream",
 };
 
 async function routes(fastify, options) {
@@ -184,7 +185,26 @@ async function routes(fastify, options) {
     {
       preValidation: [fastify.authenticate, fastify.getUser],
     },
-    async (request, reply) => {},
+    async (request, reply) => {
+      const { uuid } = request.params;
+      const stream = await Stream.findOne({ uuid }, publicFields);
+
+      if (!stream) {
+        return reply.notFound(ERROR.NOT_EXISTS);
+      }
+
+      if (!isStreamLive(stream)) {
+        return reply.conflict(ERRORS.STREAM_NOT_LIVE);
+      }
+
+      if (!fastify.core.isUserJoined(request.user._id, uuid)) {
+        return reply.conflict(ERRORS.USER_NOT_JOINED);
+      }
+
+      const { reaction } = request.body;
+      fastify.core.reaction(uuid, reaction);
+      reply.status(202);
+    },
   );
 
   fastify.post(
@@ -192,7 +212,30 @@ async function routes(fastify, options) {
     {
       preValidation: [fastify.authenticate, fastify.getUser],
     },
-    async (request, reply) => {},
+    async (request, reply) => {
+      const { uuid } = request.params;
+      const stream = await Stream.findOne({ uuid }, publicFields);
+
+      if (!stream) {
+        return reply.notFound(ERROR.NOT_EXISTS);
+      }
+
+      if (request.user._id.equals(stream.author)) {
+        return reply.forbidden();
+      }
+
+      if (!isStreamLive(stream)) {
+        return reply.conflict(ERRORS.STREAM_NOT_LIVE);
+      }
+
+      if (!fastify.core.isUserJoined(request.user._id, uuid)) {
+        return reply.conflict(ERRORS.USER_NOT_JOINED);
+      }
+
+      const { message } = request.body;
+      fastify.core.message(uuid, message);
+      reply.status(202);
+    },
   );
 
   //#endregion

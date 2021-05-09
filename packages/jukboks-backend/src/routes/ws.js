@@ -1,8 +1,7 @@
-const { Core } = require('../core');
 const { User } = require('../models/User');
 
 async function routes(fastify, options) {
-  const core = new Core(fastify.io, fastify.log);
+  const core = fastify.core;
 
   fastify.io.use((socket, next) => {
     try {

@@ -58,6 +58,7 @@ async function createServer() {
 
   // WebSocket
   fastify.register(require('./plugins/socket-io'));
+  fastify.register(require('./plugins/core'));
   fastify.register(require('./routes/ws'));
 
   // DB

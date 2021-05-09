@@ -1,10 +1,13 @@
 const socketio = require('socket.io');
+const { ObjectID } = require('mongodb');
 const { Eventer, EVENTER_EVENTS } = require('../eventer');
 const { registerStreamHandlers, STREAM_EVENTS } = require('./stream');
 
 const EVENTS = {
   ...EVENTER_EVENTS,
   ...STREAM_EVENTS,
+  STREAM_REACTION: 'stream:reaction',
+  STREAM_MESSAGE: 'stream:message',
 };
 
 class Core {
@@ -18,11 +21,16 @@ class Core {
     this.logger = logger;
     this.eventer = new Eventer(logger);
 
+    this.users = {};
+
     this.registerEveneterHandlers.bind(this)();
 
     this.start = this.start.bind(this);
     this.stop = this.stop.bind(this);
     this.addSocket = this.addSocket.bind(this);
+    this.isUserJoined = this.isUserJoined.bind(this);
+    this.reaction = this.reaction.bind(this);
+    this.message = this.message.bind(this);
   }
 
   start() {
@@ -63,6 +71,29 @@ class Core {
 
     // All the handlers for the events from Client -> Core
     registerStreamHandlers(this.io, this.logger, socket);
+  }
+
+  /**
+   * Returns if user is joined to stream
+   * @param {ObjectID|string} id user id
+   * @param {string} uuid stream uuid
+   * @returns boolean
+   */
+  isUserJoined(id, uuid) {
+    for (const sid of this.io.of('/').adapter.rooms.get(uuid)) {
+      const socket = this.io.of('/').sockets.get(sid);
+      if (!socket) throw new Error("Can't find sid in sockets"); // Race condition?
+      if (socket.user._id.equals(new ObjectID(id))) return true;
+    }
+    return false;
+  }
+
+  reaction(uuid, text) {
+    this.io.to(uuid).emit(EVENTS.STREAM_REACTION, text);
+  }
+
+  message(uuid, text) {
+    this.io.to(uuid).emit(EVENTS.STREAM_MESSAGE, text);
   }
 }
 
