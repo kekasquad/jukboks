@@ -1,7 +1,9 @@
 <script>
   import { fade } from 'svelte/transition';
+  import { navigate } from 'svelte-navigator';
   import * as ws from '../../utils/ws';
   import Shadow from '../Shadow.svelte';
+  import { listeners } from '../../utils/stores';
 
   export let stream;
   let entered = false;
@@ -9,6 +11,10 @@
   let date = new Date();
   let time = date.getTime();
   let error;
+
+  function goToProfile() {
+    navigate('/profile');
+  }
 
   function dateFrom(mseconds) {
     let begin = new Date();
@@ -29,10 +35,14 @@
     console.log('Error on connecting to socket: ' + reason);
   }
 
+  function setListeners(value) {
+    listeners.set(value[stream.uuid]);
+  }
+
   async function enterTheStream() {
     await ws.connect().catch(onError);
     await ws.join(stream.uuid).catch(onError);
-    await ws.getListeners().then(console.log).catch(onError);
+    await ws.getListeners().then(setListeners).catch(onError);
     entered = true;
   }
 </script>
@@ -40,6 +50,7 @@
 {#if !error}
   <div class="outer" out:fade={{ duration: 100 }} in:fade={{ duration: 100, delay: 150 }}>
     <Shadow />
+    <div class="back" on:click={goToProfile}>Profile</div>
     <h1>{stream.title} by {stream.author.username}</h1>
     {#if !entered && !isEnded()}
       <h1 class="enter" on:click={enterTheStream}>Enter the stream</h1>
@@ -77,6 +88,14 @@
   }
 
   .enter:hover {
+    cursor: pointer;
+  }
+
+  .back {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    font-size: 32px;
     cursor: pointer;
   }
 </style>
