@@ -137,6 +137,12 @@
         <input class="timepicker-ui-input" bind:value={time} bind:this={timePickerInput} style="width: 100%" />
       </div>
     </div>
+    <div class="controls">
+      <div class="label" id="reactionsLabel">Show reactions</div>
+      <input class="check" type="checkbox" id="reactions" name="reactions" checked />
+      <div class="label" id="titlesLabel">Show titles</div>
+      <input class="check" type="checkbox" id="titles" name="reactions" checked />
+    </div>
   </div>
   <div class="right">
     <Heading heading="Added songs" style="text-align: left; align-self: flex-start;" />
@@ -218,5 +224,41 @@
     font-size: 16px;
     line-height: normal;
     text-align: center;
+  }
+
+  .controls {
+    display: grid;
+    grid-template-areas:
+      'reactionsLabel reactions'
+      'titlesLabel titles';
+    width: 100%;
+    margin-top: 30px;
+    font-size: 24px;
+  }
+
+  .label {
+    justify-self: left;
+  }
+
+  .check {
+    justify-self: left;
+    align-self: center;
+    margin: 0px;
+  }
+
+  #titlesLabel {
+    grid-area: titlesLabel;
+  }
+
+  #titles {
+    grid-area: titles;
+  }
+
+  #reactionsLabel {
+    grid-area: reactionsLabel;
+  }
+
+  #reactions {
+    grid-area: reactions;
   }
 </style>
