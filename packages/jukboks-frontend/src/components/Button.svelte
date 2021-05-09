@@ -4,9 +4,9 @@
   export let style = '';
 </script>
 
-<button class="button" on:click={func} {style}>
+<div class="button" on:click={func} {style}>
   <h1>{title}</h1>
-</button>
+</div>
 
 <style>
   h1 {
