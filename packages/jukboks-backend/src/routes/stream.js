@@ -145,13 +145,13 @@ async function routes(fastify, options) {
     },
     async (request, reply) => {
       const { uuid } = request.params;
-      const stream = await Stream.findOne({ uuid }, publicFields);
+      const stream = await Stream.findOne({ uuid });
 
       if (!stream) {
         return reply.notFound(ERROR.NOT_EXISTS);
       }
 
-      if (request.user._id.equals(stream.author)) {
+      if (!stream.author.equals(request.user._id)) {
         return reply.forbidden();
       }
 
@@ -175,7 +175,7 @@ async function routes(fastify, options) {
 
       const live = fastify.core.listeners(uuid);
 
-      reply.send({ current: current._doc, next: next ? next._doc : null, live });
+      reply.send({ current: current._doc.title, next: next ? next._doc.title : null, live });
     },
   );
 
