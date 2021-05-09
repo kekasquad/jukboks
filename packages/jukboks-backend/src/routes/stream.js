@@ -7,6 +7,7 @@ const { User } = require('../models/User');
 
 const ERROR = {
   NOT_EXISTS: 'Stream does not exists',
+  STREAM_NOT_LIVE: 'Stream is not live',
 };
 
 async function routes(fastify, options) {
@@ -75,7 +76,7 @@ async function routes(fastify, options) {
       }
 
       if (stream.author != request.user._id) {
-        throw new reply.forbidden();
+        return reply.forbidden();
       }
 
       const updatedStream = Stream(request.body);
@@ -83,7 +84,7 @@ async function routes(fastify, options) {
       try {
         updatedStream.validate();
       } catch (err) {
-        throw new fastify.notAcceptable(err.errors);
+        return fastify.notAcceptable(err.errors);
       }
 
       stream = await Stream.findOneAndReplace({ _id: stream._id }, updatedStream, {
@@ -111,7 +112,7 @@ async function routes(fastify, options) {
       }
 
       if (stream.author != request.user._id) {
-        throw new reply.forbidden();
+        return reply.forbidden();
       }
 
       await Stream.deleteOne({ _id: stream._id });
@@ -121,6 +122,80 @@ async function routes(fastify, options) {
   );
 
   // #endregion
+
+  // #region Stream live controls
+  // Valid only if stream is live
+
+  /**
+   * Check if stream is live
+   * @param {Stream} stream
+   * @returns boolean
+   */
+  function isStreamLive(stream) {
+    const now = Date.now();
+    return stream.dt_start < now && now < stream.dt_end;
+  }
+
+  fastify.get(
+    '/stream/:uuid/info',
+    {
+      preValidation: [fastify.authenticate, fastify.getUser],
+      // TODO: add schema
+    },
+    async (request, reply) => {
+      const { uuid } = request.params;
+      const stream = await Stream.findOne({ uuid }, publicFields);
+
+      if (!stream) {
+        return reply.notFound(ERROR.NOT_EXISTS);
+      }
+
+      if (request.user._id != stream.author) {
+        return reply.forbidden();
+      }
+
+      if (!isStreamLive(stream)) {
+        return reply.conflict(ERRORS.STREAM_NOT_LIVE);
+      }
+
+      let elapsed = 0;
+      let current, next;
+      const played = Date.now() - stream.dt_start;
+      for (let i = 0; i < stream.songs.length; i++) {
+        const song = stream.songs[i];
+        // find song such as: songPrev < now < song
+        if (elapsed < played && played < elapsed + song.duration) {
+          current = song;
+          next = i + 1 < stream.songs.length ? stream.songs[i + 1] : null;
+          break;
+        }
+        elapsed += song.duration;
+      }
+
+      // HACK: probably needs to be in core
+      const live = fastify.io.of('/').adapter.rooms.get(uuid);
+
+      reply.send({ current: current._doc, next: next ? next._doc : null, live });
+    },
+  );
+
+  fastify.post(
+    '/stream/:uuid/reaction',
+    {
+      preValidation: [fastify.authenticate, fastify.getUser],
+    },
+    async (request, reply) => {},
+  );
+
+  fastify.post(
+    '/stream/:uuid/message',
+    {
+      preValidation: [fastify.authenticate, fastify.getUser],
+    },
+    async (request, reply) => {},
+  );
+
+  //#endregion
 }
 
 module.exports = routes;
