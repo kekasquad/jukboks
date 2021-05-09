@@ -6,7 +6,7 @@
   import Panel from './Panel';
   import Popup from '../Popup';
   import * as api from '../../utils/api';
-  import { song, username, message, reaction } from '../../utils/stores';
+  import { song, username, message, reaction, listeners } from '../../utils/stores';
 
   export let stream;
 
@@ -79,10 +79,10 @@
             <div class="emotion" on:click={(event) => sendReaction('💜')}>💜</div>
           </div>
         </div>
-        <Title
-          title="{$song.title} by {$song.artist}"
-          style="align-self: flex-start; margin-top: auto; text-align: left;"
-        />
+        <div class="bottom">
+          <Title title="{$song.title} by {$song.artist}" style="text-align: left;" />
+          <Title title="{$listeners}👁" style="text-align: right;" />
+        </div>
       </div>
     {/if}
 
@@ -150,5 +150,12 @@
     font-size: 28px;
     margin-left: 10px;
     cursor: pointer;
+  }
+
+  .bottom {
+    margin-top: auto;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
   }
 </style>
