@@ -74,9 +74,9 @@
           {/if}
           <Title title="{stream.title} by {stream.author.username}" style="grid-area: title;" />
           <div class="emotions">
-            <div class="emotion" on:click={sendReaction('👍')}>👍</div>
-            <div class="emotion" on:click={sendReaction('👎')}>👎</div>
-            <div class="emotion" on:click={sendReaction('💜')}>💜</div>
+            <div class="emotion" on:click={(event) => sendReaction('👍')}>👍</div>
+            <div class="emotion" on:click={(event) => sendReaction('👎')}>👎</div>
+            <div class="emotion" on:click={(event) => sendReaction('💜')}>💜</div>
           </div>
         </div>
         <Title
@@ -149,5 +149,6 @@
   .emotion {
     font-size: 28px;
     margin-left: 10px;
+    cursor: pointer;
   }
 </style>

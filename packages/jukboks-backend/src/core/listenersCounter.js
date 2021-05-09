@@ -13,14 +13,14 @@ class ListenersCounter {
     this.listenersIntervals = {};
     this.unsubscribe = [];
 
-    autobind();
+    autobind(this);
   }
 
   start() {
     // At stream start set interval that will emit current live count to room
     this.eventer.on(EVENTER_EVENTS.STREAM_STARTED, (stream) => {
       this.listenersIntervals = setInterval(() => {
-        this.io.to(stream.uuid).emit(STREAM_EVENTS.STREAM_LISTENERS, this.listeners(uuid));
+        this.io.to(stream.uuid).emit(STREAM_EVENTS.STREAM_LISTENERS, this.listeners(stream.uuid));
       }, this.interval);
     });
 

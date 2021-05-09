@@ -70,13 +70,11 @@ async function getStreamInfo(uuid) {
 }
 
 async function sendMessage(uuid, message) {
-  const sended = await client.post(`stream/${uuid}/message`, { json: message }).json();
-  return sended;
+  await client.post(`stream/${uuid}/message`, { json: { message } });
 }
 
 async function sendReaction(uuid, reaction) {
-  const sended = await client.post(`stream/${uuid}/reaction`, { json: reaction }).json();
-  return sended;
+  await client.post(`stream/${uuid}/reaction`, { json: { reaction } });
 }
 
 async function getSong(url) {

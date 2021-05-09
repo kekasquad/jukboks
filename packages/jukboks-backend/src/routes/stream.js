@@ -202,7 +202,7 @@ async function routes(fastify, options) {
 
       const { reaction } = request.body;
       fastify.core.reaction(uuid, reaction);
-      reply.status(202);
+      return reply.status(202);
     },
   );
 
