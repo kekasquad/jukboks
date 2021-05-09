@@ -18,9 +18,8 @@ const client = got.extend({
  */
 function parseMusicRecording(root) {
   const props = {};
-  root.find('[itemprop]').each(function () {
-    const el = cheerio(this);
-    props[el.attr('itemprop')] = el.attr('content');
+  root.find('[itemprop][content]').each(function (idx, el) {
+    props[el.attribs['itemprop']] = el.attribs['content'];
   });
   return props;
 }
