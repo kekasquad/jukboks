@@ -1,7 +1,9 @@
 const socketio = require('socket.io');
 const { ObjectID } = require('mongodb');
 const { Eventer, EVENTER_EVENTS } = require('../eventer');
-const { registerStreamHandlers, STREAM_EVENTS } = require('./stream');
+const { registerStreamHandlers, STREAM_EVENTS } = require('./handlers/stream');
+const { ListenersCounter } = require('./listenersCounter');
+const autobind = require('../utils/autobind');
 
 const EVENTS = {
   ...EVENTER_EVENTS,
@@ -18,28 +20,25 @@ class Core {
    */
   constructor(io, logger) {
     this.io = io;
-    this.logger = logger;
     this.eventer = new Eventer(logger);
+    this.listenersCounter = new ListenersCounter(io, eventer, logger);
+    this.logger = logger;
 
-    this.users = {};
+    autobind(this);
 
-    this.registerEveneterHandlers.bind(this)();
-
-    this.start = this.start.bind(this);
-    this.stop = this.stop.bind(this);
-    this.addSocket = this.addSocket.bind(this);
-    this.isUserJoined = this.isUserJoined.bind(this);
-    this.reaction = this.reaction.bind(this);
-    this.message = this.message.bind(this);
+    this.registerEveneterHandlers();
   }
 
   start() {
     this.eventer.start();
+    this.listenersCounter.start();
     this.logger.info('Core started');
   }
 
   stop() {
     this.eventer.stop();
+    this.listenersCounter.stop();
+    this.logger.info('Core stopped');
   }
 
   // All the handlers for the events from Eventer -> Core -> Client
@@ -63,13 +62,18 @@ class Core {
     });
   }
 
+  /**
+   * Add Core handlers to socket
+   * @param {import('socket.io').Socket} socket
+   */
   addSocket(socket) {
+    // In case something bad happens
     socket[Symbol.for('nodejs.rejection')] = (err) => {
       this.logger.error(err);
       socket.emit('error', err.message);
     };
 
-    // All the handlers for the events from Client -> Core
+    // All the handlers for the events from Core <- Client
     registerStreamHandlers(this.io, this.logger, socket);
   }
 
@@ -94,6 +98,10 @@ class Core {
 
   message(uuid, text) {
     this.io.to(uuid).emit(EVENTS.STREAM_MESSAGE, text);
+  }
+
+  listeners(uuid) {
+    return this.listenersCounter.listeners(uuid);
   }
 }
 

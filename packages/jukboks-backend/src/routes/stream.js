@@ -173,8 +173,7 @@ async function routes(fastify, options) {
         elapsed += song.duration;
       }
 
-      // HACK: probably needs to be in core
-      const live = fastify.io.of('/').adapter.rooms.get(uuid);
+      const live = fastify.core.listeners(uuid);
 
       reply.send({ current: current._doc, next: next ? next._doc : null, live });
     },
