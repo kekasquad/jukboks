@@ -74,9 +74,14 @@ async function sendMessage(message) {
   return sended;
 }
 
+async function sendReaction(reaction) {
+  const sended = await client.post(`stream/${uuid}/reaction`, { json: reaction }).json();
+  return sended;
+}
+
 async function getSong(url) {
   const song = await client.post('song', { json: { url } }).json();
   return song;
 }
 
-export { initStores, login, signup, me, getStream, createStream, getStreamInfo, sendMessage, getSong };
+export { initStores, login, signup, me, getStream, createStream, getStreamInfo, sendMessage, sendReaction, getSong };

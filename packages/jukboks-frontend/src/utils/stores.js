@@ -26,3 +26,13 @@ export const message = writable();
 message.subscribe((value) => {
   console.log(`Setting message to ${value}`);
 });
+
+export const reaction = writable();
+reaction.subscribe((value) => {
+  console.log(`Setting reaction to ${value}`);
+});
+
+export const listeners = writable();
+listeners.subscribe((value) => {
+  console.log(`Setting listeners to ${value}`);
+});

@@ -58,7 +58,6 @@
   }
 
   async function send() {
-    console.log('show');
     try {
       if (textAreaMessage && textAreaMessage.length > 0) {
         await api.sendMessage(textAreaMessage);

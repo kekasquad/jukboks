@@ -1,5 +1,5 @@
 import { io } from 'socket.io-client';
-import { plays, song, token as tokenStore } from './stores';
+import { plays, song, message, reaction, listeners, token as tokenStore } from './stores';
 
 const WS_BASE = 'ws://localhost:8080';
 
@@ -8,8 +8,9 @@ const EVENTS = {
   STREAM_STARTED: 'stream:started',
   STREAM_LISTENERS: 'stream:listeners',
   STREAM_ENDED: 'stream:ended',
-  SONG_STARTED: 'song:started',
   STREAM_MESSAGE: 'stream:message',
+  STREAM_REACTION: 'stream:reaction',
+  SONG_STARTED: 'song:started',
 };
 
 let tokenValue;
@@ -53,6 +54,14 @@ socket.on(EVENTS.SONG_STARTED, (newSong) => {
 
 socket.on(EVENTS.STREAM_MESSAGE, (newMessage) => {
   message.set(newMessage);
+});
+
+socket.on(EVENTS.STREAM_REACTION, (newReaction) => {
+  reaction.set(newReaction);
+});
+
+socket.on(EVENTS.STREAM_LISTENERS, (newListeners) => {
+  listeners.set(newListeners);
 });
 
 function connect() {

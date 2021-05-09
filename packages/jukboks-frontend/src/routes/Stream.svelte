@@ -3,7 +3,7 @@
   import Preview from '../components/stream/Preview';
   import StreamContent from '../components/stream/StreamContent';
   import * as api from '../utils/api';
-  import { plays, song, message } from '../utils/stores';
+  import { plays, song, message, reaction, listeners } from '../utils/stores';
 
   export let uuid;
 
@@ -12,6 +12,8 @@
   song.set(null);
   plays.set(false);
   message.set(null);
+  reaction.set(null);
+  listeners.set(null);
 
   let promise = api.getStream(uuid);
 </script>

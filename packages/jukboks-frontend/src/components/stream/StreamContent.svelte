@@ -6,7 +6,7 @@
   import Panel from './Panel';
   import Popup from '../Popup';
   import * as api from '../../utils/api';
-  import { song, username, message } from '../../utils/stores';
+  import { song, username, message, reaction } from '../../utils/stores';
 
   export let stream;
 
@@ -34,12 +34,27 @@
     isPanelShown = true;
   }
 
-  const onMessage = (message) => {
-    if (message) {
-      showPopup(message);
+  async function sendReaction(emotion) {
+    try {
+      await api.sendReaction(emotion);
+    } catch {
+      showPopup('Something has happened');
+    }
+  }
+
+  const onMessage = (newMessage) => {
+    if (newMessage) {
+      showPopup(newMessage);
     }
   };
   $: onMessage($message);
+
+  const onReaction = (newReaction) => {
+    if (newReaction) {
+      showPopup(newReaction);
+    }
+  };
+  $: onReaction($reaction);
 </script>
 
 <svelte:window on:keydown={handleKeydown} />
@@ -58,6 +73,11 @@
             <div class="admin" on:click={showPanel}>Admin</div>
           {/if}
           <Title title="{stream.title} by {stream.author.username}" style="grid-area: title;" />
+          <div class="emotions">
+            <div class="emotion" on:click={sendReaction('👍')}>👍</div>
+            <div class="emotion" on:click={sendReaction('👎')}>👎</div>
+            <div class="emotion" on:click={sendReaction('💜')}>💜</div>
+          </div>
         </div>
         <Title
           title="{$song.title} by {$song.artist}"
@@ -106,7 +126,7 @@
     display: inline-grid;
     grid-template-columns: repeat(5, 1fr);
     width: 100%;
-    grid-template-areas: 'admin title title title temp';
+    grid-template-areas: 'admin title title title emotions';
   }
 
   .admin {
@@ -117,5 +137,17 @@
     justify-self: start;
     cursor: pointer;
     grid-area: admin;
+  }
+
+  .emotions {
+    grid-area: emotions;
+    justify-self: end;
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .emotion {
+    font-size: 28px;
+    margin-left: 10px;
   }
 </style>
