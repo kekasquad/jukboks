@@ -150,7 +150,7 @@ async function routes(fastify, options) {
         return reply.notFound(ERROR.NOT_EXISTS);
       }
 
-      if (request.user._id != stream.author) {
+      if (request.user._id.equals(stream.author)) {
         return reply.forbidden();
       }
 
