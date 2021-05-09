@@ -74,7 +74,7 @@ class Eventer extends Emittery {
         },
       ],
     });
-    this.logger.debug({ msg: 'Streams found', streams });
+    // this.logger.debug({ msg: 'Streams found', streams });
 
     // 2
     for (const stream of streams) {
@@ -109,9 +109,9 @@ class Eventer extends Emittery {
         }, stream.dt_end - Date.now());
       }
     }
-    this.logger.debug({ msg: 'Timers', stream: this.streamsTimers, song: this.songsTimers });
-    this.logger.debug({ msg: 'Pull complete', streamsScheduled, songsScheduled });
-    this.logger.debug({ msg: 'Plan', streams: Object.keys(this.streamsTimers), songs: Object.keys(this.songsTimers) });
+    // this.logger.debug({ msg: 'Timers', stream: this.streamsTimers, song: this.songsTimers });
+    // this.logger.debug({ msg: 'Pull complete', streamsScheduled, songsScheduled });
+    // this.logger.debug({ msg: 'Plan', streams: Object.keys(this.streamsTimers), songs: Object.keys(this.songsTimers) });
   }
 }
 
