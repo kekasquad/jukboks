@@ -84,7 +84,9 @@ class Core {
    * @returns boolean
    */
   isUserJoined(id, uuid) {
-    for (const sid of this.io.of('/').adapter.rooms.get(uuid)) {
+    const room = this.io.of('/').adapter.rooms.get(uuid);
+    if (!room) throw new Error('Stream room not found');
+    for (const sid of room) {
       const socket = this.io.of('/').sockets.get(sid);
       if (!socket) throw new Error("Can't find sid in sockets"); // Race condition?
       if (socket.user._id.equals(new ObjectID(id))) return true;

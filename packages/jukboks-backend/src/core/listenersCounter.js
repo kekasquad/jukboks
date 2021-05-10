@@ -35,7 +35,9 @@ class ListenersCounter {
   }
 
   listeners(uuid) {
-    return this.io.of('/').adapter.rooms.get(uuid).size;
+    const room = this.io.of('/').adapter.rooms.get(uuid);
+    if (!room) throw new Error('Stream room not found');
+    return room.size;
   }
 }
 
