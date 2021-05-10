@@ -20,7 +20,12 @@ class ListenersCounter {
     // At stream start set interval that will emit current live count to room
     this.eventer.on(EVENTER_EVENTS.STREAM_STARTED, (stream) => {
       this.listenersIntervals = setInterval(() => {
-        this.io.to(stream.uuid).emit(STREAM_EVENTS.STREAM_LISTENERS, this.listeners(stream.uuid));
+        try {
+          const live = this.listeners(stream.uuid);
+          this.io.to(stream.uuid).emit(STREAM_EVENTS.STREAM_LISTENERS, live);
+        } catch (err) {
+          this.io.to(stream.uuid).emit(STREAM_EVENTS.STREAM_LISTENERS, 0);
+        }
       }, this.interval);
     });
 
