@@ -20,7 +20,9 @@ tokenStore.subscribe((value) => {
 });
 
 const socket = io(WS_BASE, {
-  transports: ['websocket'], autoConnect: false, auth: {
+  transports: ['websocket'],
+  autoConnect: false,
+  auth: {
     token: tokenValue,
   },
 });
@@ -84,6 +86,9 @@ function join(uuid) {
       reject('Socket is not connected');
     }
     socket.emit(EVENTS.STREAM_JOIN, uuid, resolve);
+    socket.io.on('reconnect', () => {
+      socket.emit(EVENTS.STREAM_JOIN, uuid, () => {});
+    });
   });
 }
 
