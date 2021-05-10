@@ -88,6 +88,22 @@
 
     <Widget />
   </div>
+  <div class="progress-bar">
+    <svg width="100%">
+      <defs>
+        <linearGradient id="gradient">
+          <stop offset="0%" stop-color="#f1c40f" />
+          <stop offset="100%" stop-color="#c0392b" />
+        </linearGradient>
+
+        <clipPath id="clip">
+          <rect id="clipRect" width="100%" height="5px" />
+        </clipPath>
+      </defs>
+
+      <rect width="100%" height="5px" clip-path="url(#clip)" fill="url(#gradient)" />
+    </svg>
+  </div>
 {:else}
   <Loader />
 {/if}
@@ -156,6 +172,12 @@
     margin-top: auto;
     display: flex;
     justify-content: space-between;
+    width: 100%;
+  }
+
+  .progress-bar {
+    position: absolute;
+    bottom: 0;
     width: 100%;
   }
 </style>
