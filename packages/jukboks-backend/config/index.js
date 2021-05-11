@@ -20,7 +20,11 @@ if (isProd && !JWT_SECRET) {
 }
 
 // Public url of jukboks-frontend, needed for CORS
-PUBLIC_URL = process.env.PUBLIC_URL || 'https://jukboks.danil.co';
+PUBLIC_URL = process.env.PUBLIC_URL || 'http://localhost:3000';
+
+GITHUB_CLIENT_ID = process.env.GITHUB_CLIENT_ID;
+GITHUB_CLIENT_SECRET = process.env.GITHUB_CLIENT_SECRET;
+GITHUB_SCOPE = 'read:user';
 
 module.exports = {
   isDevelopment,
@@ -28,4 +32,7 @@ module.exports = {
   JWT_SECRET,
   MONGO_URI,
   PUBLIC_URL,
+  GITHUB_CLIENT_ID,
+  GITHUB_CLIENT_SECRET,
+  GITHUB_SCOPE,
 };
