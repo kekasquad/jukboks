@@ -18,6 +18,8 @@
   let songs = [];
   let timePicker;
   let timePickerInput;
+  let reactions = true;
+  let showSongs = true;
 
   onMount(() => {
     const newTimepicker = new TimepickerUI(timePicker, {
@@ -96,7 +98,7 @@
       createError = 'Set correct time!';
       return;
     }
-    let stream = { title, songs, dt_start };
+    let stream = { title, songs, dt_start, showSongs, reactions };
     try {
       stream = await api.createStream(stream);
       if (stream) {
@@ -137,11 +139,11 @@
         <input class="timepicker-ui-input" bind:value={time} bind:this={timePickerInput} style="width: 100%" />
       </div>
     </div>
-    <div class="controls">
+    <div class="settings">
       <div class="label" id="reactionsLabel">Show reactions</div>
-      <input class="check" type="checkbox" id="reactions" name="reactions" checked />
-      <div class="label" id="titlesLabel">Show titles</div>
-      <input class="check" type="checkbox" id="titles" name="reactions" checked />
+      <input class="check" type="checkbox" id="reactions" bind:checked={reactions} />
+      <div class="label" id="songsLabel">Show songs</div>
+      <input class="check" type="checkbox" id="songs" bind:checked={showSongs} />
     </div>
   </div>
   <div class="right">
@@ -226,7 +228,7 @@
     text-align: center;
   }
 
-  .controls {
+  .settings {
     display: grid;
     grid-template-areas:
       'reactionsLabel reactions'
@@ -246,11 +248,11 @@
     margin: 0px;
   }
 
-  #titlesLabel {
+  #songsLabel {
     grid-area: titlesLabel;
   }
 
-  #titles {
+  #songs {
     grid-area: titles;
   }
 

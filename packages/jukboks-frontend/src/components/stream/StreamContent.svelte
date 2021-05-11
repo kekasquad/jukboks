@@ -73,15 +73,19 @@
             <div class="admin" on:click={showPanel}>Admin</div>
           {/if}
           <Title title="{stream.title} by {stream.author.username}" style="grid-area: title;" />
-          <div class="emotions">
-            <div class="emotion" on:click={(event) => sendReaction('👍')}>👍</div>
-            <div class="emotion" on:click={(event) => sendReaction('👎')}>👎</div>
-            <div class="emotion" on:click={(event) => sendReaction('💜')}>💜</div>
-          </div>
+          {#if stream.reactions}
+            <div class="emotions">
+              <div class="emotion" on:click={(event) => sendReaction('👍')}>👍</div>
+              <div class="emotion" on:click={(event) => sendReaction('👎')}>👎</div>
+              <div class="emotion" on:click={(event) => sendReaction('💜')}>💜</div>
+            </div>
+          {/if}
         </div>
         <div class="bottom">
-          <Title title="{$song.title} by {$song.artist}" style="text-align: left;" />
-          <Title title="{$listeners}👁" style="text-align: right;" />
+          {#if stream.showSongs}
+            <Title title="{$song.title} by {$song.artist}" style="text-align: left; grid-area: songTitle;" />
+          {/if}
+          <Title title="{$listeners}👁" style="text-align: right; grid-area: live;" />
         </div>
       </div>
     {/if}
@@ -89,7 +93,7 @@
     <Widget />
   </div>
   <div class="progress-bar">
-    <svg width="100%">
+    <svg width="100%" height="5px">
       <defs>
         <linearGradient id="gradient">
           <stop offset="0%" stop-color="#f1c40f" />
@@ -170,9 +174,10 @@
 
   .bottom {
     margin-top: auto;
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 85% 15%;
     width: 100%;
+    grid-template-areas: 'songTitle live';
   }
 
   .progress-bar {

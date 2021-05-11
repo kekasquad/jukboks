@@ -180,7 +180,13 @@ async function routes(fastify, options) {
 
       // Most likely won't throw since we check the state earlier
       const live = fastify.core.listeners(uuid);
-      reply.send({ current: current._doc.title, next: next ? next._doc.title : null, live });
+      reply.send({
+        current: current._doc.title,
+        next: next ? next._doc.title : null,
+        live,
+        reactions: stream.reactions,
+        showSongs: stream.showSongs,
+      });
     },
   );
 

@@ -14,8 +14,9 @@
   let currentTrack;
   let nextTrack;
   let live;
-  //TODO: add controls bool values;
   let textAreaMessage = '';
+  let reactionsLabel = 'Show reactions ';
+  let songsLabel = 'Show songs ';
   let getStreamInfoError;
 
   function showPopup(text) {
@@ -36,6 +37,16 @@
           nextTrack = streamInfo.next;
         } else {
           nextTrack = '-';
+        }
+        if (streamInfo.reactions) {
+          reactionsLabel += '✅';
+        } else {
+          reactionsLabel += '❌';
+        }
+        if (streamInfo.showSongs) {
+          songsLabel += '✅';
+        } else {
+          songsLabel += '❌';
         }
 
         live = streamInfo.live;
@@ -96,10 +107,10 @@
     </div>
     <div class="info" style="margin-top: 50px;">
       <div class="row">
-        <Title title="Controls:" style="width: 40%; margin-right: 5%; align-self: flex-start;" />
-        <div class="controls" style="width: 55%; text-align: left;">
-          <Title title="ell" style="width: 100%;" />
-          <Title title="pufpufpuf" style="width: 100%;" />
+        <Title title="Settings:" style="width: 40%; margin-right: 5%; align-self: flex-start;" />
+        <div class="settings" style="width: 55%; text-align: left;">
+          <Title title={reactionsLabel} style="width: 100%;" />
+          <Title title={songsLabel} style="width: 100%;" />
         </div>
       </div>
     </div>
@@ -146,7 +157,7 @@
     width: 100%;
   }
 
-  .controls {
+  .settings {
     display: flex;
     flex-direction: column;
     z-index: 1;
