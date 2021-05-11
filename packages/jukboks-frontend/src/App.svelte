@@ -11,7 +11,11 @@
   import NotFound from './routes/NotFound';
   import { initStores } from './utils/api';
 
-  initStores().catch((_) => navigate('/signin'));
+  initStores().catch((_) => {
+    if (window.location.pathname != '/') {
+      navigate('/signin');
+    }
+  });
 
   // export let url = ""; //This property is necessary declare to avoid ignore the Router
 </script>
