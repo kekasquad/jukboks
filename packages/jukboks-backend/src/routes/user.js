@@ -14,6 +14,7 @@ async function routes(fastify, options) {
       schema: {
         description: 'Login',
         additionalProperties: false,
+        security: [],
         body: {
           type: 'object',
           required: ['username', 'password'],
@@ -50,6 +51,7 @@ async function routes(fastify, options) {
       schema: {
         description: 'Sign up',
         additionalProperties: false,
+        security: [],
         body: {
           type: 'object',
           required: ['username', 'password', 'name'],

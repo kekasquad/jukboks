@@ -113,6 +113,7 @@ async function createServer() {
     '/ping',
     {
       schema: {
+        security: [],
         response: {
           200: {
             ok: {
