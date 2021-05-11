@@ -10,8 +10,11 @@
   import CreateStream from './routes/CreateStream';
   import NotFound from './routes/NotFound';
   import { initStores } from './utils/api';
+  import { token, username } from './utils/stores';
 
   initStores().catch((_) => {
+    token.set(null);
+    username.set(null);
     if (window.location.pathname != '/') {
       navigate('/signin');
     }
