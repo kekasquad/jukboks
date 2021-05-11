@@ -102,6 +102,7 @@ async function routes(fastify, options) {
                 type: 'object',
                 properties: {
                   title: { type: 'string' },
+                  uuid: { type: 'string' },
                   songs: {
                     type: 'array',
                     items: {
