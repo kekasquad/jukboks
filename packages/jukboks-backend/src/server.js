@@ -91,6 +91,7 @@ async function createServer() {
   fastify.register(require('./routes/user'));
   fastify.register(require('./routes/stream'));
   fastify.register(require('./routes/song'));
+  fastify.register(require('./routes/github'));
 
   return fastify;
 }
