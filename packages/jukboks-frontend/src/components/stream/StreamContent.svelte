@@ -5,16 +5,21 @@
   import Title from '../Title';
   import Widget from '../souncloud/Widget';
   import Panel from './Panel';
+  import Emotion from './Emotion';
   import Popup from '../Popup';
   import * as api from '../../utils/api';
   import { song, username, message, reaction, listeners } from '../../utils/stores';
 
   export let stream;
 
+  let container;
+
   let isPanelShown = false;
   let isPopupShown = false;
 
   let popupText = '';
+
+  let emotions = [];
 
   function onInterval(callback, milliseconds) {
     const interval = setInterval(callback, milliseconds);
@@ -50,6 +55,15 @@
     }, 5000);
   }
 
+  function showReaction(text) {
+    const id = Math.floor(Math.random() * 999);
+    emotions = [...emotions, { text, id }];
+  }
+
+  function removeEmotion(event) {
+    emotions = emotions.filter((arr) => arr.id !== event.detail.id);
+  }
+
   async function showPanel() {
     isPanelShown = true;
   }
@@ -71,7 +85,7 @@
 
   const onReaction = (newReaction) => {
     if (newReaction) {
-      showPopup(newReaction);
+      showReaction(newReaction);
     }
   };
   $: onReaction($reaction);
@@ -80,10 +94,15 @@
 <svelte:window on:keydown={handleKeydown} />
 
 {#if $song}
-  <div class="outer" in:fade={{ duration: 100, delay: 150 }} out:fade={{ duration: 100 }}>
+  <div class="outer" in:fade={{ duration: 100, delay: 150 }} out:fade={{ duration: 100 }} bind:this={container}>
     {#if isPopupShown}
       <Popup message={popupText} />
     {/if}
+    {#each emotions as emotion (emotion.id)}
+      <div>
+        <Emotion {emotion} on:change={removeEmotion} />
+      </div>
+    {/each}
     {#if isPanelShown}
       <Panel bind:isPopupShown bind:popupText streamUuid={stream.uuid} />
     {:else}
