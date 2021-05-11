@@ -25,7 +25,7 @@
 
   <div class="authFields">
     {#if error}
-      <div>{error}</div>
+      <div class="error">{error}</div>
     {/if}
     <input class="field" id="username" placeholder="username" bind:value={username} />
     <input class="field" id="name" placeholder="name" bind:value={name} />
@@ -132,6 +132,10 @@
 
   .field[id='password'] {
     -webkit-text-security: disc;
+  }
+
+  .error {
+    color: white;
   }
 
   /* @media (min-width: 640px) {
