@@ -28,7 +28,7 @@
       <div class="error">{error}</div>
     {/if}
     <input class="field" id="username" placeholder="username" bind:value={username} />
-    <input class="field" id="password" placeholder="password" bind:value={password} />
+    <input class="field" id="password" placeholder="password" bind:value={password} type="password" />
     <Link to="/signup">
       <h2>Sign up</h2>
     </Link>

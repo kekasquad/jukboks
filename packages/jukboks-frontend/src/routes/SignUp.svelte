@@ -29,7 +29,7 @@
     {/if}
     <input class="field" id="username" placeholder="username" bind:value={username} />
     <input class="field" id="name" placeholder="name" bind:value={name} />
-    <input class="field" id="password" placeholder="password" bind:value={password} />
+    <input class="field" id="password" placeholder="password" bind:value={password} type="password" />
     <Link to="/signin">
       <h2>Already have an account?</h2>
     </Link>
