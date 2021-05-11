@@ -1,6 +1,4 @@
 <script>
-  // TODO: add func to button
-  // TODO: add streams
   import { navigate } from 'svelte-navigator';
   import StreamsView from '../components/stream/StreamsView.svelte';
   import Heading from '../components/Heading';
