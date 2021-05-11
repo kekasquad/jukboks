@@ -11,20 +11,13 @@ async function createServer() {
     },
   });
 
-  fastify.register(require('fastify-swagger'), {
-    exposeRoute: true,
-    routePrefix: '/doc',
-    openapi: {
-      info: 'Jukboks API',
-    },
-  });
   fastify.register(require('fastify-sensible'), {
     errorHandler: false,
   });
 
   // Client-side
   fastify.register(require('fastify-cors'), {
-    origin: isDevelopment ? /localhost/ : PUBLIC_URL,
+    origin: isDevelopment ? true : PUBLIC_URL,
   });
   fastify.register(require('fastify-helmet'), { contentSecurityPolicy: false });
 
@@ -39,6 +32,40 @@ async function createServer() {
     },
   });
 
+  fastify.register(require('fastify-swagger'), {
+    exposeRoute: true,
+    routePrefix: '/doc',
+    openapi: {
+      info: {
+        title: 'Jukboks API',
+        version: 'v1',
+      },
+      components: {
+        securitySchemes: {
+          bearerAuth: {
+            type: 'http',
+            scheme: 'bearer',
+            bearerFormat: 'JWT',
+          },
+        },
+      },
+      security: [{ bearerAuth: [] }],
+      servers: [
+        {
+          url: 'http://localhost:8080',
+          description: 'Backend',
+        },
+        {
+          url: PUBLIC_URL,
+          description: 'Frontend',
+        },
+      ],
+    },
+    uiConfig: {
+      persistAuthorization: true,
+    },
+  });
+
   fastify.setErrorHandler(function (error, request, reply) {
     if (fastify.httpErrors.createError.isHttpError(error)) {
       if (error.headers) reply.headers(error.headers);
@@ -47,6 +74,8 @@ async function createServer() {
         return reply.code(error.status).send({ error: 'Something went wrong' });
       }
       return reply.send({ error: error.message });
+    } else if (error.validation) {
+      reply.status(422).send(error);
     } else {
       fastify.log.error(error);
       return reply.code(500).send({ error: 'Something went wrong' });

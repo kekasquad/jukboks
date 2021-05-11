@@ -2,8 +2,8 @@ const fp = require('fastify-plugin');
 const { TokenExpiredError } = require('jsonwebtoken');
 
 const messages = {
-  badRequestErrorMessage: 'Format is Authorization: Bearer [token]',
-  noAuthorizationInHeaderMessage: 'No Authorization was found in request.headers',
+  badRequestErrorMessage: 'Format is `Authorization: Bearer [token]`',
+  noAuthorizationInHeaderMessage: 'No Authorization was found in headers',
   authorizationTokenExpiredMessage: 'Authorization token expired',
   authorizationTokenInvalid: (err) => `Authorization token is invalid: ${err.message}`,
 };

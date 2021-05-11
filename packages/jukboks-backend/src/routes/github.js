@@ -1,3 +1,4 @@
+const { AuthorizationCode } = require('simple-oauth2');
 const { GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET, GITHUB_SCOPE, PUBLIC_URL } = require('../../config');
 
 const CALLBACK_PATH = '/auth/github/callback';

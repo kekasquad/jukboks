@@ -6,11 +6,24 @@ async function routes(fastify, options) {
     '/song',
     {
       preValidation: [fastify.authenticate],
-      // TODO: add schema + strict validation
+      schema: {
+        description: 'Get song metadata',
+        body: {
+          type: 'object',
+          required: ['url'],
+          properties: {
+            url: {
+              type: 'string',
+              description: 'Song URL',
+              format: 'uri',
+            },
+          },
+        },
+      },
     },
     async (request, reply) => {
-      let songURL = request.body.url;
-      let metadata = await getMetadata(songURL);
+      let { url } = request.body;
+      let metadata = await getMetadata(url);
       reply.send(metadata);
     },
   );
