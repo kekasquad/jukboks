@@ -30,4 +30,5 @@ Navigate to http://localhost:3000
 
 ## Screenshots
 
-![Stream page](https://user-images.githubusercontent.com/9118683/117555525-a9fdc500-b068-11eb-81a3-e67ef5b6c9a8.png)
+![Stream page](https://user-images.githubusercontent.com/9118683/117851508-10fcc300-b28f-11eb-99c8-c41600ce66d8.png)
+![Live page](https://user-images.githubusercontent.com/9118683/117851495-0cd0a580-b28f-11eb-8fed-241afa7b41d7.png)
