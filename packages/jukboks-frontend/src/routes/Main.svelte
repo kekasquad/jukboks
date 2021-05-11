@@ -24,9 +24,6 @@
   <h2 id="second">by software engeneers</h2>
   <img src={intro} alt="intro" />
   <h1>Create live streams</h1>
-  <div class="preview">
-    <h1>Video preview</h1>
-  </div>
   <h1>Get reactions</h1>
   <h1>Promote your music</h1>
 </div>
@@ -114,13 +111,6 @@
     font-size: 72px;
     line-height: 81px;
     color: #000000;
-  }
-
-  .preview {
-    margin: 5vh 12.5vw 4.5vh;
-    height: 50vh;
-    text-align: center;
-    background-color: aqua;
   }
 
   /* @media (min-width: 640px) {
