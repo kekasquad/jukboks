@@ -1,7 +1,7 @@
 import { io } from 'socket.io-client';
 import { plays, song, message, reaction, listeners, token as tokenStore } from './stores';
 
-const WS_BASE = 'ws://localhost:8080';
+const WS_BASE = process.env.WS_BASE;
 
 const EVENTS = {
   STREAM_JOIN: 'stream:join',

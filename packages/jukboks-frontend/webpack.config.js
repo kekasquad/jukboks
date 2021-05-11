@@ -62,6 +62,7 @@ module.exports = {
     new EnvironmentPlugin({
       NODE_ENV: mode,
       API_BASE: 'http://localhost:8080',
+      WS_BASE: 'ws://localhost:8080',
     }),
   ],
   devtool: prod ? false : 'source-map',
