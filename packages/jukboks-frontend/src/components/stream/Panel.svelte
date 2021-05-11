@@ -4,6 +4,7 @@
   import { fade } from 'svelte/transition';
   import Title from '../Title';
   import * as api from '../../utils/api';
+  import { listeners } from '../../utils/stores';
 
   export let isPopupShown;
   export let popupText;
@@ -13,7 +14,7 @@
 
   let currentTrack;
   let nextTrack;
-  let live;
+  $: live = $listeners;
   let textAreaMessage = '';
   let reactionsLabel = 'Show reactions ';
   let songsLabel = 'Show songs ';
