@@ -30,12 +30,14 @@
   }
 
   $: seconds = 0;
-  onInterval(() => (seconds += 1), 1000);
+  onInterval(() => (seconds += 0.2), 200);
   function onSongChange(newSong) {
-    if (newSong.offset) {
-      seconds = Number(newSong.offset / 1000);
-    } else {
-      seconds = 0;
+    if (newSong) {
+      if (newSong.offset) {
+        seconds = Number(newSong.offset / 1000);
+      } else {
+        seconds = 0;
+      }
     }
   }
   $: onSongChange($song);
@@ -132,10 +134,10 @@
     <Widget />
   </div>
   <div class="progress-bar">
-    <svg width="100%" height="5px">
+    <svg width="{(seconds * 1000 * 100) / $song.duration}%" height="5px">
       <defs>
         <linearGradient id="gradient">
-          <stop offset="{(seconds * 1000 * 100) / $song.duration}%" stop-color="#f1c40f" />
+          <stop offset="0%" stop-color="#f1c40f" />
           <stop offset="100%" stop-color="#c0392b" />
         </linearGradient>
 

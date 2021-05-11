@@ -10,7 +10,9 @@
   options.auto_play = true;
   const onSongChange = (song) => {
     if (sc) {
-      sc.load(song.url, options);
+      if (song) {
+        sc.load(song.url, options);
+      }
     }
   };
   $: onSongChange($song);
