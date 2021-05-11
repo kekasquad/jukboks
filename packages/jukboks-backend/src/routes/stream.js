@@ -48,6 +48,11 @@ async function routes(fastify, options) {
 
       stream.author = user._id;
       calculateTimes(stream);
+
+      if (stream.dt_start < Date.now()) {
+        throw fastify.httpErrors.unprocessableEntity("Stream start time can't be in past");
+      }
+
       await stream.save();
       let id = stream._id;
 
