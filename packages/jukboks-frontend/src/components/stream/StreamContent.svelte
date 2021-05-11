@@ -1,5 +1,6 @@
 <script>
   import { fade } from 'svelte/transition';
+  import { onDestroy } from 'svelte';
   import Loader from '../Loader';
   import Title from '../Title';
   import Widget from '../souncloud/Widget';
@@ -14,6 +15,25 @@
   let isPopupShown = false;
 
   let popupText = '';
+
+  function onInterval(callback, milliseconds) {
+    const interval = setInterval(callback, milliseconds);
+
+    onDestroy(() => {
+      clearInterval(interval);
+    });
+  }
+
+  $: seconds = 0;
+  onInterval(() => (seconds += 1), 1000);
+  function onSongChange(newSong) {
+    if (newSong.offset) {
+      seconds = Number(newSong.offset / 1000);
+    } else {
+      seconds = 0;
+    }
+  }
+  $: onSongChange($song);
 
   function handleKeydown(event) {
     if (event.keyCode == 27) {
@@ -96,7 +116,7 @@
     <svg width="100%" height="5px">
       <defs>
         <linearGradient id="gradient">
-          <stop offset="0%" stop-color="#f1c40f" />
+          <stop offset="{(seconds * 1000 * 100) / $song.duration}%" stop-color="#f1c40f" />
           <stop offset="100%" stop-color="#c0392b" />
         </linearGradient>
 
