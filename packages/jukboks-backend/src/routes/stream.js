@@ -1,14 +1,50 @@
 const { Stream, calculateTimes, publicFields } = require('../models/Stream');
 const { User } = require('../models/User');
 
-// TODO: authorize operations
-// TODO(kabachook): set `additionalProperties: false` in schema
-// TODO: Check mass assignment from the req.body
-
 const ERROR = {
   NOT_EXISTS: 'Stream does not exists',
   STREAM_NOT_LIVE: 'Stream is not live',
   USER_NOT_JOINED: "You haven't joined the stream",
+};
+
+const schemas = {
+  CreateOrUpdateStream: {
+    type: 'object',
+    required: ['title', 'songs', 'dt_start'],
+    properties: {
+      title: { type: 'string' },
+      songs: {
+        type: 'array',
+        items: {
+          type: 'object',
+          required: ['title', 'artist', 'url', 'duration'],
+          properties: {
+            title: { type: 'string' },
+            artist: { type: 'string' },
+            url: { type: 'string' },
+            duration: { type: 'integer' },
+          },
+        },
+      },
+      dt_start: { type: 'integer' },
+      showSongs: { type: 'boolean' },
+      reactions: { type: 'boolean' },
+    },
+  },
+  Reaction: {
+    type: 'object',
+    required: ['reaction'],
+    properties: {
+      reaction: { type: 'string' },
+    },
+  },
+  Message: {
+    type: 'object',
+    required: ['message'],
+    properties: {
+      message: { type: 'string' },
+    },
+  },
 };
 
 async function routes(fastify, options) {
@@ -18,7 +54,15 @@ async function routes(fastify, options) {
     '/stream/:uuid',
     {
       preValidation: [fastify.authenticate],
-      // TODO: add schema
+      schema: {
+        description: 'Get Stream',
+        params: {
+          type: 'object',
+          properties: {
+            uuid: { type: 'string' },
+          },
+        },
+      },
     },
     async (request, reply) => {
       const { uuid } = request.params;
@@ -39,8 +83,11 @@ async function routes(fastify, options) {
     '/stream',
     {
       preValidation: [fastify.authenticate, fastify.getUser],
-      // TODO: add schema + strict validation
-      // TODO: prevent mass assignment
+      schema: {
+        description: 'Create a Stream',
+        additionalProperties: false,
+        body: schemas.CreateOrUpdateStream,
+      },
     },
     async (request, reply) => {
       const stream = Stream(request.body);
@@ -72,6 +119,19 @@ async function routes(fastify, options) {
     '/stream/:uuid',
     {
       preValidation: [fastify.authenticate],
+      schema: {
+        description: 'Update Stream',
+        additionalProperties: false,
+        params: {
+          type: 'object',
+          properties: {
+            uuid: { type: 'string' },
+          },
+        },
+        body: {
+          body: schemas.CreateOrUpdateStream,
+        },
+      },
     },
     async (request, reply) => {
       const { uuid } = request.params;
@@ -107,7 +167,15 @@ async function routes(fastify, options) {
     '/stream/:uuid',
     {
       preValidation: [fastify.authenticate],
-      // TODO: add schema
+      schema: {
+        description: 'Delete Stream',
+        params: {
+          type: 'object',
+          properties: {
+            uuid: { type: 'string' },
+          },
+        },
+      },
     },
     async (request, reply) => {
       const { uuid } = request.params;
@@ -146,7 +214,15 @@ async function routes(fastify, options) {
     '/stream/:uuid/info',
     {
       preValidation: [fastify.authenticate, fastify.getUser],
-      // TODO: add schema
+      schema: {
+        description: "Get Stream's admin info",
+        params: {
+          type: 'object',
+          properties: {
+            uuid: { type: 'string' },
+          },
+        },
+      },
     },
     async (request, reply) => {
       const { uuid } = request.params;
@@ -194,6 +270,16 @@ async function routes(fastify, options) {
     '/stream/:uuid/reaction',
     {
       preValidation: [fastify.authenticate, fastify.getUser],
+      schema: {
+        description: 'Send a reation',
+        params: {
+          type: 'object',
+          properties: {
+            uuid: { type: 'string' },
+          },
+        },
+        body: schemas.Reaction,
+      },
     },
     async (request, reply) => {
       const { uuid } = request.params;
@@ -221,6 +307,16 @@ async function routes(fastify, options) {
     '/stream/:uuid/message',
     {
       preValidation: [fastify.authenticate, fastify.getUser],
+      schema: {
+        description: 'Send a message',
+        params: {
+          type: 'object',
+          properties: {
+            uuid: { type: 'string' },
+          },
+        },
+        body: schemas.Message,
+      },
     },
     async (request, reply) => {
       const { uuid } = request.params;

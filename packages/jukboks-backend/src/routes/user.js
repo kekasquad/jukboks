@@ -12,6 +12,8 @@ async function routes(fastify, options) {
     '/auth/login',
     {
       schema: {
+        description: 'Login',
+        additionalProperties: false,
         body: {
           type: 'object',
           required: ['username', 'password'],
@@ -46,6 +48,8 @@ async function routes(fastify, options) {
     '/auth/signup',
     {
       schema: {
+        description: 'Sign up',
+        additionalProperties: false,
         body: {
           type: 'object',
           required: ['username', 'password', 'name'],
@@ -86,9 +90,45 @@ async function routes(fastify, options) {
     '/me',
     {
       preValidation: [fastify.authenticate, fastify.getUser],
+      schema: {
+        description: 'Get profile data',
+        response: {
+          200: {
+            username: { type: 'string' },
+            name: { type: 'string' },
+            streams: {
+              type: 'array',
+              items: {
+                type: 'object',
+                properties: {
+                  title: { type: 'string' },
+                  songs: {
+                    type: 'array',
+                    items: {
+                      type: 'object',
+                      properties: {
+                        title: { type: 'string' },
+                        artist: { type: 'string' },
+                        url: { type: 'string' },
+                        duration: { type: 'integer' },
+                      },
+                    },
+                  },
+                  dt_start: { type: 'integer' },
+                  dt_end: { type: 'integer' },
+                  duration: { type: 'integer' },
+                },
+              },
+            },
+          },
+        },
+      },
     },
     async (request, reply) => {
-      const user = await User.findOne({ username: request.user.username }, publicFields).populate('streams');
+      const user = await User.findOne({ username: request.user.username }, publicFields).populate(
+        'streams',
+        '-_id -_v',
+      );
 
       if (!user) {
         return reply.notFound();
