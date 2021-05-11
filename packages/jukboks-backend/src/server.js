@@ -1,6 +1,7 @@
 const Fastify = require('fastify');
 const mongoose = require('mongoose');
 const { isDevelopment, isProd, MONGO_URI, JWT_SECRET, PUBLIC_URL } = require('../config');
+const helmet = require('fastify-helmet');
 
 async function createServer() {
   const fastify = Fastify({
@@ -19,7 +20,19 @@ async function createServer() {
   fastify.register(require('fastify-cors'), {
     origin: isDevelopment ? true : PUBLIC_URL,
   });
-  fastify.register(require('fastify-helmet'), { contentSecurityPolicy: false });
+  fastify.register(helmet, (instance) => ({
+    contentSecurityPolicy: isDevelopment
+      ? false
+      : {
+          directives: {
+            ...helmet.contentSecurityPolicy.getDefaultDirectives(),
+            'form-action': ["'self'"],
+            'img-src': ["'self'", 'data:', 'validator.swagger.io'],
+            'script-src': ["'self'"].concat(instance.swaggerCSP.script),
+            'style-src': ["'self'", 'https:'].concat(instance.swaggerCSP.style),
+          },
+        },
+  }));
 
   // Auth
   fastify.register(require('fastify-jwt'), {
