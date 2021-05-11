@@ -59,7 +59,8 @@ socket.on(EVENTS.STREAM_MESSAGE, (newMessage) => {
 });
 
 socket.on(EVENTS.STREAM_REACTION, (newReaction) => {
-  reaction.set(newReaction);
+  let emotion = { reaction: newReaction };
+  reaction.set(emotion);
 });
 
 socket.on(EVENTS.STREAM_LISTENERS, (newListeners) => {
@@ -87,7 +88,7 @@ function join(uuid) {
     }
     socket.emit(EVENTS.STREAM_JOIN, uuid, resolve);
     socket.io.on('reconnect', () => {
-      socket.emit(EVENTS.STREAM_JOIN, uuid, () => {});
+      socket.emit(EVENTS.STREAM_JOIN, uuid, () => { });
     });
   });
 }

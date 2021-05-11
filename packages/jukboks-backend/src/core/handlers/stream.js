@@ -39,7 +39,13 @@ const registerStreamHandlers = (io, logger, socket) => {
         if (elapsed < played && played < elapsed + song.duration) {
           // Send current playing song with offset (milliseconds)
           // + network delay
-          socket.emit(EVENTER_EVENTS.SONG_STARTED, { ...song._doc, offset: played - elapsed + NETWORK_DELAY });
+          socket.emit(EVENTER_EVENTS.SONG_STARTED, {
+            url: song._doc.url,
+            title: song._doc.title,
+            artist: song._doc.artist,
+            duration: song._doc.duration,
+            offset: played - elapsed + NETWORK_DELAY,
+          });
           break;
         }
         elapsed += song.duration;

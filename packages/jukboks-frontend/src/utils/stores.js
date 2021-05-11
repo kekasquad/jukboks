@@ -29,7 +29,7 @@ message.subscribe((value) => {
 
 export const reaction = writable();
 reaction.subscribe((value) => {
-  console.log(`Setting reaction to ${value}`);
+  console.log(`Setting reaction to ${JSON.stringify(value)}`);
 });
 
 export const listeners = writable();

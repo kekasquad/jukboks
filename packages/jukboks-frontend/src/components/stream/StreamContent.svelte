@@ -85,7 +85,7 @@
 
   const onReaction = (newReaction) => {
     if (newReaction) {
-      showReaction(newReaction);
+      showReaction(newReaction.reaction);
     }
   };
   $: onReaction($reaction);
