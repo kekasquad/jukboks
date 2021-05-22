@@ -1,6 +1,6 @@
 const Fastify = require('fastify');
 const mongoose = require('mongoose');
-const { isDevelopment, isProd, MONGO_URI, JWT_SECRET, PUBLIC_URL } = require('../config');
+const { isDevelopment, isProd, MONGO_URI, JWT_SECRET, PUBLIC_URL, API_URL } = require('../config');
 const helmet = require('fastify-helmet');
 
 async function createServer() {
@@ -21,17 +21,18 @@ async function createServer() {
     origin: isDevelopment ? true : PUBLIC_URL,
   });
   fastify.register(helmet, (instance) => ({
-    contentSecurityPolicy: isDevelopment
-      ? false
-      : {
-          directives: {
-            ...helmet.contentSecurityPolicy.getDefaultDirectives(),
-            'form-action': ["'self'"],
-            'img-src': ["'self'", 'data:', 'validator.swagger.io'],
-            'script-src': ["'self'"].concat(instance.swaggerCSP.script),
-            'style-src': ["'self'", 'https:'].concat(instance.swaggerCSP.style),
-          },
-        },
+    // contentSecurityPolicy: isDevelopment
+    //   ? false
+    //   : {
+    //       directives: {
+    //         ...helmet.contentSecurityPolicy.getDefaultDirectives(),
+    //         'form-action': ["'self'"],
+    //         'img-src': ["'self'", 'data:', 'validator.swagger.io'],
+    //         'script-src': ["'self'"].concat(instance.swaggerCSP.script),
+    //         'style-src': ["'self'", 'https:'].concat(instance.swaggerCSP.style),
+    //       },
+    //     },
+    contentSecurityPolicy: false,
   }));
 
   // Auth
@@ -64,14 +65,15 @@ async function createServer() {
       },
       security: [{ bearerAuth: [] }],
       servers: [
-        {
-          url: 'http://localhost:8080',
-          description: 'Backend',
-        },
-        {
-          url: PUBLIC_URL,
-          description: 'Frontend',
-        },
+        // {
+        //   url: 'http://localhost:8080',
+        //   description: 'Backend',
+        // },
+        // {
+        //   url: PUBLIC_URL,
+        //   description: 'Frontend',
+        // },
+        ...API_URL.map((url, idx) => ({ url, description: `Backend ${idx}` })),
       ],
     },
     uiConfig: {

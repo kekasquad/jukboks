@@ -8,5 +8,15 @@ services:
     volumes:
       - mongo_data:/data/db
 
+  backend:
+    build: ./packages/jukboks-backend
+    ports:
+      - "8080:8080"
+    environment:
+      - MONGO_URI=mongodb://mongo
+      - NODE_ENV=production
+    env_file: .env
+    init: true
+
 volumes:
   mongo_data: {}

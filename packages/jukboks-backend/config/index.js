@@ -19,8 +19,9 @@ if (isProd && !JWT_SECRET) {
   JWT_SECRET = 'default';
 }
 
-// Public url of jukboks-frontend, needed for CORS
-PUBLIC_URL = process.env.PUBLIC_URL || 'http://localhost:3000';
+// Public url of jukboks-frontend, needed for CORS, comma-delimited
+PUBLIC_URL = process.env.PUBLIC_URL ? process.env.PUBLIC_URL.split(',') : ['http://localhost:3000'];
+API_URL = process.env.API_URL ? process.env.API_URL.split(',') : ['http://localhost:8080'];
 
 GITHUB_CLIENT_ID = process.env.GITHUB_CLIENT_ID;
 GITHUB_CLIENT_SECRET = process.env.GITHUB_CLIENT_SECRET;
@@ -32,6 +33,7 @@ module.exports = {
   JWT_SECRET,
   MONGO_URI,
   PUBLIC_URL,
+  API_URL,
   GITHUB_CLIENT_ID,
   GITHUB_CLIENT_SECRET,
   GITHUB_SCOPE,
