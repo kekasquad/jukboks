@@ -1,8 +1,5 @@
 FROM node:16-slim AS builder
 
-ARG API_BASE
-ARG WS_BASE
-
 WORKDIR /app
 
 COPY package.json package-lock.json ./
@@ -11,8 +8,12 @@ RUN npm ci
 
 COPY . .
 
-RUN npm build
+ARG API_BASE
+ENV API_BASE=${API_BASE}
+ARG WS_BASE
+ENV WS_BASE=${WS_BASE}
 
+RUN npm run build
 
 FROM nginx:stable
 
